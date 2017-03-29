@@ -55,7 +55,7 @@
           (const :tag "Star Icon    " ((icon (on . "star") (off . "star-o"))
                                        (echo (on . "Star") (off . "Unstar"))))))
 
-;; Segments
+;;; First Divider Segments
 (spaceline-define-segment
     all-the-icons-modified "An `all-the-icons' segment depiciting the current buffers state"
     (let* ((buffer-state (format-mode-line "%*"))
@@ -75,7 +75,7 @@
         (let* ((bookmark-name (buffer-file-name))
                (bookmark (find-if (lambda (it) (equal bookmark-name (car it))) bookmark-alist)))
 
-          (propertize (all-the-icons-faicon (if bookmark .icon.on .icon.off) :v-adjust 0.0)
+          (propertize (all-the-icons-faicon (if bookmark .icon.on .icon.off) :v-adjust 0.1)
                       'pointer   'hand
                       'help-echo  (if bookmark .echo.off .echo.on)
                       'face      `(:family ,(all-the-icons-faicon-family) :inherit)
@@ -87,7 +87,9 @@
                                           (bookmark-set ,bookmark-name))
                                       (force-window-update)))))))
 
-    :when (buffer-file-name))
+    :when (buffer-file-name) :enabled nil)
+
+
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
