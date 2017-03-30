@@ -288,6 +288,22 @@ possible, allowing more information to displayed on narrower windows/frames."
                 'display '(raise 0.1))
     :tight t)
 
+(spaceline-define-segment
+    all-the-icons-region-info "An `all-the-icons' indicator of the currently highlighted region"
+    (let ((lines (count-lines (region-beginning) (region-end)))
+          (words (count-words (region-beginning) (region-end)))
+
+          (height (if spaceline-all-the-icons-slim-render 0.9 0.8))
+          (display (if spaceline-all-the-icons-slim-render 0.1 0.2))
+          (region-format (if spaceline-all-the-icons-slim-render "%s:%s" "(%s, %s)")))
+      (concat
+       (propertize (format "%s " (all-the-icons-octicon "pencil" :v-adjust 0.1))
+                   'face `(:family ,(all-the-icons-octicon-family) :inherit))
+       (propertize (format region-format lines words)
+                   'face `(:height ,height :inherit)
+                   'display `(raise ,display))))
+    :when mark-active :tight t)
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
