@@ -201,9 +201,14 @@ possible, allowing more information to displayed on narrower windows/frames."
 (defun spaceline-all-the-icons--separator (icon &optional left-padding right-padding)
   "Wrapper to render vertical line separator ICON with optional LEFT-PADDING & RIGHT-PADDING."
   (if spaceline-all-the-icons-slim-render " "
-    (propertize (format "%s%s%s" icon (or left-padding "") (or right-padding left-padding ""))
-                'face '(:height 0.9 :inherit)
-                'display '(raise 0.2))))
+    (let ((raise (if (equal "|" icon) 0.2 0.0))
+          (height (if (equal "|" icon) 0.9 1.2)))
+      (concat
+       (propertize (or left-padding "") 'face '(:height 0.8 :inherit))
+       (propertize icon
+                   'face `(:height ,height :inherit)
+                   'display `(raise ,raise))
+       (propertize (or right-padding left-padding "") 'face '(:height 0.8 :inherit))))))
 
 (defun spaceline-all-the-icons--highlight ()
   "Return the `mouse-face' highlight face to be used when propertizing text.
@@ -305,20 +310,18 @@ doesn't inherit all properties of a face."
 ;;; Second Divider Segments
 (spaceline-define-segment all-the-icons-projectile
   "An `all-the-icons' segment to indicate the current `projectile' project"
-  (let ((face '(:inherit))
-        (help-echo "Switch Project")
+  (let ((help-echo "Switch Project")
         (raise (if spaceline-all-the-icons-slim-render 0.1 0.2))
         (local-map (make-mode-line-mouse-map 'mouse-1 'projectile-switch-project))
         (project-id (if (and (fboundp 'projectile-project-p) (projectile-project-p))
                         (projectile-project-name) "×")))
 
-    (when (not spaceline-all-the-icons-slim-render) (plist-put face :height 0.8))
     (concat
-     (spaceline-all-the-icons--separator "|" "" " ")
+     (spaceline-all-the-icons--separator "|" nil " ")
      (propertize project-id
+                 'face `(:height ,(if spaceline-all-the-icons-slim-render 1.0 0.8) :inherit)
                  'mouse-face (spaceline-all-the-icons--highlight)
                  'display `(raise ,raise)
-                 'face face
                  'help-echo help-echo
                  'local-map local-map)
      (spaceline-all-the-icons--separator "|" " " "")))
