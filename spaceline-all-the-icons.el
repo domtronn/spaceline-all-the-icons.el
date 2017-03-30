@@ -339,6 +339,9 @@ possible, allowing more information to displayed on narrower windows/frames."
            (propertize (all-the-icons-alltheicon "git")
                        'face `(:height 1.1 :family ,(all-the-icons-alltheicon-family) :inherit)
                        'display '(raise 0.1)))
+          ((string-match "SVN-" vc-mode)
+           (propertize (all-the-icons-material "cloud_download" :v-adjust -0.2)
+                       'face `(:height 1.2 :family ,(all-the-icons-material-family))))
           (t ""))
 
     :when (and active vc-mode))
@@ -346,18 +349,32 @@ possible, allowing more information to displayed on narrower windows/frames."
 (defun spaceline-all-the-icons--vc-git ()
   "Get the formatted GIT Version Control Icon based on variable `vc-mode'."
   (let* ((branch (cadr (split-string vc-mode "Git[:-]")))
-         (git-branch (all-the-icons-octicon (if (equal branch "master") "git-merge" "git-branch"))))
+         (git-branch (all-the-icons-octicon (if (equal branch "master") "git-merge" "git-branch")))
+         (local-map (get-text-property 1 'local-map branch))
+         (mouse-face (get-text-property 1 'mouse-face branch)))
+    (propertize
+     (concat
+      (propertize git-branch
+                  'face `(:family ,(all-the-icons-octicon-family) :inherit)
+                  'display '(raise 0.1))
+      (propertize (format " %s" branch)
+                  'face `(:height 0.9 :inherit)
+                  'display '(raise 0.1)))
+     'mouse-face mouse-face
+     'local-map local-map)))
+
+(defun spaceline-all-the-icons--vc-svn ()
+  "Get the formatted SVN Version Control Icon based on variable `vc-mode'."
+  (let ((revision (cadr (split-string vc-mode "-"))))
     (concat
-     (propertize git-branch
-                 'face `(:family ,(all-the-icons-octicon-family) :inherit)
-                 'display '(raise 0.1))
-     (propertize (format " %s" branch)
-                 'face `(:height 0.9 :inherit)
+     (propertize (format "%s" revision)
+                 'face '(:height 0.9)
                  'display '(raise 0.1)))))
 
 (spaceline-define-segment
     all-the-icons-vc-status "An `all-the-icons' segment to depict the current VC system with an icon"
     (cond ((string-match "Git[:-]" vc-mode) (spaceline-all-the-icons--vc-git))
+          ((string-match "SVN-" vc-mode) (spaceline-all-the-icons--vc-svn))
           (t ""))
 
     :when (and active vc-mode))
