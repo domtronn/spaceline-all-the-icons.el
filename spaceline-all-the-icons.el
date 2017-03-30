@@ -98,21 +98,23 @@
     (start    ((icon (on . "star") (off . "star-o"))
                (echo (on . "Star") (off . "Unstar"))))))
 
-(defcustom spaceline-all-the-icons-icon-set-dedicated
-  '(("thumb-tack" . faicon) ("pin" . octicon))
+;;; Dedicated Icon
+(defcustom spaceline-all-the-icons-icon-set-dedicated 'pin
   "The Icon set to use for the `all-the-icons-dedicated' window indicator."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
           (const :tag ,(format "Pin          - %s / %s"
                                (all-the-icons-octicon "pin" :v-adjust 0.0)
-                               (all-the-icons-faicon "thumb-tack" :v-adjust 0.0))
-                 (("thumb-tack" . faicon)
-                  ("pin" . octicon)))
+                               (all-the-icons-faicon "thumb-tack" :v-adjust 0.0)) pin)
           (const :tag ,(format "Sticky Note  - %s / %s"
                                (all-the-icons-faicon "sticky-note" :v-adjust 0.0)
-                               (all-the-icons-faicon "sticky-note-o" :v-adjust 0.0))
-                 (("sticky-note" . faicon)
-                  ("sticky-note-o" . faicon)))))
+                               (all-the-icons-faicon "sticky-note-o" :v-adjust 0.0)) sticky-note)))
+
+(defconst spaceline-all-the-icons-icon-set--dedicated
+  '((stick-note (("sticky-note" . faicon)
+                 ("sticky-note-o" . faicon)))
+    (pin        (("thumb-tack" . faicon)
+                 ("pin" . octicon)))))
 
 
 (defcustom spaceline-all-the-icons-icon-set-window-numbering 'circle
@@ -250,7 +252,7 @@ doesn't inherit all properties of a face."
   (pcase-let*
       ((window (get-buffer-window (current-buffer)))
        (dedicated (window-dedicated-p window))
-       (`(,icon . ,family) (funcall (if dedicated 'car 'cadr) spaceline-all-the-icons-icon-set-dedicated))
+       (`(,icon . ,family) (funcall (if dedicated 'car 'cadr) (spaceline-all-the-icons-icon-set-dedicated)))
 
        (icon-f (all-the-icons--function-name family))
        (family-f (all-the-icons--family-name family)))
