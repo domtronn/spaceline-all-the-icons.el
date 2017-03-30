@@ -395,7 +395,7 @@ doesn't inherit all properties of a face."
                        'face `(:height 1.2 :family ,(all-the-icons-material-family))))
           (t ""))
 
-    :when (and active vc-mode))
+    :when (and active vc-mode (not spaceline-all-the-icons-slim-render)))
 
 (defun spaceline-all-the-icons--vc-git ()
   "Get the formatted GIT Version Control Icon based on variable `vc-mode'."
