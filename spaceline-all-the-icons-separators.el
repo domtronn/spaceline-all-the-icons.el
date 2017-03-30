@@ -29,11 +29,19 @@
 (defcustom spaceline-all-the-icons-separators-type 'slant
   "Choose the spaceline separator type to use."
   :group 'spaceline-all-the-icons
-  :type '(radio
-          (const :tag "Slant" slant)
-          (const :tag "Wave"  wave)
-          (const :tag "Cup"   cup)
-          (const :tag "Arrow" arrow)))
+  :type `(radio
+          (const :tag ,(format "Slant  %s / %s"
+                               (all-the-icons-alltheicon "slant-left")
+                               (all-the-icons-alltheicon "slant-right")) slant)
+          (const :tag ,(format "Wave   %s / %s"
+                               (all-the-icons-alltheicon "wave-left")
+                               (all-the-icons-alltheicon "wave-right")) wave)
+          (const :tag ,(format "Cup    %s / %s"
+                               (all-the-icons-alltheicon "cup-left")
+                               (all-the-icons-alltheicon "cup-right")) cup)
+          (const :tag ,(format "Arrow  %s / %s"
+                               (all-the-icons-alltheicon "arrow-left")
+                               (all-the-icons-alltheicon "arrow-right")) arrow)))
 
 (defcustom spaceline-all-the-icons-separators-invert-direction nil
   "Whether or not to invert the separator direction."
