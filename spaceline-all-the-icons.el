@@ -86,6 +86,14 @@
   :group 'spaceline-all-the-icons
   :type 'boolean)
 
+(defcustom spaceline-all-the-icons-slim-render nil
+  "Whether or not to render all information as slimly as possible.
+
+This changes the way the mode line is rendered to be as slim as
+possible, allowing more information to displayed on narrower windows/frames."
+  :group 'spaceline-all-the-icons
+  :type 'boolean)
+
 ;;; First Divider Segments
 (spaceline-define-segment
     all-the-icons-modified "An `all-the-icons' segment depiciting the current buffers state"
