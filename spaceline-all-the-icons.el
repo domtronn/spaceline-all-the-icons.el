@@ -56,6 +56,16 @@
           (const :tag "Star Icon    " ((icon (on . "star") (off . "star-o"))
                                        (echo (on . "Star") (off . "Unstar"))))))
 
+(defcustom spaceline-all-the-icons-icon-set-dedicated
+  '(("thumb-tack" . "faicon") ("pin" . "octicon"))
+  "The Icon set to use for the dedicated window indicator."
+  :group 'spaceline-all-the-icons
+  :type '(radio
+          (const :tag "Thumb Tack / Pin " (("thumb-tack" . "faicon")
+                                           ("pin" . "octicon")))
+          (const :tag "Sticky Note      " (("sticky-note" . "faicon")
+                                           ("sticky-note-o" . "faicon")))))
+
 ;;; First Divider Segments
 (spaceline-define-segment
     all-the-icons-modified "An `all-the-icons' segment depiciting the current buffers state"
@@ -90,7 +100,27 @@
 
     :when (buffer-file-name) :enabled nil)
 
+(spaceline-define-segment
+    all-the-icons-dedicated "An `all-he-icons' segment to indicate and allow for making windows dedicated"
+    (pcase-let*
+        ((window (get-buffer-window (current-buffer)))
+         (dedicated (window-dedicated-p window))
+         (`(,icon . ,family) (funcall (if dedicated 'car 'cadr) spaceline-all-the-icons-icon-set-dedicated))
 
+         (icon-f (intern (format "all-the-icons-%s" family)))
+         (family-f (intern (format "all-the-icons-%s-family" family))))
+
+      (propertize (funcall icon-f icon)
+                  'pointer    'hand
+                  'display    '(raise 0.1)
+                  'face       `(:family ,(funcall family-f) :inherit)
+                  'help-echo  "Toggle `window-dedidcated' for this window"
+                  'local-map  (make-mode-line-mouse-map
+                               'mouse-1
+                               `(lambda () (interactive)
+                                  (set-window-dedicated-p ,window (not ,dedicated))
+                                  (force-window-update)))))
+    :enabled nil)
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
