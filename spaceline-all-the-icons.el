@@ -189,6 +189,30 @@ possible, allowing more information to displayed on narrower windows/frames."
                 'display '(raise 0.1))
     :tight t)
 
+;;; Second Divider Segments
+(spaceline-define-segment
+    all-the-icons-projectile "An `all-the-icons' segment to indicate the current `projectile' project"
+    (let ((help-echo "Switch Project")
+          (local-map (make-mode-line-mouse-map 'mouse-1 'projectile-switch-project))
+          (project-id (if (and (fboundp 'projectile-project-p) (projectile-project-p))
+                          (projectile-project-name) "×")));;
+      (if spaceline-all-the-icons-slim-render
+          (propertize project-id
+                      'display '(raise 0.1)
+                      'pointer 'hand
+                      'help-echo help-echo
+                      'local-map local-map)
+        (concat
+         (spaceline-all-the-icons--separator) " "
+         (propertize project-id
+                     'pointer 'hand
+                     'display '(raise 0.2)
+                     'face '(:height 0.8 :inherit)
+                     'help-echo help-echo
+                     'local-map local-map)
+         " " (spaceline-all-the-icons--separator))))
+    :tight t)
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
