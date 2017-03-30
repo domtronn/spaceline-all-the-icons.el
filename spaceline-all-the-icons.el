@@ -83,20 +83,20 @@
                   (echo (on . "Star") (off . "Unstar"))))))
 
 (defcustom spaceline-all-the-icons-icon-set-dedicated
-  '(("thumb-tack" . "faicon") ("pin" . "octicon"))
+  '(("thumb-tack" . faicon) ("pin" . octicon))
   "The Icon set to use for the `all-the-icons-dedicated' window indicator."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
           (const :tag ,(format "Pin          - %s / %s"
                                (all-the-icons-octicon "pin" :v-adjust 0.0)
                                (all-the-icons-faicon "thumb-tack" :v-adjust 0.0))
-                 (("thumb-tack" . "faicon")
-                  ("pin" . "octicon")))
+                 (("thumb-tack" . faicon)
+                  ("pin" . octicon)))
           (const :tag ,(format "Sticky Note  - %s / %s"
                                (all-the-icons-faicon "sticky-note" :v-adjust 0.0)
                                (all-the-icons-faicon "sticky-note-o" :v-adjust 0.0))
-                 (("sticky-note" . "faicon")
-                  ("sticky-note-o" . "faicon")))))
+                 (("sticky-note" . faicon)
+                  ("sticky-note-o" . faicon)))))
 
 (defcustom spaceline-all-the-icons-icon-set-window-numbering 'circle
   "The Icon set to use for the `all-the-icons-window-number' indicator."
@@ -234,8 +234,8 @@ doesn't inherit all properties of a face."
        (dedicated (window-dedicated-p window))
        (`(,icon . ,family) (funcall (if dedicated 'car 'cadr) spaceline-all-the-icons-icon-set-dedicated))
 
-       (icon-f (intern (format "all-the-icons-%s" family)))
-       (family-f (intern (format "all-the-icons-%s-family" family))))
+       (icon-f (all-the-icons--function-name family))
+       (family-f (all-the-icons--family-name family)))
 
     (propertize (funcall icon-f icon)
                 'display    '(raise 0.1)
