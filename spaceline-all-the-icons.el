@@ -318,6 +318,20 @@ possible, allowing more information to displayed on narrower windows/frames."
 
     :tight t :enabled t)
 
+(spaceline-define-segment
+    all-the-icons-text-scale "An `all-the-icons' indicator to show how much text has been scaled"
+    (let* ((zoom (if (equal (substring text-scale-mode-lighter 0 1) "+") "in" "out"))
+           (icon (all-the-icons-material (format "zoom_%s" zoom)))
+           (text (substring text-scale-mode-lighter 1)))
+
+      (when (not (equal text "0"))
+        (concat
+         (propertize icon
+                     'display '(raise -0.2)
+                     'face `(:family ,(all-the-icons-material-family) :height 1.2 :inherit))
+         (propertize text 'display '(raise 0.1)))))
+    :tight t :enabled t)
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
