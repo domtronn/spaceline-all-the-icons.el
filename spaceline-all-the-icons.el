@@ -620,6 +620,25 @@ available updates then restores the current buffer."
 
   :when (and active spaceline-all-the-icons--package-updates))
 
+;; First Right divider segments
+(spaceline-define-segment all-the-icons-hud
+  "An `all-the-icons' segment to show the position through buffer HUD indicator."
+  (let ((color (face-foreground default-face))
+        (height (or powerline-height (frame-char-height)))
+        (ws (window-start))
+        (we (window-end))
+        pmax pmin)
+    (save-restriction
+      (widen)
+      (setq pmax (point-max))
+      (setq pmin (point-min)))
+    (propertize " "
+                'display (pl/percent-xpm height pmax pmin we ws (* (frame-char-width) 1) color nil)
+                'face default-face))
+  :tight t
+  :when (and active
+             (not (equal "All" (format-mode-line "%p")))))
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
