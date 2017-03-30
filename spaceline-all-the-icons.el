@@ -33,12 +33,19 @@
 (defgroup spaceline-all-the-icons nil
   "Customize the the Spaceline All The Icons mode line and theming."
   :prefix "spaceline-all-the-icons-"
+  :group 'spaceline
+  :group 'appearance)
+
+(defgroup spaceline-all-the-icons-icon-set nil
+  "Customize which Icon Sets to use for various segments of the Spaceline All The Icons theme."
+  :prefix "spaceline-all-the-icons-icon-set-"
   :group 'appearance
-  :group 'convenience)
+  :group 'spaceline
+  :group 'spaceline-all-the-icons)
 
 (defcustom spaceline-all-the-icons-icon-set-modified '("link" . "chain-broken")
   "The Icon set to use for the modified indicator."
-  :group 'spaceline-all-the-icons
+  :group 'spaceline-all-the-icons-icon-set
   :type '(radio
           (const :tag "Toggle Switch     On / Off" ("toggle-on" . "toggle-off"))
           (const :tag "Chain Links       Solid / Broken" ("link" . "chain-broken"))))
@@ -47,7 +54,7 @@
   '((icon (on . "bookmark") (off . "bookmark-o"))
     (echo (on . "Bookmark") (off . "Remove Bookmark")))
   "The Icon set to use for the bookmark indicator."
-  :group 'spaceline-all-the-icons
+  :group 'spaceline-all-the-icons-icon-set
   :type '(radio
           (const :tag "Bookmark Icon" ((icon (on . "bookmark") (off . "bookmark-o"))
                                        (echo (on . "Bookmark") (off . "Remove Bookmark"))))
@@ -59,7 +66,7 @@
 (defcustom spaceline-all-the-icons-icon-set-dedicated
   '(("thumb-tack" . "faicon") ("pin" . "octicon"))
   "The Icon set to use for the dedicated window indicator."
-  :group 'spaceline-all-the-icons
+  :group 'spaceline-all-the-icons-icon-set
   :type '(radio
           (const :tag "Thumb Tack / Pin " (("thumb-tack" . "faicon")
                                            ("pin" . "octicon")))
