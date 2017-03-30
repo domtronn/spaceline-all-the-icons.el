@@ -54,7 +54,11 @@
           (const :tag ,(format "Chain Links       - %s / %s"
                                (all-the-icons-faicon "link")
                                (all-the-icons-faicon "chain-broken"))
-                 ("link" . "chain-broken"))))
+                 ("link" . "chain-broken"))
+          (const :tag ,(format "Radio Buttons     - %s / %s"
+                               (all-the-icons-faicon "circle-o")
+                               (all-the-icons-faicon "dot-circle-o"))
+                 ("circle-o" . "dot-circle-o"))))
 
 (defcustom spaceline-all-the-icons-icon-set-bookmark
   '((icon (on . "bookmark") (off . "bookmark-o"))
@@ -155,7 +159,8 @@ doesn't inherit all properties of a face."
                   ((equal buffer-state "-") (car spaceline-all-the-icons-icon-set-modified))
                   ((equal buffer-state "*") (cdr spaceline-all-the-icons-icon-set-modified))
                   ((equal buffer-state "%") "lock"))))
-      (propertize (all-the-icons-faicon icon :v-adjust -0.0)
+
+      (propertize (all-the-icons-faicon icon :v-adjust 0.0)
                   'face `(:family ,(all-the-icons-faicon-family) :height 1.1 :inherit)
                   'mouse-face (spaceline-all-the-icons--highlight)
                   'local-map (make-mode-line-mouse-map 'mouse-1 'read-only-mode)))
@@ -416,7 +421,6 @@ doesn't inherit all properties of a face."
           (t ""))
 
     :when (and active vc-mode))
-
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
