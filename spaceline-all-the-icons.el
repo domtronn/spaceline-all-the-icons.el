@@ -94,6 +94,13 @@ possible, allowing more information to displayed on narrower windows/frames."
   :group 'spaceline-all-the-icons
   :type 'boolean)
 
+;;; Helper functions
+(defun spaceline-all-the-icons--separator (&optional padding)
+  "Wrapper to render vertical line separator with optional PADDING."
+  (propertize (format "%s|%s" (or padding "") (or padding ""))
+              'face '(:height 0.9 :inherit)
+              'display '(raise 0.2)))
+
 ;;; First Divider Segments
 (spaceline-define-segment
     all-the-icons-modified "An `all-the-icons' segment depiciting the current buffers state"
