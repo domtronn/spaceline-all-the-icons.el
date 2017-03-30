@@ -55,6 +55,7 @@
 (define-icon-set-getter "bookmark")
 (define-icon-set-getter "dedicated")
 (define-icon-set-getter "git-stats")
+(define-icon-set-getter "flycheck-slim")
 
 ;;; Modified Icon
 (defcustom spaceline-all-the-icons-icon-set-modified 'chain
@@ -142,32 +143,31 @@
              ,(all-the-icons-octicon-family)))
     (arrows ("↑" "↓"))))
 
-(defcustom spaceline-all-the-icons-icon-set-flycheck-slim
-  `(,(all-the-icons-material "error" :v-adjust -0.2)
-    ,(all-the-icons-material "help" :v-adjust -0.2)
-    ,(all-the-icons-material "info" :v-adjust -0.2)
-    ,(all-the-icons-material-family))
+;; Flycheck Slim Icons
+(defcustom spaceline-all-the-icons-icon-set-flycheck-slim 'solid
   "The Icon set to use for the `all-the-icons-flycheck-status' in SLIM mode."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
           (const :tag ,(format "Solid Icons   - %s %s %s"
                                (all-the-icons-material "error" :v-adjust -0.2)
                                (all-the-icons-material "help" :v-adjust -0.2)
-                               (all-the-icons-material "info" :v-adjust -0.2))
-                 (,(all-the-icons-material "error" :v-adjust -0.2)
-                  ,(all-the-icons-material "help" :v-adjust -0.2)
-                  ,(all-the-icons-material "info" :v-adjust -0.2)
-                  ,(all-the-icons-material-family)))
+                               (all-the-icons-material "info" :v-adjust -0.2)) solid)
           (const :tag ,(format "Outline Icons - %s %s %s"
                                (all-the-icons-material "error_outline" :v-adjust -0.2)
                                (all-the-icons-material "help_outline" :v-adjust -0.2)
-                               (all-the-icons-material "info_outline" :v-adjust -0.2))
-                 (,(all-the-icons-material "error_outline" :v-adjust -0.2)
-                  ,(all-the-icons-material "help_outline" :v-adjust -0.2)
-                  ,(all-the-icons-material "info_outline" :v-adjust -0.2)
-                  ,(all-the-icons-material-family)))
-          (const :tag "Circles       - • • •" ("•" "•" "•"))))
+                               (all-the-icons-material "info_outline" :v-adjust -0.2)) outline)
+          (const :tag "Circles       - • • •" dots)))
 
+(defconst spaceline-all-the-icons-icon-set--flycheck-slim
+  `((solid   (,(all-the-icons-material "error" :v-adjust -0.2)
+              ,(all-the-icons-material "help" :v-adjust -0.2)
+              ,(all-the-icons-material "info" :v-adjust -0.2)
+              ,(all-the-icons-material-family)))
+    (outline (,(all-the-icons-material "error_outline" :v-adjust -0.2)
+              ,(all-the-icons-material "help_outline" :v-adjust -0.2)
+              ,(all-the-icons-material "info_outline" :v-adjust -0.2)
+              ,(all-the-icons-material-family)))
+    (dots ("•" "•" "•"))))
 
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
@@ -518,7 +518,7 @@ When FAMILY is provided, put `:family' property into face."
   "Wrapper to render flycheck status ICON with NUM using FACE.
 When FAMILY is provided, put `:family' property into face."
   (let* ((height 1.0)
-         (raise (if (> (length spaceline-all-the-icons-icon-set-flycheck-slim) 3) -0.2 0.0))
+         (raise (if (> (length (spaceline-all-the-icons-icon-set-flycheck-slim)) 3) -0.2 0.0))
          (icon-face `(:foreground ,(face-foreground face) :height ,height)))
     (when family (plist-put icon-face :family family))
     (concat
@@ -528,10 +528,10 @@ When FAMILY is provided, put `:family' property into face."
 (defun spaceline-all-the-icons--flycheck-status-slim ()
   "Render the mode line for Flycheck Status slim mode."
   (let-alist (flycheck-count-errors flycheck-current-errors)
-    (let ((error-icon (car spaceline-all-the-icons-icon-set-flycheck-slim))
-          (warn-icon (cadr spaceline-all-the-icons-icon-set-flycheck-slim))
-          (help-icon (caddr spaceline-all-the-icons-icon-set-flycheck-slim))
-          (family (cadddr spaceline-all-the-icons-icon-set-flycheck-slim))
+    (let ((error-icon (car (spaceline-all-the-icons-icon-set-flycheck-slim)))
+          (warn-icon (cadr (spaceline-all-the-icons-icon-set-flycheck-slim)))
+          (help-icon (caddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
+          (family (cadddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
 
           (space (propertize " " 'face '(:height 0.6))))
       (concat
