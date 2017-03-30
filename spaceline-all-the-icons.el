@@ -94,6 +94,16 @@ possible, allowing more information to displayed on narrower windows/frames."
   :group 'spaceline-all-the-icons
   :type 'boolean)
 
+(defcustom spaceline-all-the-icons-highlight-file-name nil
+  "Whether or not to highlight the file name as part of the buffer id."
+  :group 'spaceline-all-the-icons
+  :type 'boolean)
+
+(defcustom spaceline-all-the-icons-file-name-highlight nil
+  "The Color to highlight the file name part of the path.  e.g. #123123."
+  :group 'spaceline-all-the-icons
+  :type 'string)
+
 ;;; Helper functions
 (defun spaceline-all-the-icons--separator (&optional padding)
   "Wrapper to render vertical line separator with optional PADDING."
@@ -223,6 +233,42 @@ possible, allowing more information to displayed on narrower windows/frames."
                           :family ,(all-the-icons-icon-family-for-buffer)
                           :inherit)))
     :when (not (symbolp (all-the-icons-icon-for-buffer))))
+
+(spaceline-define-segment
+    all-the-icons-buffer-id "An `all-the-icons' segment to display current buffer id"
+    (let* ((buffer-id (if (buffer-file-name)
+                      (file-truename (buffer-file-name))
+                      (format-mode-line "%b")))
+
+           (project-root    (ignore-errors (file-truename (projectile-project-root))))
+           (buffer-relative (or (cadr (split-string buffer-id project-root)) buffer-id))
+
+           (path (file-name-directory buffer-relative))
+           (file (file-name-nondirectory buffer-relative))
+
+           (height (if spaceline-all-the-icons-slim-render 1.0 0.8))
+           (raise  (if spaceline-all-the-icons-slim-render 0.1 0.2))
+           (help-echo (format "Major-mode: `%s'" major-mode))
+
+           (file-face `(:height ,height :inherit))
+           (show-path-p (and (not spaceline-all-the-icons-slim-render) path active)))
+
+      (when (and spaceline-all-the-icons-highlight-file-name show-path-p)
+        (plist-put file-face :height height)
+        (plist-put file-face :background (face-background default-face))
+        (plist-put file-face :foreground (or spaceline-all-the-icons-file-name-highlight
+                                             (face-background highlight-face))))
+
+      (concat
+       (propertize (if show-path-p path "")
+                   'face `(:height ,height :inherit)
+                   'display `(raise ,raise)
+                   'help-echo help-echo)
+       (propertize file
+                   'face `(or ,file-face )
+                   'display `(raise ,raise)
+                   'help-echo help-echo)))
+    :tight t)
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
