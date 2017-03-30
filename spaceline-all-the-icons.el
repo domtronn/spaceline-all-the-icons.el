@@ -332,6 +332,37 @@ possible, allowing more information to displayed on narrower windows/frames."
          (propertize text 'display '(raise 0.1)))))
     :tight t :enabled t)
 
+;; Fourth divider segments
+(spaceline-define-segment
+    all-the-icons-vc-icon "An `all-the-icons' segment to depict the current VC system with an icon"
+    (cond ((string-match "Git[:-]" vc-mode)
+           (propertize (all-the-icons-alltheicon "git")
+                       'face `(:height 1.1 :family ,(all-the-icons-alltheicon-family) :inherit)
+                       'display '(raise 0.1)))
+          (t ""))
+
+    :when (and active vc-mode))
+
+(defun spaceline-all-the-icons--vc-git ()
+  "Get the formatted GIT Version Control Icon based on variable `vc-mode'."
+  (let* ((branch (cadr (split-string vc-mode "Git[:-]")))
+         (git-branch (all-the-icons-octicon (if (equal branch "master") "git-merge" "git-branch"))))
+    (concat
+     (propertize git-branch
+                 'face `(:family ,(all-the-icons-octicon-family) :inherit)
+                 'display '(raise 0.1))
+     (propertize (format " %s" branch)
+                 'face `(:height 0.9 :inherit)
+                 'display '(raise 0.1)))))
+
+(spaceline-define-segment
+    all-the-icons-vc-status "An `all-the-icons' segment to depict the current VC system with an icon"
+    (cond ((string-match "Git[:-]" vc-mode) (spaceline-all-the-icons--vc-git))
+          (t ""))
+
+    :when (and active vc-mode))
+
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
