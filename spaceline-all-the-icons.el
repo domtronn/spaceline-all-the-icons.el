@@ -513,7 +513,7 @@ When FAMILY is provided, put `:family' property into face."
           (warn-icon (cadr spaceline-all-the-icons-icon-set-flycheck-slim))
           (help-icon (caddr spaceline-all-the-icons-icon-set-flycheck-slim))
           (family (cadddr spaceline-all-the-icons-icon-set-flycheck-slim))
-          
+
           (space (propertize " " 'face '(:height 0.6))))
       (concat
        (unless (zerop (or .error 0))
@@ -549,7 +549,7 @@ When FAMILY is provided, put `:family' property into face."
                 ((string-match "✖ [0-9]" text) `(:height 0.9 :foreground ,(face-foreground 'error)))
                 ((string-match "✖ Disabled" text) `(:height 0.9 :foreground ,(face-foreground 'font-lock-comment-face)))
                 (t '(:height 0.9 :inherit)))))
-    
+
      (propertize text 'face face 'display '(raise 0.1))))
 
 (spaceline-define-segment all-the-icons-flycheck-status
@@ -576,6 +576,49 @@ When FAMILY is provided, put `:family' property into face."
     :when (and active
                (not spaceline-all-the-icons-slim-render)
                (bound-and-true-p flycheck-last-status-change)))
+
+(defvar spaceline-all-the-icons--package-updates nil)
+(defun spaceline-all-the-icons--count-package-udpates (&rest args)
+  "Function to count the number of package upgrades available.
+
+ARGS are provided as part of advice.  Opens a packages menu and
+sets `spaceline-all-the-icons--package-updates' to the number of
+available updates then restores the current buffer."
+  (let ((cb (current-buffer)))
+    (package-list-packages-no-fetch)
+    (with-current-buffer "*Packages*"
+      (setq spaceline-all-the-icons--package-updates (length (package-menu--find-upgrades))))
+    (switch-to-buffer cb)))
+
+(defun spaceline-all-the-icons-setup-advice ()
+  "Set up advice in order to count package upgrades."
+  (advice-add 'package-menu-execute :after 'spaceline-all-the-icons--count-package-updates)
+  (advice-add 'package-refresh-contents :after 'spaceline-all-the-icons--count-package-updates))
+
+(spaceline-define-segment all-the-icons-package-updates
+  "An `all-the-icons' segment to display the number of package updates"
+  (let ((face '(:height 0.9))
+        (new-text  (when spaceline-all-the-icons-slim-render
+                       (format "%s" (all-the-icons-material "new_releases" :v-adjust -0.2))))
+        (update-text (concat
+                      (format "%s" spaceline-all-the-icons--package-updates)
+                      (unless spaceline-all-the-icons-slim-render " updates"))))
+    
+    (propertize
+     (concat
+      (propertize (all-the-icons-octicon "package" :v-adjust 0.1)
+                  'face `(:height 1.1 :family ,(all-the-icons-octicon-family)))
+      (propertize (or new-text "")
+                  'face `(:height 1.2 :family ,(all-the-icons-material-family)))
+      (propertize " " 'face '(:height 0.4))
+      (propertize update-text
+                  'face face
+                  'display '(raise 0.1)))
+     'help-echo "Open Packages Menu"
+     'mouse-face (spaceline-all-the-icons--highlight)
+     'local-map (make-mode-line-mouse-map 'mouse-1 'package-list-packages)))
+
+  :when (and active spaceline-all-the-icons--package-updates))
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
