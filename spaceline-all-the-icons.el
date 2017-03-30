@@ -304,6 +304,20 @@ possible, allowing more information to displayed on narrower windows/frames."
                    'display `(raise ,display))))
     :when mark-active :tight t)
 
+(spaceline-define-segment
+    all-the-icons-fullscreen "An `all-the-icons' indicator to toggle fullscreen settings"
+    (let* ((fullscreen? (frame-parameter nil 'fullscreen))
+           (icon (all-the-icons-material (if fullscreen? "fullscreen_exit" "fullscreen"))))
+
+      (propertize icon
+                  'pointer 'hand
+                  'display '(raise -0.2)
+                  'help-echo "Toggle frame fullscreen"
+                  'face `(:height 1.3 :family ,(all-the-icons-material-family) :inherit)
+                  'local-map (make-mode-line-mouse-map 'mouse-1 'toggle-frame-fullscreen)))
+
+    :tight t :enabled t)
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
