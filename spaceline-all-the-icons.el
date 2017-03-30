@@ -73,6 +73,21 @@
           (const :tag "Sticky Note      " (("sticky-note" . "faicon")
                                            ("sticky-note-o" . "faicon")))))
 
+(defcustom spaceline-all-the-icons-icon-set-window-numbering 'circle
+  "The Icon set to use for the modified indicator."
+  :group 'spaceline-all-the-icons-icon-set
+  :type '(radio
+          (const :tag "Circle Outline Icons" circle)
+          (const :tag "Circle Solid Icons" solid)
+          (const :tag "Square Icons" square)))
+
+(defcustom spaceline-all-the-icons-window-number-always-visible nil
+  "Whether or not to show the window number all the time or when there are multiple windows."
+  :group 'spaceline-all-the-icons
+  :type '(radio
+          (const :tag "Always show the window number" t)
+          (const :tag "Only when there are multiple windows" nil)))
+
 ;;; First Divider Segments
 (spaceline-define-segment
     all-the-icons-modified "An `all-the-icons' segment depiciting the current buffers state"
@@ -128,6 +143,31 @@
                                   (set-window-dedicated-p ,window (not ,dedicated))
                                   (force-window-update)))))
     :enabled nil)
+
+(spaceline-define-segment
+    all-the-icons-window-number "An `all-the-icons' segment depicting the current window number"
+    (let ((face '(:height 1.4 :inherit))
+          (window-num
+           (cond
+            ((bound-and-true-p winum-mode) (winum-get-number))
+            ((bound-and-true-p window-numbering-mode) (window-numbering-get-number)))))
+      (if (> window-num 9) window-num ;; Return the string version of the window number
+        (let ((icon
+               (pcase spaceline-all-the-icons-icon-set-window-numbering
+                 ('solid   (format "%c" (+ window-num 10121)))
+                 ('circle  (format "%c" (+ window-num 9311)))
+                 ('square  (progn
+                             (plist-put face :height 1.2)
+                             (plist-put face :family (all-the-icons-material-family))
+                             (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
+
+          (propertize icon 'face face))))
+
+    :when (and
+           (or (bound-and-true-p winum-mode)
+               (bound-and-true-p window-numbering-mode))
+           (or spaceline-all-the-icons-window-number-always-visible
+               (> (length (window-list)) 1))))
 
 (spaceline-define-segment
     all-the-icons-buffer-size "An `all-the-icons' segment depicting the buffer size"
