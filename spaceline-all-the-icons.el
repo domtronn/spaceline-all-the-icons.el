@@ -603,7 +603,7 @@ available updates then restores the current buffer."
         (update-text (concat
                       (format "%s" spaceline-all-the-icons--package-updates)
                       (unless spaceline-all-the-icons-slim-render " updates"))))
-    
+
     (propertize
      (concat
       (propertize (all-the-icons-octicon "package" :v-adjust 0.1)
@@ -645,6 +645,48 @@ available updates then restores the current buffer."
       (format-mode-line "%p%%")
       (format-mode-line "%p"))
   :enabled nil)
+
+;; Second Right divider segments
+(spaceline-define-segment all-the-icons-battery-status
+  "An `all-the-icons' segment to show the battery information"
+  (let* ((charging?  (equal "AC" (alist-get ?L fancy-battery-last-status)))
+         (percent    (string-to-int (alist-get ?p fancy-battery-last-status)))
+         (time       (alist-get ?t fancy-battery-last-status))
+
+         (icon-alist
+          (cond
+           (charging? '((icon . "charging") (inherit . success) (height . 1.3) (raise . 0.0)))
+           ((> percent 95) '((icon . "full") (inherit . success)))
+           ((> percent 70) '((icon . "three-quarters")))
+           ((> percent 30) '((icon . "half")))
+           ((> percent 15) '((icon . "quarter") (inherit . warning)))
+           (t '((icon . "empty") (inherit . error)))))
+
+         (icon-set (if charging? 'alltheicon 'faicon))
+         (icon-f   (all-the-icons--function-name icon-set))
+         (family-f (all-the-icons--family-name icon-set))
+
+         (icon-face `(:height 1.0 :family ,(funcall family-f) :background ,(face-background default-face)))
+         (text-face `(:height 0.9 :background ,(face-background default-face))))
+
+    (let-alist icon-alist
+      (when .height (plist-put icon-face :height .height))
+      (when .inherit
+        (plist-put icon-face :foreground (face-foreground .inherit))
+        (plist-put text-face :foreground (face-foreground .inherit)))
+      (concat
+       (propertize (funcall icon-f (format "battery-%s" .icon))
+                   'face icon-face
+                   'display `(raise ,(or .raise 0.0)))
+       (propertize (cond
+                    (spaceline-all-the-icons-slim-render "")
+                    (charging? (format " %s%%%%" percent))
+                    (t (format " %s" time)))
+                   'face text-face
+                   'display '(raise 0.1)))))
+
+  :global-override fancy-battery-mode-line
+  :when (and active (bound-and-true-p fancy-battery-mode)))
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
