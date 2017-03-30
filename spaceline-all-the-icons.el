@@ -270,6 +270,17 @@ possible, allowing more information to displayed on narrower windows/frames."
                    'help-echo help-echo)))
     :tight t)
 
+;;; Third Divider Segments
+(spaceline-define-segment
+    all-the-icons-process "An `all-the-icons' segment to depict the current process"
+    (propertize
+     (concat
+      (when (or (symbolp (all-the-icons-icon-for-buffer)) mode-line-process) (format-mode-line "%m"))
+      (when mode-line-process (format-mode-line mode-line-process)))
+     'face `(:height 0.8 :inherit)
+     'display '(raise 0.2))
+    :tight t)
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
