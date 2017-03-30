@@ -399,7 +399,7 @@ doesn't inherit all properties of a face."
                 'face `(:height 1.3 :family ,(all-the-icons-material-family) :inherit)
                 'local-map (make-mode-line-mouse-map 'mouse-1 'toggle-frame-fullscreen)))
 
-  :tight t :enabled t)
+  :tight t :enabled nil)
 
 (spaceline-define-segment all-the-icons-text-scale
   "An `all-the-icons' indicator to show how much text has been scaled"
@@ -644,7 +644,7 @@ available updates then restores the current buffer."
   (if (string-match "\%" (format-mode-line "%p"))
       (format-mode-line "%p%%")
       (format-mode-line "%p"))
-  :enabled nil)
+  :enabled nil :when (not spaceline-all-the-icons-slim-render))
 
 ;; Second Right divider segments
 (spaceline-define-segment all-the-icons-battery-status
@@ -674,16 +674,19 @@ available updates then restores the current buffer."
       (when .inherit
         (plist-put icon-face :foreground (face-foreground .inherit))
         (plist-put text-face :foreground (face-foreground .inherit)))
-      (concat
-       (propertize (funcall icon-f (format "battery-%s" .icon))
-                   'face icon-face
-                   'display `(raise ,(or .raise 0.0)))
-       (propertize (cond
-                    (spaceline-all-the-icons-slim-render "")
-                    (charging? (format " %s%%%%" percent))
-                    (t (format " %s" time)))
-                   'face text-face
-                   'display '(raise 0.1)))))
+      (propertize
+       (concat
+        (propertize (funcall icon-f (format "battery-%s" .icon))
+                    'face icon-face
+                    'display `(raise ,(or .raise 0.0)))
+        (propertize (cond
+                     (spaceline-all-the-icons-slim-render "")
+                     (charging? (format " %s%%%%" percent))
+                     (t (format " %s" time)))
+                    'face text-face
+                    'display '(raise 0.1)))
+       'help-echo `(format "%s Remaining" ,time)
+       'mouse-face (spaceline-all-the-icons--highlight))))
 
   :global-override fancy-battery-mode-line
   :when (and active (bound-and-true-p fancy-battery-mode)))
