@@ -122,6 +122,13 @@
                                   (force-window-update)))))
     :enabled nil)
 
+(spaceline-define-segment
+    all-the-icons-buffer-size "An `all-the-icons' segment depicting the buffer size"
+    (propertize (format-mode-line "%I")
+                'face '(:height 0.9 :inherit)
+                'display '(raise 0.1))
+    :tight t)
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
