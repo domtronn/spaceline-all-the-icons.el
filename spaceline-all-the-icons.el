@@ -251,16 +251,16 @@ possible, allowing more information to displayed on narrower windows/frames."
            (help-echo (format "Major-mode: `%s'" major-mode))
 
            (file-face `(:height ,height :inherit))
-           (show-path-p (and (not spaceline-all-the-icons-slim-render) path active)))
+           (show-path? (and (not spaceline-all-the-icons-slim-render) path active)))
 
-      (when (and spaceline-all-the-icons-highlight-file-name show-path-p)
+      (when (and spaceline-all-the-icons-highlight-file-name show-path?)
         (plist-put file-face :height height)
         (plist-put file-face :background (face-background default-face))
         (plist-put file-face :foreground (or spaceline-all-the-icons-file-name-highlight
                                              (face-background highlight-face))))
 
       (concat
-       (propertize (if show-path-p path "")
+       (propertize (if show-path? path "")
                    'face `(:height ,height :inherit)
                    'display `(raise ,raise)
                    'help-echo help-echo)
