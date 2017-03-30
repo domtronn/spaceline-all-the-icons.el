@@ -448,9 +448,12 @@ When FAMILY is provided, put `:family' property into face."
             (added-icon (car spaceline-all-the-icons-icon-set-git-stats))
             (removed-icon (cadr spaceline-all-the-icons-icon-set-git-stats)))
         (concat
-         (when (> added 0) (spaceline-all-the-icons--git-stats added-icon added 'success icon-fam))
-         (when (and (> added 0) (> removed 0)) (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
-         (when (> removed 0) (spaceline-all-the-icons--git-stats removed-icon removed 'error icon-fam)))))
+         (unless (zerop added)
+           (spaceline-all-the-icons--git-stats added-icon added 'success icon-fam))
+         (unless (or (zerop added) (zerop removed))
+           (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
+         (unless (zerop removed)
+           (spaceline-all-the-icons--git-stats removed-icon removed 'error icon-fam)))))
 
     :when (and active
                (fboundp 'git-gutter:statistic)
