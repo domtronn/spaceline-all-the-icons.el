@@ -43,8 +43,9 @@
           (const :tag "Toggle Switch     On / Off" ("toggle-on" . "toggle-off"))
           (const :tag "Chain Links       Solid / Broken" ("link" . "chain-broken"))))
 
-(defcustom spaceline-all-the-icons-icon-set-bookmark '((icon (on . "bookmark") (off . "bookmark-o"))
-                                                       (echo (on . "Bookmark") (off . "Remove Bookmark")))
+(defcustom spaceline-all-the-icons-icon-set-bookmark
+  '((icon (on . "bookmark") (off . "bookmark-o"))
+    (echo (on . "Bookmark") (off . "Remove Bookmark")))
   "The Icon set to use for the bookmark indicator."
   :group 'spaceline-all-the-icons
   :type '(radio
