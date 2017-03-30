@@ -48,8 +48,11 @@
   "Macro to create a getter function for icon set NAME."
   `(defun ,(intern (format "spaceline-all-the-icons-icon-set-%s" name)) ()
      ,(format "The Icon set to use for the `all-the-icons-%s' indicator." name)
-     (car (alist-get (symbol-value (intern ,(format "spaceline-all-the-icons-icon-set-%s" name)))
-                     (symbol-value (intern ,(format "spaceline-all-the-icons-icon-set--%s" name)))))))
+     (let* ((icon-name (symbol-value (intern ,(format "spaceline-all-the-icons-icon-set-%s" name))))
+            (icon-set (symbol-value (intern ,(format "spaceline-all-the-icons-icon-set--%s" name))))
+            (result (alist-get icon-name icon-set)))
+       (unless result (error "Unable to find key `%s' - See `spaceline-all-the-icons-icon-set-%s'" icon-name ,name))
+       (car result))))
 
 ;; Icon set getters
 (define-icon-set-getter "modified")
