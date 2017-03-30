@@ -691,6 +691,20 @@ available updates then restores the current buffer."
   :global-override fancy-battery-mode-line
   :when (and active (bound-and-true-p fancy-battery-mode)))
 
+(spaceline-define-segment all-the-icons-time
+  "An `all-the-icons' segment to to display the time and a clock icon"
+  (let ((icon (all-the-icons-wicon (format-time-string "time-%I") :v-adjust 0.0)))
+    (propertize
+     (concat
+      (propertize (format-time-string "%H:%M ") 'face '(:height 0.9 :inherit) 'display '(raise 0.1))
+      (propertize icon
+                  'face `(:height 0.9 :family ,(all-the-icons-wicon-family) :inherit)
+                  'display '(raise 0.1)))
+      'help-echo `(format-time-string "%H:%M")
+      'mouse-face (spaceline-all-the-icons--highlight)))
+  :tight t
+  :enabled t)
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
