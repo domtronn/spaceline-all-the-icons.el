@@ -281,6 +281,13 @@ possible, allowing more information to displayed on narrower windows/frames."
      'display '(raise 0.2))
     :tight t)
 
+(spaceline-define-segment
+    all-the-icons-position "An `all-the-icons' Line & Column indicator"
+    (propertize (format-mode-line "%l:%c")
+                'face `(:height 0.9 :inherit)
+                'display '(raise 0.1))
+    :tight t)
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
