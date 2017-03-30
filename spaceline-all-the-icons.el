@@ -178,9 +178,11 @@ possible, allowing more information to displayed on narrower windows/frames."
   :group 'spaceline-all-the-icons)
 
 ;;; Helper functions
-(defun spaceline-all-the-icons--separator (&optional padding)
-  "Wrapper to render vertical line separator with optional PADDING."
-  (propertize (format "%s|%s" (or padding "") (or padding ""))
+(defun spaceline-all-the-icons--separator (icon &optional left-padding right-padding)
+  "Wrapper to render vertical line separator ICON with optional LEFT-PADDING & RIGHT-PADDING."
+  (propertize (if spaceline-all-the-icons-slim-render
+                  (format "%s" icon)
+                  (format "%s%s%s" icon (or left-padding "") (or right-padding left-padding "")))
               'face '(:height 0.9 :inherit)
               'display '(raise 0.2)))
 
