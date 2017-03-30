@@ -286,9 +286,11 @@ doesn't inherit all properties of a face."
 
 (spaceline-define-segment
     all-the-icons-buffer-id "An `all-the-icons' segment to display current buffer id"
-    (let* ((buffer-id (if (buffer-file-name)
-                      (file-truename (buffer-file-name))
-                      (format-mode-line "%b")))
+    (let* ((buffer-id (if (and (buffer-file-name)
+                               (fboundp 'projectile-project-p)
+                               (projectile-project-p))
+                          (file-truename (buffer-file-name))
+                          (format-mode-line "%b")))
 
            (project-root    (ignore-errors (file-truename (projectile-project-root))))
            (buffer-relative (or (cadr (split-string buffer-id project-root)) buffer-id))
@@ -304,7 +306,6 @@ doesn't inherit all properties of a face."
            (show-path? (and (not spaceline-all-the-icons-slim-render) path active)))
 
       (when (and spaceline-all-the-icons-highlight-file-name show-path?)
-        (plist-put file-face :height height)
         (plist-put file-face :background (face-background default-face))
         (plist-put file-face :foreground (or spaceline-all-the-icons-file-name-highlight
                                              (face-background highlight-face))))
@@ -315,7 +316,7 @@ doesn't inherit all properties of a face."
                    'display `(raise ,raise)
                    'help-echo help-echo)
        (propertize file
-                   'face `(or ,file-face )
+                   'face file-face
                    'display `(raise ,raise)
                    'help-echo help-echo)))
     :tight t)
