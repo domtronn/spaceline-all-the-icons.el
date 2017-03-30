@@ -357,22 +357,30 @@ doesn't inherit all properties of a face."
          (help-echo (format "Major-mode: `%s'" major-mode))
 
          (file-face `(:height ,height :inherit))
-         (show-path? (and (not spaceline-all-the-icons-slim-render) path active)))
+         (show-path? (and (not spaceline-all-the-icons-slim-render) path active))
+         
+         (mouse-f (if (and (fboundp 'projectile-project-p)
+                           (projectile-project-p))
+                      'projectile-find-file
+                      'find-file)))
 
     (when (and spaceline-all-the-icons-highlight-file-name show-path?)
       (plist-put file-face :background (face-background default-face))
       (plist-put file-face :foreground (or spaceline-all-the-icons-file-name-highlight
                                            (face-background highlight-face))))
 
-    (concat
-     (propertize (if show-path? path "")
-                 'face `(:height ,height :inherit)
-                 'display `(raise ,raise)
-                 'help-echo help-echo)
-     (propertize file
-                 'face file-face
-                 'display `(raise ,raise)
-                 'help-echo help-echo)))
+    (propertize
+     (concat
+      (propertize (if show-path? path "")
+                  'face `(:height ,height :inherit)
+                  'display `(raise ,raise)
+                  'help-echo help-echo)
+      (propertize file
+                  'face file-face
+                  'display `(raise ,raise)
+                  'help-echo help-echo))
+     'mouse-face (spaceline-all-the-icons--highlight)
+     'local-map (make-mode-line-mouse-map 'mouse-1 mouse-f)))
   :tight t)
 
 ;;; Third Divider Segments
