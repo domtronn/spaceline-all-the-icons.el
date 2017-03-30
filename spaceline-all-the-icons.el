@@ -44,42 +44,72 @@
   :group 'spaceline-all-the-icons)
 
 (defcustom spaceline-all-the-icons-icon-set-modified '("link" . "chain-broken")
-  "The Icon set to use for the modified indicator."
+  "The Icon set to use for the `all-the-icons-modified' indicator."
   :group 'spaceline-all-the-icons-icon-set
-  :type '(radio
-          (const :tag "Toggle Switch     On / Off" ("toggle-on" . "toggle-off"))
-          (const :tag "Chain Links       Solid / Broken" ("link" . "chain-broken"))))
+  :type `(radio
+          (const :tag ,(format "Toggle Switch     - %s / %s"
+                               (all-the-icons-faicon "toggle-on")
+                               (all-the-icons-faicon "toggle-off"))
+                 ("toggle-on" . "toggle-off"))
+          (const :tag ,(format "Chain Links       - %s / %s"
+                               (all-the-icons-faicon "link")
+                               (all-the-icons-faicon "chain-broken"))
+                 ("link" . "chain-broken"))))
 
 (defcustom spaceline-all-the-icons-icon-set-bookmark
   '((icon (on . "bookmark") (off . "bookmark-o"))
     (echo (on . "Bookmark") (off . "Remove Bookmark")))
-  "The Icon set to use for the bookmark indicator."
+  "The Icon set to use for the `all-the-icons-bookmark' indicator."
   :group 'spaceline-all-the-icons-icon-set
-  :type '(radio
-          (const :tag "Bookmark Icon" ((icon (on . "bookmark") (off . "bookmark-o"))
-                                       (echo (on . "Bookmark") (off . "Remove Bookmark"))))
-          (const :tag "Heart Icon   " ((icon (on . "heart") (off . "heart-o"))
-                                       (echo (on . "Like") (off . "Unlike"))))
-          (const :tag "Star Icon    " ((icon (on . "star") (off . "star-o"))
-                                       (echo (on . "Star") (off . "Unstar"))))))
+  :type `(radio
+          (const :tag ,(format "Bookmark Icon  - %s / %s"
+                               (all-the-icons-faicon "bookmark")
+                               (all-the-icons-faicon "bookmark-o"))
+                 ((icon (on . "bookmark") (off . "bookmark-o"))
+                  (echo (on . "Bookmark") (off . "Remove Bookmark"))))
+          (const :tag ,(format "Heart Icon     - %s / %s"
+                               (all-the-icons-faicon "heart")
+                               (all-the-icons-faicon "heart-o"))
+                 ((icon (on . "heart") (off . "heart-o"))
+                  (echo (on . "Like") (off . "Unlike"))))
+          (const :tag ,(format "Star Icon      - %s / %s"
+                               (all-the-icons-faicon "star")
+                               (all-the-icons-faicon "star-o"))
+                 ((icon (on . "star") (off . "star-o"))
+                  (echo (on . "Star") (off . "Unstar"))))))
 
 (defcustom spaceline-all-the-icons-icon-set-dedicated
   '(("thumb-tack" . "faicon") ("pin" . "octicon"))
-  "The Icon set to use for the dedicated window indicator."
+  "The Icon set to use for the `all-the-icons-dedicated' window indicator."
   :group 'spaceline-all-the-icons-icon-set
-  :type '(radio
-          (const :tag "Thumb Tack / Pin " (("thumb-tack" . "faicon")
-                                           ("pin" . "octicon")))
-          (const :tag "Sticky Note      " (("sticky-note" . "faicon")
-                                           ("sticky-note-o" . "faicon")))))
+  :type `(radio
+          (const :tag ,(format "Pin          - %s / %s"
+                               (all-the-icons-octicon "pin" :v-adjust 0.0)
+                               (all-the-icons-faicon "thumb-tack" :v-adjust 0.0))
+                 (("thumb-tack" . "faicon")
+                  ("pin" . "octicon")))
+          (const :tag ,(format "Sticky Note  - %s / %s"
+                               (all-the-icons-faicon "sticky-note" :v-adjust 0.0)
+                               (all-the-icons-faicon "sticky-note-o" :v-adjust 0.0))
+                 (("sticky-note" . "faicon")
+                  ("sticky-note-o" . "faicon")))))
 
 (defcustom spaceline-all-the-icons-icon-set-window-numbering 'circle
-  "The Icon set to use for the modified indicator."
+  "The Icon set to use for the `all-the-icons-window-number' indicator."
   :group 'spaceline-all-the-icons-icon-set
-  :type '(radio
-          (const :tag "Circle Outline Icons" circle)
-          (const :tag "Circle Solid Icons" solid)
-          (const :tag "Square Icons" square)))
+  :type `(radio
+          (const :tag "Circle Outline - ①" circle)
+          (const :tag "Circle Solid   - ➊" solid)
+          (const :tag ,(format "Square         - %s" (all-the-icons-material "filter_1" :v-adjust 0.0)) square)))
+
+(defcustom spaceline-all-the-icons-icon-set-git-statistics 'git
+  "The Icon set to use for the `all-the-icons-git-status' indicator."
+  :group 'spaceline-all-the-icons-icon-set
+  :type `(radio
+          (const :tag ,(format "GitHub   - %s / %s"
+                               (all-the-icons-octicon "diff-added" :v-adjust 0.0)
+                               (all-the-icons-octicon "diff-removed" :v-adjust 0.0)) git)
+          (const :tag "Arrows   - ↑ / ↓" arrows)))
 
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
@@ -154,7 +184,7 @@ doesn't inherit all properties of a face."
     :when (buffer-file-name) :enabled nil)
 
 (spaceline-define-segment
-    all-the-icons-dedicated "An `all-he-icons' segment to indicate and allow for making windows dedicated"
+    all-the-icons-dedicated "An `all-the-icons' segment to indicate and allow for making windows dedicated"
     (pcase-let*
         ((window (get-buffer-window (current-buffer)))
          (dedicated (window-dedicated-p window))
