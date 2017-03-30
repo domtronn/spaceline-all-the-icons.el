@@ -43,22 +43,29 @@
   :group 'spaceline
   :group 'spaceline-all-the-icons)
 
-(defcustom spaceline-all-the-icons-icon-set-modified '("link" . "chain-broken")
+(defconst spaceline-all-the-icons-icon-set--modified
+  '((chain ("link" . "chain-broken"))
+    (toggle ("toggle-on" . "toggle-off"))
+    (circle ("circle-o" . "dot-circle-o"))))
+
+(defcustom spaceline-all-the-icons-icon-set-modified 'chain
   "The Icon set to use for the `all-the-icons-modified' indicator."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
           (const :tag ,(format "Toggle Switch     - %s / %s"
                                (all-the-icons-faicon "toggle-on")
-                               (all-the-icons-faicon "toggle-off"))
-                 ("toggle-on" . "toggle-off"))
+                               (all-the-icons-faicon "toggle-off")) toggle)
           (const :tag ,(format "Chain Links       - %s / %s"
                                (all-the-icons-faicon "link")
-                               (all-the-icons-faicon "chain-broken"))
-                 ("link" . "chain-broken"))
+                               (all-the-icons-faicon "chain-broken")) chain)
           (const :tag ,(format "Radio Buttons     - %s / %s"
                                (all-the-icons-faicon "circle-o")
-                               (all-the-icons-faicon "dot-circle-o"))
-                 ("circle-o" . "dot-circle-o"))))
+                               (all-the-icons-faicon "dot-circle-o")) circle)))
+
+(defun spaceline-all-the-icons-icon-set-modified ()
+  "Get `icon-set-modified' icon."
+  (car (alist-get spaceline-all-the-icons-icon-set-modified
+                  spaceline-all-the-icons-icon-set--modified)))
 
 (defcustom spaceline-all-the-icons-icon-set-bookmark
   '((icon (on . "bookmark") (off . "bookmark-o"))
@@ -196,8 +203,8 @@ doesn't inherit all properties of a face."
   "An `all-the-icons' segment depiciting the current buffers state"
   (let* ((buffer-state (format-mode-line "%*"))
          (icon (cond
-                ((equal buffer-state "-") (car spaceline-all-the-icons-icon-set-modified))
-                ((equal buffer-state "*") (cdr spaceline-all-the-icons-icon-set-modified))
+                ((equal buffer-state "-") (car (spaceline-all-the-icons-icon-set-modified)))
+                ((equal buffer-state "*") (cdr (spaceline-all-the-icons-icon-set-modified)))
                 ((equal buffer-state "%") "lock"))))
 
     (propertize (all-the-icons-faicon icon :v-adjust 0.0)
