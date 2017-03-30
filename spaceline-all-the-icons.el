@@ -29,8 +29,7 @@
 (require 'spaceline-segments)
 (require 'bookmark)
 
-;; toggle-on/-off  Toggle Switch
-;; link/-broken    Chain with break
+;; Customization
 (defgroup spaceline-all-the-icons nil
   "Customize the the Spaceline All The Icons mode line and theming."
   :prefix "spaceline-all-the-icons-"
@@ -172,6 +171,11 @@ possible, allowing more information to displayed on narrower windows/frames."
   "The Color to highlight the file name part of the path.  e.g. #123123."
   :group 'spaceline-all-the-icons
   :type 'string)
+
+(defface spaceline-all-the-icons-info-face
+  '((t (:foreground "#63B2FF")))
+  "Face for `all-the-icons' info feedback in the modeline."
+  :group 'spaceline-all-the-icons)
 
 ;;; Helper functions
 (defun spaceline-all-the-icons--separator (&optional padding)
@@ -521,7 +525,7 @@ When FAMILY is provided, put `:family' property into face."
        (unless (or (zerop (or .warning 0))
                    (zerop (or .info 0))) space)
        (unless (zerop (or .info 0))
-         (spaceline-all-the-icons--flycheck-pip help-icon .info 'success family))))))
+         (spaceline-all-the-icons--flycheck-pip help-icon .info 'spaceline-all-the-icons-info-face family))))))
 
 (defun spaceline-all-the-icons--flycheck-finished ()
   "Get the string for finished status of Flycheck."
@@ -560,6 +564,18 @@ When FAMILY is provided, put `:family' property into face."
   :tight t
   :when (and active (bound-and-true-p flycheck-last-status-change)))
 
+(spaceline-define-segment all-the-icons-flycheck-status-info
+  "An `all-the-icons' segment to show the info section of `flycheck-last-status-change'."
+  (let-alist (flycheck-count-errors flycheck-current-errors)
+    (unless (zerop (or .info 0))
+      (propertize (format "%s %s" .info (all-the-icons-faicon "info" :v-adjust 0.0 :height 0.8))
+                  'face `(:foreground ,(face-foreground 'spaceline-all-the-icons-info-face))
+                  'help-echo "Show Flycheck Errors"
+                  'mouse-face (spaceline-all-the-icons--highlight)
+                  'local-map (make-mode-line-mouse-map 'mouse-1 'flycheck-list-errors))))
+    :when (and active
+               (not spaceline-all-the-icons-slim-render)
+               (bound-and-true-p flycheck-last-status-change)))
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
