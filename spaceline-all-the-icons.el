@@ -43,6 +43,19 @@
   :group 'spaceline
   :group 'spaceline-all-the-icons)
 
+(defmacro define-icon-set-getter (name)
+  "Macro to create a getter function for icon set NAME."
+  `(defun ,(intern (format "spaceline-all-the-icons-icon-set-%s" name)) ()
+     ,(format "The Icon set to use for the `all-the-icons-%s' indicator." name)
+     (car (alist-get (symbol-value (intern ,(format "spaceline-all-the-icons-icon-set-%s" name)))
+                     (symbol-value (intern ,(format "spaceline-all-the-icons-icon-set--%s" name)))))))
+
+;; Icon set getters
+(define-icon-set-getter "modified")
+(define-icon-set-getter "bookmark")
+(define-icon-set-getter "dedicated")
+
+;;; Modified Icon
 (defcustom spaceline-all-the-icons-icon-set-modified 'chain
   "The Icon set to use for the `all-the-icons-modified' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -62,11 +75,7 @@
     (toggle ("toggle-on" . "toggle-off"))
     (circle ("circle-o" . "dot-circle-o"))))
 
-(defun spaceline-all-the-icons-icon-set-modified ()
-  "Get `icon-set-modified' icon."
-  (car (alist-get spaceline-all-the-icons-icon-set-modified
-                  spaceline-all-the-icons-icon-set--modified)))
-
+;;; Bookmark Icon
 (defcustom spaceline-all-the-icons-icon-set-bookmark 'bookmark
   "The Icon set to use for the `all-the-icons-bookmark' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -89,11 +98,6 @@
     (start    ((icon (on . "star") (off . "star-o"))
                (echo (on . "Star") (off . "Unstar"))))))
 
-(defun spaceline-all-the-icons-icon-set-bookmark ()
-  "Get `icon-set-modified' icon."
-  (car (alist-get spaceline-all-the-icons-icon-set-bookmark
-                  spaceline-all-the-icons-icon-set--bookmark)))
-
 (defcustom spaceline-all-the-icons-icon-set-dedicated
   '(("thumb-tack" . faicon) ("pin" . octicon))
   "The Icon set to use for the `all-the-icons-dedicated' window indicator."
@@ -109,6 +113,7 @@
                                (all-the-icons-faicon "sticky-note-o" :v-adjust 0.0))
                  (("sticky-note" . faicon)
                   ("sticky-note-o" . faicon)))))
+
 
 (defcustom spaceline-all-the-icons-icon-set-window-numbering 'circle
   "The Icon set to use for the `all-the-icons-window-number' indicator."
