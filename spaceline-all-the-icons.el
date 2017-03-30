@@ -111,6 +111,12 @@ possible, allowing more information to displayed on narrower windows/frames."
               'face '(:height 0.9 :inherit)
               'display '(raise 0.2)))
 
+(defun spaceline-all-the-icons--highlight ()
+  "Return the `mouse-face' highlight face to be used when propertizing text.
+This is done as a function rather than a static face as it
+doesn't inherit all properties of a face."
+  `((foreground-color . ,(face-foreground 'highlight))))
+
 ;;; First Divider Segments
 (spaceline-define-segment
     all-the-icons-modified "An `all-the-icons' segment depiciting the current buffers state"
@@ -132,9 +138,9 @@ possible, allowing more information to displayed on narrower windows/frames."
                (bookmark (find-if (lambda (it) (equal bookmark-name (car it))) bookmark-alist)))
 
           (propertize (all-the-icons-faicon (if bookmark .icon.on .icon.off) :v-adjust 0.1)
-                      'pointer   'hand
-                      'help-echo  (if bookmark .echo.off .echo.on)
                       'face      `(:family ,(all-the-icons-faicon-family) :inherit)
+                      'help-echo  (if bookmark .echo.off .echo.on)
+                      'mouse-face (spaceline-all-the-icons--highlight)
                       'local-map  (make-mode-line-mouse-map
                                    'mouse-1
                                    `(lambda () (interactive)
@@ -156,10 +162,10 @@ possible, allowing more information to displayed on narrower windows/frames."
          (family-f (intern (format "all-the-icons-%s-family" family))))
 
       (propertize (funcall icon-f icon)
-                  'pointer    'hand
                   'display    '(raise 0.1)
                   'face       `(:family ,(funcall family-f) :inherit)
                   'help-echo  "Toggle `window-dedidcated' for this window"
+                  'mouse-face (spaceline-all-the-icons--highlight)
                   'local-map  (make-mode-line-mouse-map
                                'mouse-1
                                `(lambda () (interactive)
@@ -209,13 +215,13 @@ possible, allowing more information to displayed on narrower windows/frames."
       (if spaceline-all-the-icons-slim-render
           (propertize project-id
                       'display '(raise 0.1)
-                      'pointer 'hand
+                      'mouse-face (spaceline-all-the-icons--highlight)
                       'help-echo help-echo
                       'local-map local-map)
         (concat
          (spaceline-all-the-icons--separator) " "
          (propertize project-id
-                     'pointer 'hand
+                     'mouse-face (spaceline-all-the-icons--highlight)
                      'display '(raise 0.2)
                      'face '(:height 0.8 :inherit)
                      'help-echo help-echo
@@ -310,9 +316,9 @@ possible, allowing more information to displayed on narrower windows/frames."
            (icon (all-the-icons-material (if fullscreen? "fullscreen_exit" "fullscreen"))))
 
       (propertize icon
-                  'pointer 'hand
                   'display '(raise -0.2)
                   'help-echo "Toggle frame fullscreen"
+                  'mouse-face (spaceline-all-the-icons--highlight)
                   'face `(:height 1.3 :family ,(all-the-icons-material-family) :inherit)
                   'local-map (make-mode-line-mouse-map 'mouse-1 'toggle-frame-fullscreen)))
 
