@@ -106,14 +106,21 @@
           (const :tag "Circle Solid   - ➊" solid)
           (const :tag ,(format "Square         - %s" (all-the-icons-material "filter_1" :v-adjust 0.0)) square)))
 
-(defcustom spaceline-all-the-icons-icon-set-git-statistics 'git
+(defcustom spaceline-all-the-icons-icon-set-git-stats
+  `(,(all-the-icons-octicon "diff-added")
+    ,(all-the-icons-octicon "diff-removed")
+    ,(all-the-icons-octicon-family))
   "The Icon set to use for the `all-the-icons-git-status' indicator."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
           (const :tag ,(format "GitHub   - %s / %s"
                                (all-the-icons-octicon "diff-added" :v-adjust 0.0)
-                               (all-the-icons-octicon "diff-removed" :v-adjust 0.0)) git)
-          (const :tag "Arrows   - ↑ / ↓" arrows)))
+                               (all-the-icons-octicon "diff-removed" :v-adjust 0.0))
+                 (,(all-the-icons-octicon "diff-added")
+                  ,(all-the-icons-octicon "diff-removed")
+                  ,(all-the-icons-octicon-family)))
+          (const :tag "Arrows   - ↑ / ↓"
+                 ("↑" "↓"))))
 
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
@@ -421,6 +428,32 @@ doesn't inherit all properties of a face."
           (t ""))
 
     :when (and active vc-mode))
+
+(defun spaceline-all-the-icons--git-stats (icon text face &optional family)
+  "Wrapper to render git statistics ICON with TEXT using FACE.
+When FAMILY is provided, put `:family' property into face."
+  (let* ((height (if (> (length spaceline-all-the-icons-icon-set-git-stats) 2) 1.0 1.2))
+         (icon-face `(:foreground ,(face-foreground face) :height ,height)))
+    (when family (plist-put icon-face :family family))
+    (concat
+     (propertize icon 'face icon-face 'display '(raise 0.1))
+     (propertize " " 'face '(:height 0.2))
+     (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face))))))
+
+(spaceline-define-segment
+    all-the-icons-git-status "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
+    (destructuring-bind (added . removed) (git-gutter:statistic)
+      (let ((icon-fam (caddr spaceline-all-the-icons-icon-set-git-stats))
+            (added-icon (car spaceline-all-the-icons-icon-set-git-stats))
+            (removed-icon (cadr spaceline-all-the-icons-icon-set-git-stats)))
+        (concat
+         (when (> added 0) (spaceline-all-the-icons--git-stats added-icon added 'success icon-fam))
+         (when (and (> added 0) (> removed 0)) (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
+         (when (> removed 0) (spaceline-all-the-icons--git-stats removed-icon removed 'error icon-fam)))))
+
+    :when (and active
+               (fboundp 'git-gutter:statistic)
+               (not (equal '(0 . 0) (git-gutter:statistic)))))
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
