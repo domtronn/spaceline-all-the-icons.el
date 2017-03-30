@@ -43,11 +43,6 @@
   :group 'spaceline
   :group 'spaceline-all-the-icons)
 
-(defconst spaceline-all-the-icons-icon-set--modified
-  '((chain ("link" . "chain-broken"))
-    (toggle ("toggle-on" . "toggle-off"))
-    (circle ("circle-o" . "dot-circle-o"))))
-
 (defcustom spaceline-all-the-icons-icon-set-modified 'chain
   "The Icon set to use for the `all-the-icons-modified' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -62,32 +57,42 @@
                                (all-the-icons-faicon "circle-o")
                                (all-the-icons-faicon "dot-circle-o")) circle)))
 
+(defconst spaceline-all-the-icons-icon-set--modified
+  '((chain ("link" . "chain-broken"))
+    (toggle ("toggle-on" . "toggle-off"))
+    (circle ("circle-o" . "dot-circle-o"))))
+
 (defun spaceline-all-the-icons-icon-set-modified ()
   "Get `icon-set-modified' icon."
   (car (alist-get spaceline-all-the-icons-icon-set-modified
                   spaceline-all-the-icons-icon-set--modified)))
 
-(defcustom spaceline-all-the-icons-icon-set-bookmark
-  '((icon (on . "bookmark") (off . "bookmark-o"))
-    (echo (on . "Bookmark") (off . "Remove Bookmark")))
+(defcustom spaceline-all-the-icons-icon-set-bookmark 'bookmark
   "The Icon set to use for the `all-the-icons-bookmark' indicator."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
           (const :tag ,(format "Bookmark Icon  - %s / %s"
                                (all-the-icons-faicon "bookmark")
-                               (all-the-icons-faicon "bookmark-o"))
-                 ((icon (on . "bookmark") (off . "bookmark-o"))
-                  (echo (on . "Bookmark") (off . "Remove Bookmark"))))
+                               (all-the-icons-faicon "bookmark-o")) bookmark)
           (const :tag ,(format "Heart Icon     - %s / %s"
                                (all-the-icons-faicon "heart")
-                               (all-the-icons-faicon "heart-o"))
-                 ((icon (on . "heart") (off . "heart-o"))
-                  (echo (on . "Like") (off . "Unlike"))))
+                               (all-the-icons-faicon "heart-o")) heart)
           (const :tag ,(format "Star Icon      - %s / %s"
                                (all-the-icons-faicon "star")
-                               (all-the-icons-faicon "star-o"))
-                 ((icon (on . "star") (off . "star-o"))
-                  (echo (on . "Star") (off . "Unstar"))))))
+                               (all-the-icons-faicon "star-o")) star)))
+
+(defconst spaceline-all-the-icons-icon-set--bookmark
+  '((bookmark ((icon (on . "bookmark") (off . "bookmark-o"))
+               (echo (on . "Bookmark") (off . "Remove Bookmark"))))
+    (heart    ((icon (on . "heart") (off . "heart-o"))
+               (echo (on . "Like") (off . "Unlike"))))
+    (start    ((icon (on . "star") (off . "star-o"))
+               (echo (on . "Star") (off . "Unstar"))))))
+
+(defun spaceline-all-the-icons-icon-set-bookmark ()
+  "Get `icon-set-modified' icon."
+  (car (alist-get spaceline-all-the-icons-icon-set-bookmark
+                  spaceline-all-the-icons-icon-set--bookmark)))
 
 (defcustom spaceline-all-the-icons-icon-set-dedicated
   '(("thumb-tack" . faicon) ("pin" . octicon))
@@ -217,7 +222,7 @@ doesn't inherit all properties of a face."
   "An `all-the-icons' segment allowing for easy bookmarking of files"
   (progn
     (unless (boundp 'bookmark-alist) (bookmark-all-names)) ;; Force bookmarks to load
-    (let-alist spaceline-all-the-icons-icon-set-bookmark
+    (let-alist (spaceline-all-the-icons-icon-set-bookmark)
       (let* ((bookmark-name (buffer-file-name))
              (bookmark (find-if (lambda (it) (equal bookmark-name (car it))) bookmark-alist)))
 
