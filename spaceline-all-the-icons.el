@@ -26,6 +26,7 @@
 ;;; Code:
 
 (require 'spaceline)
+(require 'spaceline-segments)
 (require 'bookmark)
 
 ;; toggle-on/-off  Toggle Switch
@@ -121,6 +122,33 @@
                   ,(all-the-icons-octicon-family)))
           (const :tag "Arrows   - ↑ / ↓"
                  ("↑" "↓"))))
+
+(defcustom spaceline-all-the-icons-icon-set-flycheck-slim
+  `(,(all-the-icons-material "error" :v-adjust -0.2)
+    ,(all-the-icons-material "help" :v-adjust -0.2)
+    ,(all-the-icons-material "info" :v-adjust -0.2)
+    ,(all-the-icons-material-family))
+  "The Icon set to use for the `all-the-icons-flycheck-status' in SLIM mode."
+  :group 'spaceline-all-the-icons-icon-set
+  :type `(radio
+          (const :tag ,(format "Solid Icons   - %s %s %s"
+                               (all-the-icons-material "error" :v-adjust -0.2)
+                               (all-the-icons-material "help" :v-adjust -0.2)
+                               (all-the-icons-material "info" :v-adjust -0.2))
+                 (,(all-the-icons-material "error" :v-adjust -0.2)
+                  ,(all-the-icons-material "help" :v-adjust -0.2)
+                  ,(all-the-icons-material "info" :v-adjust -0.2)
+                  ,(all-the-icons-material-family)))
+          (const :tag ,(format "Outline Icons - %s %s %s"
+                               (all-the-icons-material "error_outline" :v-adjust -0.2)
+                               (all-the-icons-material "help_outline" :v-adjust -0.2)
+                               (all-the-icons-material "info_outline" :v-adjust -0.2))
+                 (,(all-the-icons-material "error_outline" :v-adjust -0.2)
+                  ,(all-the-icons-material "help_outline" :v-adjust -0.2)
+                  ,(all-the-icons-material "info_outline" :v-adjust -0.2)
+                  ,(all-the-icons-material-family)))
+          (const :tag "Circles       - • • •" ("•" "•" "•"))))
+
 
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
@@ -458,6 +486,47 @@ When FAMILY is provided, put `:family' property into face."
     :when (and active
                (fboundp 'git-gutter:statistic)
                (not (equal '(0 . 0) (git-gutter:statistic)))))
+
+(defun spaceline-all-the-icons--flycheck-pip (icon num face &optional family)
+  "Wrapper to render flycheck status ICON with NUM using FACE.
+When FAMILY is provided, put `:family' property into face."
+  (let* ((height 1.0)
+         (raise (if (> (length spaceline-all-the-icons-icon-set-flycheck-slim) 3) -0.2 0.0))
+         (icon-face `(:foreground ,(face-foreground face) :height ,height)))
+    (when family (plist-put icon-face :family family))
+    (concat
+     (propertize icon 'face icon-face 'display `(raise ,raise))
+     (propertize (format "%s" num) 'face `(:foreground ,(face-foreground face))))))
+
+(defun spaceline-all-the-icons--flycheck-status-slim ()
+  "Render the mode line for Flycheck Status slim mode."
+  (let-alist (flycheck-count-errors flycheck-current-errors)
+    (let ((error-icon (car spaceline-all-the-icons-icon-set-flycheck-slim))
+          (warn-icon (cadr spaceline-all-the-icons-icon-set-flycheck-slim))
+          (help-icon (caddr spaceline-all-the-icons-icon-set-flycheck-slim))
+          (family (cadddr spaceline-all-the-icons-icon-set-flycheck-slim))
+          
+          (space (propertize " " 'face '(:height 0.6))))
+      (concat
+       (unless (zerop (or .error 0))
+         (spaceline-all-the-icons--flycheck-pip error-icon .error 'error family))
+       (unless (or (zerop (or .error 0))
+                   (zerop (or .warning 0))) space)
+       (unless (zerop (or .warning 0))
+         (spaceline-all-the-icons--flycheck-pip warn-icon .warning 'warning family))
+       (unless (or (zerop (or .warning 0))
+                   (zerop (or .info 0))) space)
+       (unless (zerop (or .info 0))
+         (spaceline-all-the-icons--flycheck-pip help-icon .info 'success family))))))
+
+(spaceline-define-segment
+    all-the-icons-flycheck-status "An `all-the-icons' segment to show the flycheck status."
+    (spaceline-all-the-icons--flycheck-status-slim)
+
+    :tight t
+    :when (and active
+               (bound-and-true-p flycheck-last-status-change)
+               (bound-and-true-p flycheck-current-errors)))
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
