@@ -639,6 +639,13 @@ available updates then restores the current buffer."
   :when (and active
              (not (equal "All" (format-mode-line "%p")))))
 
+(spaceline-define-segment all-the-icons-buffer-position
+  "An `all-the-icons' segment to show the buffer position as a percentage"
+  (if (string-match "\%" (format-mode-line "%p"))
+      (format-mode-line "%p%%")
+      (format-mode-line "%p"))
+  :enabled nil)
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
