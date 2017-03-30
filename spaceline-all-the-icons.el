@@ -26,8 +26,9 @@
 ;;; Code:
 
 (require 'spaceline)
-(require 'spaceline-segments)
-(require 'bookmark)
+(require 'all-the-icons)
+
+(require 'spaceline-all-the-icons-separators "./spaceline-all-the-icons-separators")
 
 ;; Customization
 (defgroup spaceline-all-the-icons nil
