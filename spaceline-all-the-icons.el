@@ -126,7 +126,9 @@ doesn't inherit all properties of a face."
                   ((equal buffer-state "*") (cdr spaceline-all-the-icons-icon-set-modified))
                   ((equal buffer-state "%") "lock"))))
       (propertize (all-the-icons-faicon icon :v-adjust -0.0)
-                  'face `(:family ,(all-the-icons-faicon-family) :height 1.1 :inherit)))
+                  'face `(:family ,(all-the-icons-faicon-family) :height 1.1 :inherit)
+                  'mouse-face (spaceline-all-the-icons--highlight)
+                  'local-map (make-mode-line-mouse-map 'mouse-1 'read-only-mode)))
      :tight t)
 
 (spaceline-define-segment
