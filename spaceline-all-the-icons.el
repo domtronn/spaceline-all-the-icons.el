@@ -84,9 +84,7 @@
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
   :group 'spaceline-all-the-icons
-  :type '(radio
-          (const :tag "Always show the window number" t)
-          (const :tag "Only when there are multiple windows" nil)))
+  :type 'boolean)
 
 ;;; First Divider Segments
 (spaceline-define-segment
