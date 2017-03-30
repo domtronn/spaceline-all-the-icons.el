@@ -213,6 +213,17 @@ possible, allowing more information to displayed on narrower windows/frames."
          " " (spaceline-all-the-icons--separator))))
     :tight t)
 
+(spaceline-define-segment
+    all-the-icons-mode-icon "An `all-the-icons' segment indicating the current buffer's mode with an icon"
+    (let ((icon (all-the-icons-icon-for-buffer)))
+      (propertize icon
+                  'help-echo (format "Major-mode: `%s'" major-mode)
+                  'display `(raise ,(if spaceline-all-the-icons-slim-render -0.1 0.0))
+                  'face `(:height ,(if spaceline-all-the-icons-slim-render 1.3 1.1)
+                          :family ,(all-the-icons-icon-family-for-buffer)
+                          :inherit)))
+    :when (not (symbolp (all-the-icons-icon-for-buffer))))
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
