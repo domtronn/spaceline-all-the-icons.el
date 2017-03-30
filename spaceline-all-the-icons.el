@@ -187,243 +187,243 @@ doesn't inherit all properties of a face."
   `((foreground-color . ,(face-foreground 'highlight))))
 
 ;;; First Divider Segments
-(spaceline-define-segment
-    all-the-icons-modified "An `all-the-icons' segment depiciting the current buffers state"
-    (let* ((buffer-state (format-mode-line "%*"))
-           (icon (cond
-                  ((equal buffer-state "-") (car spaceline-all-the-icons-icon-set-modified))
-                  ((equal buffer-state "*") (cdr spaceline-all-the-icons-icon-set-modified))
-                  ((equal buffer-state "%") "lock"))))
+(spaceline-define-segment all-the-icons-modified
+  "An `all-the-icons' segment depiciting the current buffers state"
+  (let* ((buffer-state (format-mode-line "%*"))
+         (icon (cond
+                ((equal buffer-state "-") (car spaceline-all-the-icons-icon-set-modified))
+                ((equal buffer-state "*") (cdr spaceline-all-the-icons-icon-set-modified))
+                ((equal buffer-state "%") "lock"))))
 
-      (propertize (all-the-icons-faicon icon :v-adjust 0.0)
-                  'face `(:family ,(all-the-icons-faicon-family) :height 1.1 :inherit)
-                  'mouse-face (spaceline-all-the-icons--highlight)
-                  'local-map (make-mode-line-mouse-map 'mouse-1 'read-only-mode)))
-     :tight t)
+    (propertize (all-the-icons-faicon icon :v-adjust 0.0)
+                'face `(:family ,(all-the-icons-faicon-family) :height 1.1 :inherit)
+                'mouse-face (spaceline-all-the-icons--highlight)
+                'local-map (make-mode-line-mouse-map 'mouse-1 'read-only-mode)))
+  :tight t)
 
-(spaceline-define-segment
-    all-the-icons-bookmark "An `all-the-icons' segment allowing for easy bookmarking of files"
-    (progn
-      (unless (boundp 'bookmark-alist) (bookmark-all-names)) ;; Force bookmarks to load
-      (let-alist spaceline-all-the-icons-icon-set-bookmark
-        (let* ((bookmark-name (buffer-file-name))
-               (bookmark (find-if (lambda (it) (equal bookmark-name (car it))) bookmark-alist)))
+(spaceline-define-segment all-the-icons-bookmark
+  "An `all-the-icons' segment allowing for easy bookmarking of files"
+  (progn
+    (unless (boundp 'bookmark-alist) (bookmark-all-names)) ;; Force bookmarks to load
+    (let-alist spaceline-all-the-icons-icon-set-bookmark
+      (let* ((bookmark-name (buffer-file-name))
+             (bookmark (find-if (lambda (it) (equal bookmark-name (car it))) bookmark-alist)))
 
-          (propertize (all-the-icons-faicon (if bookmark .icon.on .icon.off) :v-adjust 0.1)
-                      'face      `(:family ,(all-the-icons-faicon-family) :inherit)
-                      'help-echo  (if bookmark .echo.off .echo.on)
-                      'mouse-face (spaceline-all-the-icons--highlight)
-                      'local-map  (make-mode-line-mouse-map
-                                   'mouse-1
-                                   `(lambda () (interactive)
-                                      (if ,(car bookmark)
-                                          (bookmark-delete ,(car bookmark))
-                                          (bookmark-set ,bookmark-name))
-                                      (force-window-update)))))))
+        (propertize (all-the-icons-faicon (if bookmark .icon.on .icon.off) :v-adjust 0.1)
+                    'face      `(:family ,(all-the-icons-faicon-family) :inherit)
+                    'help-echo  (if bookmark .echo.off .echo.on)
+                    'mouse-face (spaceline-all-the-icons--highlight)
+                    'local-map  (make-mode-line-mouse-map
+                                 'mouse-1
+                                 `(lambda () (interactive)
+                                    (if ,(car bookmark)
+                                        (bookmark-delete ,(car bookmark))
+                                      (bookmark-set ,bookmark-name))
+                                    (force-window-update)))))))
 
-    :when (buffer-file-name) :enabled nil)
+  :when (buffer-file-name) :enabled nil)
 
-(spaceline-define-segment
-    all-the-icons-dedicated "An `all-the-icons' segment to indicate and allow for making windows dedicated"
-    (pcase-let*
-        ((window (get-buffer-window (current-buffer)))
-         (dedicated (window-dedicated-p window))
-         (`(,icon . ,family) (funcall (if dedicated 'car 'cadr) spaceline-all-the-icons-icon-set-dedicated))
+(spaceline-define-segment all-the-icons-dedicated
+  "An `all-the-icons' segment to indicate and allow for making windows dedicated"
+  (pcase-let*
+      ((window (get-buffer-window (current-buffer)))
+       (dedicated (window-dedicated-p window))
+       (`(,icon . ,family) (funcall (if dedicated 'car 'cadr) spaceline-all-the-icons-icon-set-dedicated))
 
-         (icon-f (intern (format "all-the-icons-%s" family)))
-         (family-f (intern (format "all-the-icons-%s-family" family))))
+       (icon-f (intern (format "all-the-icons-%s" family)))
+       (family-f (intern (format "all-the-icons-%s-family" family))))
 
-      (propertize (funcall icon-f icon)
-                  'display    '(raise 0.1)
-                  'face       `(:family ,(funcall family-f) :inherit)
-                  'help-echo  "Toggle `window-dedidcated' for this window"
-                  'mouse-face (spaceline-all-the-icons--highlight)
-                  'local-map  (make-mode-line-mouse-map
-                               'mouse-1
-                               `(lambda () (interactive)
-                                  (set-window-dedicated-p ,window (not ,dedicated))
-                                  (force-window-update)))))
-    :enabled nil)
+    (propertize (funcall icon-f icon)
+                'display    '(raise 0.1)
+                'face       `(:family ,(funcall family-f) :inherit)
+                'help-echo  "Toggle `window-dedidcated' for this window"
+                'mouse-face (spaceline-all-the-icons--highlight)
+                'local-map  (make-mode-line-mouse-map
+                             'mouse-1
+                             `(lambda () (interactive)
+                                (set-window-dedicated-p ,window (not ,dedicated))
+                                (force-window-update)))))
+  :enabled nil)
 
-(spaceline-define-segment
-    all-the-icons-window-number "An `all-the-icons' segment depicting the current window number"
-    (let ((face '(:height 1.4 :inherit))
-          (window-num
-           (cond
-            ((bound-and-true-p winum-mode) (winum-get-number))
-            ((bound-and-true-p window-numbering-mode) (window-numbering-get-number)))))
-      (if (> window-num 9) window-num ;; Return the string version of the window number
-        (let ((icon
-               (pcase spaceline-all-the-icons-icon-set-window-numbering
-                 ('solid   (format "%c" (+ window-num 10121)))
-                 ('circle  (format "%c" (+ window-num 9311)))
-                 ('square  (progn
-                             (plist-put face :height 1.2)
-                             (plist-put face :family (all-the-icons-material-family))
-                             (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
+(spaceline-define-segment all-the-icons-window-number
+  "An `all-the-icons' segment depicting the current window number"
+  (let ((face '(:height 1.4 :inherit))
+        (window-num
+         (cond
+          ((bound-and-true-p winum-mode) (winum-get-number))
+          ((bound-and-true-p window-numbering-mode) (window-numbering-get-number)))))
+    (if (> window-num 9) window-num ;; Return the string version of the window number
+      (let ((icon
+             (pcase spaceline-all-the-icons-icon-set-window-numbering
+               ('solid   (format "%c" (+ window-num 10121)))
+               ('circle  (format "%c" (+ window-num 9311)))
+               ('square  (progn
+                           (plist-put face :height 1.2)
+                           (plist-put face :family (all-the-icons-material-family))
+                           (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
 
-          (propertize icon 'face face))))
+        (propertize icon 'face face))))
 
-    :when (and
-           (or (bound-and-true-p winum-mode)
-               (bound-and-true-p window-numbering-mode))
-           (or spaceline-all-the-icons-window-number-always-visible
-               (> (length (window-list)) 1))))
+  :when (and
+         (or (bound-and-true-p winum-mode)
+             (bound-and-true-p window-numbering-mode))
+         (or spaceline-all-the-icons-window-number-always-visible
+             (> (length (window-list)) 1))))
 
-(spaceline-define-segment
-    all-the-icons-buffer-size "An `all-the-icons' segment depicting the buffer size"
-    (propertize (format-mode-line "%I")
-                'face '(:height 0.9 :inherit)
-                'display '(raise 0.1))
-    :tight t)
+(spaceline-define-segment all-the-icons-buffer-size
+  "An `all-the-icons' segment depicting the buffer size"
+  (propertize (format-mode-line "%I")
+              'face '(:height 0.9 :inherit)
+              'display '(raise 0.1))
+  :tight t)
 
 ;;; Second Divider Segments
-(spaceline-define-segment
-    all-the-icons-projectile "An `all-the-icons' segment to indicate the current `projectile' project"
-    (let ((help-echo "Switch Project")
-          (local-map (make-mode-line-mouse-map 'mouse-1 'projectile-switch-project))
-          (project-id (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-                          (projectile-project-name) "×")));;
-      (if spaceline-all-the-icons-slim-render
-          (propertize project-id
-                      'display '(raise 0.1)
-                      'mouse-face (spaceline-all-the-icons--highlight)
-                      'help-echo help-echo
-                      'local-map local-map)
-        (concat
-         (spaceline-all-the-icons--separator) " "
-         (propertize project-id
-                     'mouse-face (spaceline-all-the-icons--highlight)
-                     'display '(raise 0.2)
-                     'face '(:height 0.8 :inherit)
-                     'help-echo help-echo
-                     'local-map local-map)
-         " " (spaceline-all-the-icons--separator))))
-    :tight t)
-
-(spaceline-define-segment
-    all-the-icons-mode-icon "An `all-the-icons' segment indicating the current buffer's mode with an icon"
-    (let ((icon (all-the-icons-icon-for-buffer)))
-      (propertize icon
-                  'help-echo (format "Major-mode: `%s'" major-mode)
-                  'display `(raise ,(if spaceline-all-the-icons-slim-render -0.1 0.0))
-                  'face `(:height ,(if spaceline-all-the-icons-slim-render 1.3 1.1)
-                          :family ,(all-the-icons-icon-family-for-buffer)
-                          :inherit)))
-    :when (not (symbolp (all-the-icons-icon-for-buffer))))
-
-(spaceline-define-segment
-    all-the-icons-buffer-id "An `all-the-icons' segment to display current buffer id"
-    (let* ((buffer-id (if (and (buffer-file-name)
-                               (fboundp 'projectile-project-p)
-                               (projectile-project-p))
-                          (file-truename (buffer-file-name))
-                          (format-mode-line "%b")))
-
-           (project-root    (ignore-errors (file-truename (projectile-project-root))))
-           (buffer-relative (or (cadr (split-string buffer-id project-root)) buffer-id))
-
-           (path (file-name-directory buffer-relative))
-           (file (file-name-nondirectory buffer-relative))
-
-           (height (if spaceline-all-the-icons-slim-render 1.0 0.8))
-           (raise  (if spaceline-all-the-icons-slim-render 0.1 0.2))
-           (help-echo (format "Major-mode: `%s'" major-mode))
-
-           (file-face `(:height ,height :inherit))
-           (show-path? (and (not spaceline-all-the-icons-slim-render) path active)))
-
-      (when (and spaceline-all-the-icons-highlight-file-name show-path?)
-        (plist-put file-face :background (face-background default-face))
-        (plist-put file-face :foreground (or spaceline-all-the-icons-file-name-highlight
-                                             (face-background highlight-face))))
-
+(spaceline-define-segment all-the-icons-projectile
+  "An `all-the-icons' segment to indicate the current `projectile' project"
+  (let ((help-echo "Switch Project")
+        (local-map (make-mode-line-mouse-map 'mouse-1 'projectile-switch-project))
+        (project-id (if (and (fboundp 'projectile-project-p) (projectile-project-p))
+                        (projectile-project-name) "×")));;
+    (if spaceline-all-the-icons-slim-render
+        (propertize project-id
+                    'display '(raise 0.1)
+                    'mouse-face (spaceline-all-the-icons--highlight)
+                    'help-echo help-echo
+                    'local-map local-map)
       (concat
-       (propertize (if show-path? path "")
-                   'face `(:height ,height :inherit)
-                   'display `(raise ,raise)
-                   'help-echo help-echo)
-       (propertize file
-                   'face file-face
-                   'display `(raise ,raise)
-                   'help-echo help-echo)))
-    :tight t)
+       (spaceline-all-the-icons--separator) " "
+       (propertize project-id
+                   'mouse-face (spaceline-all-the-icons--highlight)
+                   'display '(raise 0.2)
+                   'face '(:height 0.8 :inherit)
+                   'help-echo help-echo
+                   'local-map local-map)
+       " " (spaceline-all-the-icons--separator))))
+  :tight t)
+
+(spaceline-define-segment all-the-icons-mode-icon
+  "An `all-the-icons' segment indicating the current buffer's mode with an icon"
+  (let ((icon (all-the-icons-icon-for-buffer)))
+    (propertize icon
+                'help-echo (format "Major-mode: `%s'" major-mode)
+                'display `(raise ,(if spaceline-all-the-icons-slim-render -0.1 0.0))
+                'face `(:height ,(if spaceline-all-the-icons-slim-render 1.3 1.1)
+                                :family ,(all-the-icons-icon-family-for-buffer)
+                                :inherit)))
+  :when (not (symbolp (all-the-icons-icon-for-buffer))))
+
+(spaceline-define-segment all-the-icons-buffer-id
+  "An `all-the-icons' segment to display current buffer id"
+  (let* ((buffer-id (if (and (buffer-file-name)
+                             (fboundp 'projectile-project-p)
+                             (projectile-project-p))
+                        (file-truename (buffer-file-name))
+                      (format-mode-line "%b")))
+
+         (project-root    (ignore-errors (file-truename (projectile-project-root))))
+         (buffer-relative (or (cadr (split-string buffer-id project-root)) buffer-id))
+
+         (path (file-name-directory buffer-relative))
+         (file (file-name-nondirectory buffer-relative))
+
+         (height (if spaceline-all-the-icons-slim-render 1.0 0.8))
+         (raise  (if spaceline-all-the-icons-slim-render 0.1 0.2))
+         (help-echo (format "Major-mode: `%s'" major-mode))
+
+         (file-face `(:height ,height :inherit))
+         (show-path? (and (not spaceline-all-the-icons-slim-render) path active)))
+
+    (when (and spaceline-all-the-icons-highlight-file-name show-path?)
+      (plist-put file-face :background (face-background default-face))
+      (plist-put file-face :foreground (or spaceline-all-the-icons-file-name-highlight
+                                           (face-background highlight-face))))
+
+    (concat
+     (propertize (if show-path? path "")
+                 'face `(:height ,height :inherit)
+                 'display `(raise ,raise)
+                 'help-echo help-echo)
+     (propertize file
+                 'face file-face
+                 'display `(raise ,raise)
+                 'help-echo help-echo)))
+  :tight t)
 
 ;;; Third Divider Segments
-(spaceline-define-segment
-    all-the-icons-process "An `all-the-icons' segment to depict the current process"
-    (propertize
-     (concat
-      (when (or (symbolp (all-the-icons-icon-for-buffer)) mode-line-process) (format-mode-line "%m"))
-      (when mode-line-process (format-mode-line mode-line-process)))
-     'face `(:height 0.8 :inherit)
-     'display '(raise 0.2))
-    :tight t)
+(spaceline-define-segment all-the-icons-process
+  "An `all-the-icons' segment to depict the current process"
+  (propertize
+   (concat
+    (when (or (symbolp (all-the-icons-icon-for-buffer)) mode-line-process) (format-mode-line "%m"))
+    (when mode-line-process (format-mode-line mode-line-process)))
+   'face `(:height 0.8 :inherit)
+   'display '(raise 0.2))
+  :tight t)
 
-(spaceline-define-segment
-    all-the-icons-position "An `all-the-icons' Line & Column indicator"
-    (propertize (format-mode-line "%l:%c")
-                'face `(:height 0.9 :inherit)
-                'display '(raise 0.1))
-    :tight t)
+(spaceline-define-segment all-the-icons-position
+  "An `all-the-icons' Line & Column indicator"
+  (propertize (format-mode-line "%l:%c")
+              'face `(:height 0.9 :inherit)
+              'display '(raise 0.1))
+  :tight t)
 
-(spaceline-define-segment
-    all-the-icons-region-info "An `all-the-icons' indicator of the currently highlighted region"
-    (let ((lines (count-lines (region-beginning) (region-end)))
-          (words (count-words (region-beginning) (region-end)))
+(spaceline-define-segment all-the-icons-region-info
+  "An `all-the-icons' indicator of the currently highlighted region"
+  (let ((lines (count-lines (region-beginning) (region-end)))
+        (words (count-words (region-beginning) (region-end)))
 
-          (height (if spaceline-all-the-icons-slim-render 0.9 0.8))
-          (display (if spaceline-all-the-icons-slim-render 0.1 0.2))
-          (region-format (if spaceline-all-the-icons-slim-render "%s:%s" "(%s, %s)")))
+        (height (if spaceline-all-the-icons-slim-render 0.9 0.8))
+        (display (if spaceline-all-the-icons-slim-render 0.1 0.2))
+        (region-format (if spaceline-all-the-icons-slim-render "%s:%s" "(%s, %s)")))
+    (concat
+     (propertize (format "%s " (all-the-icons-octicon "pencil" :v-adjust 0.1))
+                 'face `(:family ,(all-the-icons-octicon-family) :inherit))
+     (propertize (format region-format lines words)
+                 'face `(:height ,height :inherit)
+                 'display `(raise ,display))))
+  :when mark-active :tight t)
+
+(spaceline-define-segment all-the-icons-fullscreen
+  "An `all-the-icons' indicator to toggle fullscreen settings"
+  (let* ((fullscreen? (frame-parameter nil 'fullscreen))
+         (icon (all-the-icons-material (if fullscreen? "fullscreen_exit" "fullscreen"))))
+
+    (propertize icon
+                'display '(raise -0.2)
+                'help-echo "Toggle frame fullscreen"
+                'mouse-face (spaceline-all-the-icons--highlight)
+                'face `(:height 1.3 :family ,(all-the-icons-material-family) :inherit)
+                'local-map (make-mode-line-mouse-map 'mouse-1 'toggle-frame-fullscreen)))
+
+  :tight t :enabled t)
+
+(spaceline-define-segment all-the-icons-text-scale
+  "An `all-the-icons' indicator to show how much text has been scaled"
+  (let* ((zoom (if (equal (substring text-scale-mode-lighter 0 1) "+") "in" "out"))
+         (icon (all-the-icons-material (format "zoom_%s" zoom)))
+         (text (substring text-scale-mode-lighter 1)))
+
+    (when (not (equal text "0"))
       (concat
-       (propertize (format "%s " (all-the-icons-octicon "pencil" :v-adjust 0.1))
-                   'face `(:family ,(all-the-icons-octicon-family) :inherit))
-       (propertize (format region-format lines words)
-                   'face `(:height ,height :inherit)
-                   'display `(raise ,display))))
-    :when mark-active :tight t)
-
-(spaceline-define-segment
-    all-the-icons-fullscreen "An `all-the-icons' indicator to toggle fullscreen settings"
-    (let* ((fullscreen? (frame-parameter nil 'fullscreen))
-           (icon (all-the-icons-material (if fullscreen? "fullscreen_exit" "fullscreen"))))
-
-      (propertize icon
-                  'display '(raise -0.2)
-                  'help-echo "Toggle frame fullscreen"
-                  'mouse-face (spaceline-all-the-icons--highlight)
-                  'face `(:height 1.3 :family ,(all-the-icons-material-family) :inherit)
-                  'local-map (make-mode-line-mouse-map 'mouse-1 'toggle-frame-fullscreen)))
-
-    :tight t :enabled t)
-
-(spaceline-define-segment
-    all-the-icons-text-scale "An `all-the-icons' indicator to show how much text has been scaled"
-    (let* ((zoom (if (equal (substring text-scale-mode-lighter 0 1) "+") "in" "out"))
-           (icon (all-the-icons-material (format "zoom_%s" zoom)))
-           (text (substring text-scale-mode-lighter 1)))
-
-      (when (not (equal text "0"))
-        (concat
-         (propertize icon
-                     'display '(raise -0.2)
-                     'face `(:family ,(all-the-icons-material-family) :height 1.2 :inherit))
-         (propertize text 'display '(raise 0.1)))))
-    :tight t :enabled t)
+       (propertize icon
+                   'display '(raise -0.2)
+                   'face `(:family ,(all-the-icons-material-family) :height 1.2 :inherit))
+       (propertize text 'display '(raise 0.1)))))
+  :tight t :enabled t)
 
 ;; Fourth divider segments
-(spaceline-define-segment
-    all-the-icons-vc-icon "An `all-the-icons' segment to depict the current VC system with an icon"
-    (cond ((string-match "Git[:-]" vc-mode)
-           (propertize (all-the-icons-alltheicon "git")
-                       'face `(:height 1.1 :family ,(all-the-icons-alltheicon-family) :inherit)
-                       'display '(raise 0.1)))
-          ((string-match "SVN-" vc-mode)
-           (propertize (all-the-icons-material "cloud_download" :v-adjust -0.2)
-                       'face `(:height 1.2 :family ,(all-the-icons-material-family))))
-          (t ""))
+(spaceline-define-segment all-the-icons-vc-icon
+  "An `all-the-icons' segment to depict the current VC system with an icon"
+  (cond ((string-match "Git[:-]" vc-mode)
+         (propertize (all-the-icons-alltheicon "git")
+                     'face `(:height 1.1 :family ,(all-the-icons-alltheicon-family) :inherit)
+                     'display '(raise 0.1)))
+        ((string-match "SVN-" vc-mode)
+         (propertize (all-the-icons-material "cloud_download" :v-adjust -0.2)
+                     'face `(:height 1.2 :family ,(all-the-icons-material-family))))
+        (t ""))
 
-    :when (and active vc-mode (not spaceline-all-the-icons-slim-render)))
+  :when (and active vc-mode (not spaceline-all-the-icons-slim-render)))
 
 (defun spaceline-all-the-icons--vc-git ()
   "Get the formatted GIT Version Control Icon based on variable `vc-mode'."
@@ -450,13 +450,13 @@ doesn't inherit all properties of a face."
                  'face '(:height 0.9)
                  'display '(raise 0.1)))))
 
-(spaceline-define-segment
-    all-the-icons-vc-status "An `all-the-icons' segment to depict the current VC system with an icon"
-    (cond ((string-match "Git[:-]" vc-mode) (spaceline-all-the-icons--vc-git))
-          ((string-match "SVN-" vc-mode) (spaceline-all-the-icons--vc-svn))
-          (t ""))
+(spaceline-define-segment all-the-icons-vc-status
+  "An `all-the-icons' segment to depict the current VC system with an icon"
+  (cond ((string-match "Git[:-]" vc-mode) (spaceline-all-the-icons--vc-git))
+        ((string-match "SVN-" vc-mode) (spaceline-all-the-icons--vc-svn))
+        (t ""))
 
-    :when (and active vc-mode))
+  :when (and active vc-mode))
 
 (defun spaceline-all-the-icons--git-stats (icon text face &optional family)
   "Wrapper to render git statistics ICON with TEXT using FACE.
@@ -469,27 +469,27 @@ When FAMILY is provided, put `:family' property into face."
      (propertize " " 'face '(:height 0.2))
      (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face))))))
 
-(spaceline-define-segment
-    all-the-icons-git-status "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
-    (destructuring-bind (added . removed) (git-gutter:statistic)
-      (let ((icon-fam (caddr spaceline-all-the-icons-icon-set-git-stats))
-            (added-icon (car spaceline-all-the-icons-icon-set-git-stats))
-            (removed-icon (cadr spaceline-all-the-icons-icon-set-git-stats)))
-        (propertize
-         (concat
-          (unless (zerop added)
-            (spaceline-all-the-icons--git-stats added-icon added 'success icon-fam))
-          (unless (or (zerop added) (zerop removed))
-            (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
-          (unless (zerop removed)
-            (spaceline-all-the-icons--git-stats removed-icon removed 'error icon-fam)))
-        'help-echo "View Diff of current file"
-        'mouse-face (spaceline-all-the-icons--highlight)
-        'local-map (make-mode-line-mouse-map 'mouse-1 'vc-ediff))))
+(spaceline-define-segment all-the-icons-git-status
+  "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
+  (destructuring-bind (added . removed) (git-gutter:statistic)
+    (let ((icon-fam (caddr spaceline-all-the-icons-icon-set-git-stats))
+          (added-icon (car spaceline-all-the-icons-icon-set-git-stats))
+          (removed-icon (cadr spaceline-all-the-icons-icon-set-git-stats)))
+      (propertize
+       (concat
+        (unless (zerop added)
+          (spaceline-all-the-icons--git-stats added-icon added 'success icon-fam))
+        (unless (or (zerop added) (zerop removed))
+          (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
+        (unless (zerop removed)
+          (spaceline-all-the-icons--git-stats removed-icon removed 'error icon-fam)))
+       'help-echo "View Diff of current file"
+       'mouse-face (spaceline-all-the-icons--highlight)
+       'local-map (make-mode-line-mouse-map 'mouse-1 'vc-ediff))))
 
-    :when (and active
-               (fboundp 'git-gutter:statistic)
-               (not (equal '(0 . 0) (git-gutter:statistic)))))
+  :when (and active
+             (fboundp 'git-gutter:statistic)
+             (not (equal '(0 . 0) (git-gutter:statistic)))))
 
 (defun spaceline-all-the-icons--flycheck-pip (icon num face &optional family)
   "Wrapper to render flycheck status ICON with NUM using FACE.
@@ -526,7 +526,7 @@ When FAMILY is provided, put `:family' property into face."
 (defun spaceline-all-the-icons--flycheck-finished ()
   "Get the string for finished status of Flycheck."
   (let* ((count (let-alist (flycheck-count-errors flycheck-current-errors)
-                 (+ (or .warning 0) (or .error 0))))
+                  (+ (or .warning 0) (or .error 0))))
          (plural (if (eq 1 count) "" "s")))
     (if flycheck-current-errors (format "✖ %s Issue%s" count plural) "✔ No Issues")))
 
@@ -540,24 +540,26 @@ When FAMILY is provided, put `:family' property into face."
                  (`errored     "⚠ Error")
                  (`interrupted "⛔ Interrupted")))
          (face (cond
+                ((string-match "✔" text) `(:height 0.9 :foreground ,(face-foreground 'success)))
                 ((string-match "⚠" text) `(:height 0.9 :foreground ,(face-foreground 'warning)))
                 ((string-match "✖ [0-9]" text) `(:height 0.9 :foreground ,(face-foreground 'error)))
                 ((string-match "✖ Disabled" text) `(:height 0.9 :foreground ,(face-foreground 'font-lock-comment-face)))
                 (t '(:height 0.9 :inherit)))))
     
-    (propertize text 'face face 'display '(raise 0.1))))
+     (propertize text 'face face 'display '(raise 0.1))))
 
-(spaceline-define-segment
-    all-the-icons-flycheck-status "An `all-the-icons' segment to show the flycheck status."
-    (propertize (if spaceline-all-the-icons-slim-render
-                    (spaceline-all-the-icons--flycheck-status-slim)
-                    (spaceline-all-the-icons--flycheck-status))
-                'help-echo "Show Flycheck Errors"
-                'mouse-face (spaceline-all-the-icons--highlight)
-                'local-map (make-mode-line-mouse-map 'mouse-1 'flycheck-list-errors))
+(spaceline-define-segment all-the-icons-flycheck-status
+  "An `all-the-icons' segment to show the `flycheck-last-status-change'."
+  (propertize (if spaceline-all-the-icons-slim-render
+                  (spaceline-all-the-icons--flycheck-status-slim)
+                  (spaceline-all-the-icons--flycheck-status))
+              'help-echo "Show Flycheck Errors"
+              'mouse-face (spaceline-all-the-icons--highlight)
+              'local-map (make-mode-line-mouse-map 'mouse-1 'flycheck-list-errors))
 
-    :tight t
-    :when (and active (bound-and-true-p flycheck-last-status-change)))
+  :tight t
+  :when (and active (bound-and-true-p flycheck-last-status-change)))
+
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
