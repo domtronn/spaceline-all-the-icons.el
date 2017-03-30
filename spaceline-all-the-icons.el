@@ -54,6 +54,7 @@
 (define-icon-set-getter "modified")
 (define-icon-set-getter "bookmark")
 (define-icon-set-getter "dedicated")
+(define-icon-set-getter "git-stats")
 
 ;;; Modified Icon
 (defcustom spaceline-all-the-icons-icon-set-modified 'chain
@@ -116,7 +117,7 @@
     (pin        (("thumb-tack" . faicon)
                  ("pin" . octicon)))))
 
-
+;; Window Numbering Icon
 (defcustom spaceline-all-the-icons-icon-set-window-numbering 'circle
   "The Icon set to use for the `all-the-icons-window-number' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -125,21 +126,21 @@
           (const :tag "Circle Solid   - ➊" solid)
           (const :tag ,(format "Square         - %s" (all-the-icons-material "filter_1" :v-adjust 0.0)) square)))
 
-(defcustom spaceline-all-the-icons-icon-set-git-stats
-  `(,(all-the-icons-octicon "diff-added")
-    ,(all-the-icons-octicon "diff-removed")
-    ,(all-the-icons-octicon-family))
+;; Git Statistics Icon
+(defcustom spaceline-all-the-icons-icon-set-git-stats 'github
   "The Icon set to use for the `all-the-icons-git-status' indicator."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
           (const :tag ,(format "GitHub   - %s / %s"
                                (all-the-icons-octicon "diff-added" :v-adjust 0.0)
-                               (all-the-icons-octicon "diff-removed" :v-adjust 0.0))
-                 (,(all-the-icons-octicon "diff-added")
-                  ,(all-the-icons-octicon "diff-removed")
-                  ,(all-the-icons-octicon-family)))
-          (const :tag "Arrows   - ↑ / ↓"
-                 ("↑" "↓"))))
+                               (all-the-icons-octicon "diff-removed" :v-adjust 0.0)) github)
+          (const :tag "Arrows   - ↑ / ↓" arrows)))
+
+(defconst spaceline-all-the-icons-icon-set--git-stats
+  `((github (,(all-the-icons-octicon "diff-added")
+             ,(all-the-icons-octicon "diff-removed")
+             ,(all-the-icons-octicon-family)))
+    (arrows ("↑" "↓"))))
 
 (defcustom spaceline-all-the-icons-icon-set-flycheck-slim
   `(,(all-the-icons-material "error" :v-adjust -0.2)
@@ -483,7 +484,7 @@ doesn't inherit all properties of a face."
 (defun spaceline-all-the-icons--git-stats (icon text face &optional family)
   "Wrapper to render git statistics ICON with TEXT using FACE.
 When FAMILY is provided, put `:family' property into face."
-  (let* ((height (if (> (length spaceline-all-the-icons-icon-set-git-stats) 2) 1.0 1.2))
+  (let* ((height (if (> (length (spaceline-all-the-icons-icon-set-git-stats)) 2) 1.0 1.2))
          (icon-face `(:foreground ,(face-foreground face) :height ,height)))
     (when family (plist-put icon-face :family family))
     (concat
@@ -494,9 +495,9 @@ When FAMILY is provided, put `:family' property into face."
 (spaceline-define-segment all-the-icons-git-status
   "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
   (destructuring-bind (added . removed) (git-gutter:statistic)
-    (let ((icon-fam (caddr spaceline-all-the-icons-icon-set-git-stats))
-          (added-icon (car spaceline-all-the-icons-icon-set-git-stats))
-          (removed-icon (cadr spaceline-all-the-icons-icon-set-git-stats)))
+    (let ((icon-fam (caddr (spaceline-all-the-icons-icon-set-git-stats)))
+          (added-icon (car (spaceline-all-the-icons-icon-set-git-stats)))
+          (removed-icon (cadr (spaceline-all-the-icons-icon-set-git-stats))))
       (propertize
        (concat
         (unless (zerop added)
