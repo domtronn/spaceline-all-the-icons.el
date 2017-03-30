@@ -114,7 +114,7 @@
                                (all-the-icons-faicon "sticky-note-o" :v-adjust 0.0)) sticky-note)))
 
 (defconst spaceline-all-the-icons-icon-set--dedicated
-  '((stick-note (("sticky-note" . faicon)
+  '((sticky-note (("sticky-note" . faicon)
                  ("sticky-note-o" . faicon)))
     (pin        (("thumb-tack" . faicon)
                  ("pin" . octicon)))))
