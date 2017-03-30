@@ -286,25 +286,23 @@ doesn't inherit all properties of a face."
 ;;; Second Divider Segments
 (spaceline-define-segment all-the-icons-projectile
   "An `all-the-icons' segment to indicate the current `projectile' project"
-  (let ((help-echo "Switch Project")
+  (let ((face '(:inherit))
+        (help-echo "Switch Project")
+        (raise (if spaceline-all-the-icons-slim-render 0.1 0.2))
         (local-map (make-mode-line-mouse-map 'mouse-1 'projectile-switch-project))
         (project-id (if (and (fboundp 'projectile-project-p) (projectile-project-p))
-                        (projectile-project-name) "×")));;
-    (if spaceline-all-the-icons-slim-render
-        (propertize project-id
-                    'display '(raise 0.1)
-                    'mouse-face (spaceline-all-the-icons--highlight)
-                    'help-echo help-echo
-                    'local-map local-map)
-      (concat
-       (spaceline-all-the-icons--separator) " "
-       (propertize project-id
-                   'mouse-face (spaceline-all-the-icons--highlight)
-                   'display '(raise 0.2)
-                   'face '(:height 0.8 :inherit)
-                   'help-echo help-echo
-                   'local-map local-map)
-       " " (spaceline-all-the-icons--separator))))
+                        (projectile-project-name) "×")))
+
+    (when (not spaceline-all-the-icons-slim-render) (plist-put face :height 0.8))
+    (concat
+     (spaceline-all-the-icons--separator "|" "" " ")
+     (propertize project-id
+                 'mouse-face (spaceline-all-the-icons--highlight)
+                 'display `(raise ,raise)
+                 'face face
+                 'help-echo help-echo
+                 'local-map local-map)
+     (spaceline-all-the-icons--separator "|" " " "")))
   :tight t)
 
 (spaceline-define-segment all-the-icons-mode-icon
