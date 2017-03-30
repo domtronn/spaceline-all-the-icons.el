@@ -475,13 +475,17 @@ When FAMILY is provided, put `:family' property into face."
       (let ((icon-fam (caddr spaceline-all-the-icons-icon-set-git-stats))
             (added-icon (car spaceline-all-the-icons-icon-set-git-stats))
             (removed-icon (cadr spaceline-all-the-icons-icon-set-git-stats)))
-        (concat
-         (unless (zerop added)
-           (spaceline-all-the-icons--git-stats added-icon added 'success icon-fam))
-         (unless (or (zerop added) (zerop removed))
-           (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
-         (unless (zerop removed)
-           (spaceline-all-the-icons--git-stats removed-icon removed 'error icon-fam)))))
+        (propertize
+         (concat
+          (unless (zerop added)
+            (spaceline-all-the-icons--git-stats added-icon added 'success icon-fam))
+          (unless (or (zerop added) (zerop removed))
+            (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
+          (unless (zerop removed)
+            (spaceline-all-the-icons--git-stats removed-icon removed 'error icon-fam)))
+        'help-echo "View Diff of current file"
+        'mouse-face (spaceline-all-the-icons--highlight)
+        'local-map (make-mode-line-mouse-map 'mouse-1 'vc-ediff))))
 
     :when (and active
                (fboundp 'git-gutter:statistic)
