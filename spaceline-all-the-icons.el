@@ -180,11 +180,10 @@ possible, allowing more information to displayed on narrower windows/frames."
 ;;; Helper functions
 (defun spaceline-all-the-icons--separator (icon &optional left-padding right-padding)
   "Wrapper to render vertical line separator ICON with optional LEFT-PADDING & RIGHT-PADDING."
-  (propertize (if spaceline-all-the-icons-slim-render
-                  (format "%s" icon)
-                  (format "%s%s%s" icon (or left-padding "") (or right-padding left-padding "")))
-              'face '(:height 0.9 :inherit)
-              'display '(raise 0.2)))
+  (if spaceline-all-the-icons-slim-render " "
+    (propertize (format "%s%s%s" icon (or left-padding "") (or right-padding left-padding ""))
+                'face '(:height 0.9 :inherit)
+                'display '(raise 0.2))))
 
 (defun spaceline-all-the-icons--highlight ()
   "Return the `mouse-face' highlight face to be used when propertizing text.
