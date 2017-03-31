@@ -570,10 +570,10 @@ When FAMILY is provided, put `:family' property into face."
            (error-icon (car (spaceline-all-the-icons-icon-set-flycheck-slim)))
            (warn-icon (cadr (spaceline-all-the-icons-icon-set-flycheck-slim)))
            (help-icon (caddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
- 
+
            (family (cadddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
            (space (propertize " " 'face '(:height 0.6))))
-      
+
       (mapconcat
        'identity
        (remove-if
@@ -762,6 +762,33 @@ available updates then restores the current buffer."
       'mouse-face (spaceline-all-the-icons--highlight)))
   :tight t
   :enabled t)
+
+;; Middle Divider Segments
+(spaceline-define-segment all-the-icons-which-function
+  "An `all-the-icons' segment to show the `which-function-mode' function"
+  (let* ((current (format-mode-line which-func-current))
+         (unknown? (equal current which-func-unknown))
+         (icon (if unknown? (all-the-icons-octicon "circle-slash") "ƒ"))
+
+         (face '(:height 0.8 :inherit))
+         (icon-face `(:height ,(if unknown? 1.2 1.0) :inherit)))
+
+    (when unknown? (plist-put icon-face :family (all-the-icons-octicon-family)))
+    (when (string-match "{\\(.*\\)}" current) (setq current (match-string 1 current)))
+
+    (propertize
+     (concat (propertize icon 'face icon-face 'display '(raise 0.1))
+             (unless unknown? (propertize "::" 'face face 'display '(raise 0.2)))
+             (unless unknown? (propertize current 'face face 'display '(raise 0.2))))
+     'mouse-face (spaceline-all-the-icons--highlight)
+     'local-map which-func-keymap
+     'help-echo "mouse-1: go to beginning\n\
+mouse-2: toggle rest visibility\n\
+mouse-3: go to end"))
+
+  :when (and active
+             (bound-and-true-p which-function-mode)
+             (bound-and-true-p which-func-mode)))
 
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:

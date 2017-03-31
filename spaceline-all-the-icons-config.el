@@ -65,7 +65,11 @@
      all-the-icons-package-updates)
     :separator (spaceline-all-the-icons--separator "·" " ") :face other-face)
 
-   all-the-icons-separator-left-active-4)
+   all-the-icons-separator-left-active-4
+
+   ((all-the-icons-which-function)
+    :face powerline-active2
+    :separator ""))
 
  '(all-the-icons-separator-right-active-1
    ((all-the-icons-hud
