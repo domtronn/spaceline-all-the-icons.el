@@ -368,7 +368,8 @@ doesn't inherit all properties of a face."
                       'projectile-find-file
                       'find-file)))
 
-    (when (and spaceline-all-the-icons-highlight-file-name show-path?)
+    (if (not (and spaceline-all-the-icons-highlight-file-name show-path?))
+        (add-to-list 'file-face :inherit t)
       (plist-put file-face :background (face-background default-face))
       (plist-put file-face :foreground (or spaceline-all-the-icons-file-name-highlight
                                            (face-background highlight-face))))
