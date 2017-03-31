@@ -348,10 +348,10 @@ doesn't inherit all properties of a face."
   (let ((icon (all-the-icons-icon-for-buffer)))
     (propertize icon
                 'help-echo (format "Major-mode: `%s'" major-mode)
-                'display `(raise ,(if spaceline-all-the-icons-slim-render -0.1 0.0))
-                'face `(:height ,(if spaceline-all-the-icons-slim-render 1.3 1.1)
-                                :family ,(all-the-icons-icon-family-for-buffer)
-                                :inherit)))
+                'display '(raise -0.1)
+                'face `(:height 1.1
+                        :family ,(all-the-icons-icon-family-for-buffer)
+                        :inherit)))
   :when (not (symbolp (all-the-icons-icon-for-buffer))))
 
 (spaceline-define-segment all-the-icons-buffer-id
