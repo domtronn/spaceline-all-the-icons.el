@@ -360,7 +360,7 @@ doesn't inherit all properties of a face."
          (raise  (if spaceline-all-the-icons-slim-render 0.1 0.2))
          (help-echo (format "Major-mode: `%s'" major-mode))
 
-         (file-face `(:height ,height :inherit))
+         (file-face `(:height ,height))
          (show-path? (and (not spaceline-all-the-icons-slim-render) path active))
 
          (mouse-f (if (and (fboundp 'projectile-project-p)
