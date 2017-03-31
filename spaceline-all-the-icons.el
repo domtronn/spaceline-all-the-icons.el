@@ -129,6 +129,7 @@
   :type `(radio
           (const :tag "Circle Outline - ①" circle)
           (const :tag "Circle Solid   - ➊" solid)
+          (const :tag "Normal String  - 1" string)
           (const :tag ,(format "Square         - %s" (all-the-icons-material "filter_1" :v-adjust 0.0)) square)))
 
 ;; Git Statistics Icon
@@ -291,6 +292,9 @@ doesn't inherit all properties of a face."
              (pcase spaceline-all-the-icons-icon-set-window-numbering
                ('solid   (format "%c" (+ window-num 10121)))
                ('circle  (format "%c" (+ window-num 9311)))
+               ('string  (progn
+                           (plist-put face :height 1.2)
+                           (number-to-string window-num)))
                ('square  (progn
                            (plist-put face :height 1.2)
                            (plist-put face :family (all-the-icons-material-family))
