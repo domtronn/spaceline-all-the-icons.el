@@ -28,7 +28,7 @@
 (require 'spaceline)
 (require 'all-the-icons)
 
-(require 'spaceline-all-the-icons-separators "./spaceline-all-the-icons-separators")
+(require 'spaceline-all-the-icons-separators)
 
 ;; Customization
 (defgroup spaceline-all-the-icons nil
@@ -362,7 +362,7 @@ doesn't inherit all properties of a face."
 
          (file-face `(:height ,height :inherit))
          (show-path? (and (not spaceline-all-the-icons-slim-render) path active))
-         
+
          (mouse-f (if (and (fboundp 'projectile-project-p)
                            (projectile-project-p))
                       'projectile-find-file
@@ -727,7 +727,8 @@ available updates then restores the current buffer."
 
 (spaceline-define-segment all-the-icons-time
   "An `all-the-icons' segment to to display the time and a clock icon"
-  (let ((icon (all-the-icons-wicon (format-time-string "time-%I") :v-adjust 0.0)))
+  (let* ((time (string-to-number (format-time-string "%I")))
+         (icon (all-the-icons-wicon (format "time-%s" time) :v-adjust 0.0)))
     (propertize
      (concat
       (propertize (format-time-string "%H:%M ") 'face '(:height 0.9 :inherit) 'display '(raise 0.1))
