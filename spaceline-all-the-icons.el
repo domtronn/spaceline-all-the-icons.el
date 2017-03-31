@@ -381,7 +381,7 @@ doesn't inherit all properties of a face."
                            (projectile-project-p))
                       'projectile-find-file
                       'find-file)))
-    
+
     (if (not (and spaceline-all-the-icons-highlight-file-name show-path?))
         (add-to-list 'file-face :inherit t)
       (plist-put file-face :background (face-background default-face))
@@ -767,18 +767,19 @@ available updates then restores the current buffer."
   "An `all-the-icons' segment to show the `which-function-mode' function"
   (let* ((current (format-mode-line which-func-current))
          (unknown? (equal current which-func-unknown))
-         (icon (if unknown? (all-the-icons-octicon "circle-slash") "ƒ"))
+         (function-icon (all-the-icons-fileicon "cold-fusion" :v-adjust 0))
+         (question-icon (all-the-icons-faicon "question"))
 
-         (face '(:height 0.8 :inherit))
-         (icon-face `(:height ,(if unknown? 1.2 1.0) :inherit)))
+         (text-face '(:family ,(all-the-icons-faicon-family) :inherit))
+         (icon-face `(:family ,(all-the-icons-fileicon-family) :inherit)))
 
-    (when unknown? (plist-put icon-face :family (all-the-icons-octicon-family)))
     (when (string-match "{\\(.*\\)}" current) (setq current (match-string 1 current)))
 
     (propertize
-     (concat (propertize icon 'face icon-face 'display '(raise 0.1))
-             (unless unknown? (propertize "::" 'face face 'display '(raise 0.2)))
-             (unless unknown? (propertize current 'face face 'display '(raise 0.2))))
+     (concat (propertize function-icon 'face icon-face) " "
+             (propertize (if unknown? question-icon current)
+                         'face `(if unknown? ,text-face '(:height 0.8 :inherit))
+                         'display '(raise 0.2)))
      'mouse-face (spaceline-all-the-icons--highlight)
      'local-map which-func-keymap
      'help-echo "mouse-1: go to beginning\n\
