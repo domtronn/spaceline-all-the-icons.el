@@ -95,7 +95,7 @@ These segments can have one of the following icon sets
 
 You can customize the divider separators using
 `spaceline-all-the-icons-separators-type`, the available types are:
-`'slant`, `'arrow`, `'cup`, `'wave`
+`'slant`, `'arrow`, `'cup`, `'wave`, `'none`
 
 
 [▲ back to top](#readme)

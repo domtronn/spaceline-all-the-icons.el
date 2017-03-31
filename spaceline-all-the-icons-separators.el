@@ -33,6 +33,7 @@
   "Choose the spaceline separator type to use."
   :group 'spaceline-all-the-icons
   :type `(radio
+          (const :tag "None" none)
           (const :tag ,(format "Slant  %s / %s"
                                (all-the-icons-alltheicon "slant-left")
                                (all-the-icons-alltheicon "slant-right")) slant)
@@ -83,11 +84,12 @@ separator."
                   (equal direction "left"))      ;; need to invert the faces for left direction
          (setq sf (prog1 ef (setq ef sf))))
 
-       (propertize (all-the-icons-alltheicon (format "%s-%s" separator direction) :v-adjust 0.0)
-                   'face `(:height 1.6
-                           :family ,(all-the-icons-alltheicon-family)
-                           :foreground ,(face-background sf)
-                           :background ,(face-background ef))))
+       (unless (eq separator 'none)
+        (propertize (all-the-icons-alltheicon (format "%s-%s" separator direction) :v-adjust 0.0)
+                    'face `(:height 1.6
+                                    :family ,(all-the-icons-alltheicon-family)
+                                    :foreground ,(face-background sf)
+                                    :background ,(face-background ef)))))
      :skip-alternate t :tight t :when (if ,invert (not active) active)))
 
 (define-separator left-active-1 "right" spaceline-highlight-face-func 'powerline-active1)
