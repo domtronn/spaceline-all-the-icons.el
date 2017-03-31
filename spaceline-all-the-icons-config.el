@@ -88,7 +88,7 @@
 (defun spaceline-all-the-icons-theme ()
   "Set `mode-line-format' to be `spaceline-ml-all-the-icons'."
   (interactive)
-  (setq-default mode-line-format '("%e" (:eval (spaceline-ml-all-the-icons)))))
+  (setq-default mode-line-format spaceline-all-the-icons-theme))
 
 (defconst spaceline-all-the-icons-theme '("%e" (:eval (spaceline-ml-all-the-icons)))
   "Constant version of `spaceline-all-the-icons-theme' to allow to be set manually.")
