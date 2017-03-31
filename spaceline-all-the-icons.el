@@ -101,7 +101,7 @@
                (echo (on . "Bookmark") (off . "Remove Bookmark"))))
     (heart    ((icon (on . "heart") (off . "heart-o"))
                (echo (on . "Like") (off . "Unlike"))))
-    (start    ((icon (on . "star") (off . "star-o"))
+    (star     ((icon (on . "star") (off . "star-o"))
                (echo (on . "Star") (off . "Unstar"))))))
 
 ;;; Dedicated Icon
