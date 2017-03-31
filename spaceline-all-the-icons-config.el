@@ -68,8 +68,7 @@
 
    all-the-icons-separator-left-active-4
 
-   ((all-the-icons-which-function
-     minor-modes)
+   ((all-the-icons-which-function)
     :face powerline-active2
     :separator ""))
 
