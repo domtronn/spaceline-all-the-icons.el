@@ -544,37 +544,44 @@ When FAMILY is provided, put `:family' property into face."
              (fboundp 'git-gutter:statistic)
              (not (equal '(0 . 0) (git-gutter:statistic)))))
 
-(defun spaceline-all-the-icons--flycheck-pip (icon num face &optional family)
-  "Wrapper to render flycheck status ICON with NUM using FACE.
+(defun spaceline-all-the-icons--flycheck-pip (icon text face &optional family)
+  "Wrapper to render flycheck status ICON with TEXT using FACE.
 When FAMILY is provided, put `:family' property into face."
   (let* ((height 1.0)
          (raise (if (> (length (spaceline-all-the-icons-icon-set-flycheck-slim)) 3) -0.2 0.0))
          (icon-face `(:foreground ,(face-foreground face) :height ,height)))
     (when family (plist-put icon-face :family family))
-    (concat
-     (propertize icon 'face icon-face 'display `(raise ,raise))
-     (propertize (format "%s" num) 'face `(:foreground ,(face-foreground face))))))
+    (when text
+     (concat
+      (propertize icon 'face icon-face 'display `(raise ,raise))
+      (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face)))))))
 
 (defun spaceline-all-the-icons--flycheck-status-slim ()
   "Render the mode line for Flycheck Status slim mode."
   (let-alist (flycheck-count-errors flycheck-current-errors)
-    (let ((error-icon (car (spaceline-all-the-icons-icon-set-flycheck-slim)))
-          (warn-icon (cadr (spaceline-all-the-icons-icon-set-flycheck-slim)))
-          (help-icon (caddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
-          (family (cadddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
+    (let* ((get-text (lambda (text) (cond ((eq 'running flycheck-last-status-change) "?")
+                                     ((zerop (or text 0)) nil)
+                                     (t text))))
 
-          (space (propertize " " 'face '(:height 0.6))))
-      (concat
-       (unless (zerop (or .error 0))
-         (spaceline-all-the-icons--flycheck-pip error-icon .error 'error family))
-       (unless (or (zerop (or .error 0))
-                   (zerop (or .warning 0))) space)
-       (unless (zerop (or .warning 0))
-         (spaceline-all-the-icons--flycheck-pip warn-icon .warning 'warning family))
-       (unless (or (zerop (or .warning 0))
-                   (zerop (or .info 0))) space)
-       (unless (zerop (or .info 0))
-         (spaceline-all-the-icons--flycheck-pip help-icon .info 'spaceline-all-the-icons-info-face family))))))
+           (error-text (funcall get-text .error))
+           (warn-text  (funcall get-text .warn))
+           (info-text  (funcall get-text .info))
+
+           (error-icon (car (spaceline-all-the-icons-icon-set-flycheck-slim)))
+           (warn-icon (cadr (spaceline-all-the-icons-icon-set-flycheck-slim)))
+           (help-icon (caddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
+ 
+           (family (cadddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
+           (space (propertize " " 'face '(:height 0.6))))
+      
+      (mapconcat
+       'identity
+       (remove-if
+        'null
+        `(,(spaceline-all-the-icons--flycheck-pip error-icon error-text 'error family)
+          ,(spaceline-all-the-icons--flycheck-pip warn-icon warn-text 'warning family)
+          ,(spaceline-all-the-icons--flycheck-pip help-icon info-text 'spaceline-all-the-icons-info-face family)))
+       space))))
 
 (defun spaceline-all-the-icons--flycheck-finished ()
   "Get the string for finished status of Flycheck."
