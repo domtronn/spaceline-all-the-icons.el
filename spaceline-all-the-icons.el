@@ -482,8 +482,7 @@ doesn't inherit all properties of a face."
   "Get the formatted GIT Version Control Icon based on variable `vc-mode'."
   (let* ((branch (cadr (split-string vc-mode "Git[:-]")))
          (git-branch (all-the-icons-octicon (if (equal branch "master") "git-merge" "git-branch")))
-         (local-map (get-text-property 1 'local-map branch))
-         (mouse-face (get-text-property 1 'mouse-face branch)))
+         (local-map (get-text-property 1 'local-map branch)))
     (propertize
      (concat
       (propertize git-branch
@@ -492,7 +491,7 @@ doesn't inherit all properties of a face."
       (propertize (format " %s" branch)
                   'face `(:height 0.9 :inherit)
                   'display '(raise 0.1)))
-     'mouse-face mouse-face
+     'mouse-face (spaceline-all-the-icons--highlight)
      'local-map local-map)))
 
 (defun spaceline-all-the-icons--vc-svn ()
