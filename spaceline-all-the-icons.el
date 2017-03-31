@@ -187,6 +187,16 @@ possible, allowing more information to displayed on narrower windows/frames."
   :group 'spaceline-all-the-icons
   :type 'boolean)
 
+(defcustom spaceline-all-the-icons-flycheck-alternate nil
+  "Whether or not to use the alternate slim version of `flycheck-status'.
+
+This is used whenever `spaceline-all-the-icons-slim-render' is non-nil,
+and shows three dots with numbers,  i.e.
+  - non-nil : •1•2•1
+  - nil     : ✖ 3 issues 1 i"
+  :group 'spaceline-all-the-icons
+  :type 'boolean)
+
 (defcustom spaceline-all-the-icons-highlight-file-name nil
   "Whether or not to highlight the file name as part of the buffer id."
   :group 'spaceline-all-the-icons
@@ -593,7 +603,8 @@ When FAMILY is provided, put `:family' property into face."
 
 (spaceline-define-segment all-the-icons-flycheck-status
   "An `all-the-icons' segment to show the `flycheck-last-status-change'."
-  (propertize (if spaceline-all-the-icons-slim-render
+  (propertize (if (or spaceline-all-the-icons-flycheck-alternate
+                      spaceline-all-the-icons-slim-render)
                   (spaceline-all-the-icons--flycheck-status-slim)
                   (spaceline-all-the-icons--flycheck-status))
               'help-echo "Show Flycheck Errors"
