@@ -26,6 +26,7 @@
 ;;; Code:
 
 (require 'spaceline)
+
 (require 'spaceline-all-the-icons)
 (require 'spaceline-all-the-icons-separators)
 
@@ -98,6 +99,7 @@
   (setq spaceline-all-the-icons-slim-render
         (not spaceline-all-the-icons-slim-render)))
 
+(provide 'spaceline-all-the-icons-config)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
 ;; End:

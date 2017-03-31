@@ -28,8 +28,6 @@
 (require 'spaceline)
 (require 'all-the-icons)
 
-(require 'spaceline-all-the-icons-separators)
-
 ;; Customization
 (defgroup spaceline-all-the-icons nil
   "Customize the the Spaceline All The Icons mode line and theming."

@@ -99,4 +99,8 @@ separator."
 (define-separator right-inactive "left" 'powerline-inactive1 'powerline-inactive2 t)
 
 (provide 'spaceline-all-the-icons-separators)
+;; Local Variables:
+;; indent-tabs-mode: nil
+;; End:
+
 ;;; spaceline-all-the-icons-separators.el ends here
