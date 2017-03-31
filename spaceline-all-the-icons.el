@@ -740,56 +740,6 @@ available updates then restores the current buffer."
   :tight t
   :enabled t)
 
-;;; Full Modeline Definition
-(spaceline-compile
- "all-the-icons"
- '(((all-the-icons-modified
-     all-the-icons-bookmark
-     all-the-icons-dedicated
-     all-the-icons-window-number
-     all-the-icons-buffer-size) :face highlight-face :skip-alternate t)
-
-   all-the-icons-separator-left-active-1
-
-   ((all-the-icons-projectile
-     all-the-icons-mode-icon
-     all-the-icons-buffer-id)
-    :face default-face)
-
-   all-the-icons-separator-left-active-2
-
-   ((all-the-icons-process
-     all-the-icons-position
-     all-the-icons-region-info
-     all-the-icons-fullscreen
-     all-the-icons-text-scale)
-    :separator (spaceline-all-the-icons--separator "|" " ") :face highlight-face)
-
-   all-the-icons-separator-left-active-3
-   all-the-icons-separator-left-inactive
-
-   ((all-the-icons-vc-icon
-     all-the-icons-vc-status
-     all-the-icons-git-status
-     ((all-the-icons-flycheck-status
-       all-the-icons-flycheck-status-info) :separator " ")
-     all-the-icons-package-updates)
-    :separator (spaceline-all-the-icons--separator "·" " ") :face other-face)
-
-   all-the-icons-separator-left-active-4)
-
- '(all-the-icons-separator-right-active-1
-   ((all-the-icons-hud
-     all-the-icons-buffer-position)
-    :separator " " :when active)
-
-   all-the-icons-separator-right-active-2
-   all-the-icons-separator-right-inactive
-
-   ((all-the-icons-battery-status
-     all-the-icons-time "")
-    :separator (spaceline-all-the-icons--separator "|" " ") :face default-face)))
-
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
