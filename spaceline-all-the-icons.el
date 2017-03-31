@@ -775,16 +775,17 @@ available updates then restores the current buffer."
 
     (when (string-match "{\\(.*\\)}" current) (setq current (match-string 1 current)))
 
-    (propertize
-     (concat (propertize function-icon 'face icon-face) " "
-             (propertize (if unknown? question-icon current)
-                         'face `(if unknown? ,text-face '(:height 0.8 :inherit))
-                         'display '(raise 0.2)))
-     'mouse-face (spaceline-all-the-icons--highlight)
-     'local-map which-func-keymap
-     'help-echo "mouse-1: go to beginning\n\
+    (unless spaceline-all-the-icons-slim-render
+      (propertize
+       (concat (propertize function-icon 'face icon-face) " "
+               (propertize (if unknown? question-icon current)
+                           'face `(if unknown? ,text-face '(:height 0.8 :inherit))
+                           'display '(raise 0.2)))
+       'mouse-face (spaceline-all-the-icons--highlight)
+       'local-map which-func-keymap
+       'help-echo "mouse-1: go to beginning\n\
 mouse-2: toggle rest visibility\n\
-mouse-3: go to end"))
+mouse-3: go to end")))
 
   :when (and active
              (bound-and-true-p which-function-mode)
