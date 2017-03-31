@@ -563,7 +563,7 @@ When FAMILY is provided, put `:family' property into face."
                                      (t text))))
 
            (error-text (funcall get-text .error))
-           (warn-text  (funcall get-text .warn))
+           (warn-text  (funcall get-text .warning))
            (info-text  (funcall get-text .info))
 
            (error-icon (car (spaceline-all-the-icons-icon-set-flycheck-slim)))
