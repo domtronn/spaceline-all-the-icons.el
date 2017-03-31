@@ -80,4 +80,22 @@ M-x customize-group spaceline-all-the-icons-icon-set
 (setq spaceline-all-the-icons-icon-set-modified 'toggle)
 ```
 
+These segments can have one of the following icon sets
+
+| Segment | Available Icons |
+| :-- | :-- |
+| `modified` | `'chain`, `'toggle`, `'circle` |
+| `bookmark` | `'bookmark`, `'heart`, `'star` |
+| `dedicated` | `'pin`, `'sticky-note` |
+| `window-numbering` | `'circle`, `'solid`, `'string`, `'square` |
+| `git-stats` | `'github`, `'arrows` |
+| `flycheck-slim` | `'solid`, `'outline`, `'dots` |
+
+### Separators
+
+You can customize the divider separators using
+`spaceline-all-the-icons-separators-type`, the available types are:
+`'slant`, `'arrow`, `'cup`, `'wave`
+
+
 [▲ back to top](#readme)
