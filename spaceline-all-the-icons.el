@@ -218,7 +218,7 @@ possible, allowing more information to displayed on narrower windows/frames."
   "Return the `mouse-face' highlight face to be used when propertizing text.
 This is done as a function rather than a static face as it
 doesn't inherit all properties of a face."
-  `((foreground-color . ,(face-foreground 'highlight))))
+  `((foreground-color . ,(face-foreground 'spaceline-all-the-icons-info-face))))
 
 ;;; First Divider Segments
 (spaceline-define-segment all-the-icons-modified
