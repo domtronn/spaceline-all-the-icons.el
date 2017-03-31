@@ -363,7 +363,9 @@ doesn't inherit all properties of a face."
                       (format-mode-line "%b")))
 
          (project-root    (ignore-errors (file-truename (projectile-project-root))))
-         (buffer-relative (or (cadr (split-string buffer-id project-root)) buffer-id))
+         (buffer-relative (if project-root
+                              (or (cadr (split-string buffer-id project-root)) buffer-id)
+                              buffer-id))
 
          (path (file-name-directory buffer-relative))
          (file (file-name-nondirectory buffer-relative))
@@ -379,7 +381,7 @@ doesn't inherit all properties of a face."
                            (projectile-project-p))
                       'projectile-find-file
                       'find-file)))
-
+    
     (if (not (and spaceline-all-the-icons-highlight-file-name show-path?))
         (add-to-list 'file-face :inherit t)
       (plist-put file-face :background (face-background default-face))
