@@ -1,4 +1,6 @@
-<h1 align="center">spaceline-all-the-icons.el</h1>
+<p align="center">
+<img src="logo.png" width="1200">
+</p>
 
 <p align="center">
 <b><a href="#installation">Installation</a></b>
@@ -6,10 +8,6 @@
 <b><a href="#usage">Usage</a></b>
 |
 <b><a href="#customization">Customization</a></b>
-</p>
-
-<p align="center">
-<img src="logo.png" width="1200">
 </p>
 
 ## Installation
