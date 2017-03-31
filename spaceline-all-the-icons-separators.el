@@ -5,6 +5,8 @@
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
 ;; Keywords: convenience
+;; Package-Requires: ((emacs "24.3") (all-the-icons "2.4.0") (spaceline "2.0.0"))
+;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Created: 30 Mar 2017
 
 ;; This program is free software; you can redistribute it and/or
@@ -24,6 +26,7 @@
 
 ;;; Code:
 (require 'spaceline)
+(require 'all-the-icons)
 
 ;; Custom settings for separators
 (defcustom spaceline-all-the-icons-separators-type 'slant

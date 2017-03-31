@@ -4,7 +4,7 @@
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.3") (all-the-icons "2.4.0"))
+;; Package-Requires: ((emacs "24.3") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
 
@@ -68,7 +68,8 @@
 
    all-the-icons-separator-left-active-4
 
-   ((all-the-icons-which-function)
+   ((all-the-icons-which-function
+     minor-modes)
     :face powerline-active2
     :separator ""))
 

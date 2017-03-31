@@ -4,7 +4,7 @@
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.3") (all-the-icons "2.4.0"))
+;; Package-Requires: ((emacs "24.3") (all-the-icons "2.4.0") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
 
@@ -348,7 +348,7 @@ doesn't inherit all properties of a face."
   (let ((icon (all-the-icons-icon-for-buffer)))
     (propertize icon
                 'help-echo (format "Major-mode: `%s'" major-mode)
-                'display '(raise -0.1)
+                'display '(raise 0)
                 'face `(:height 1.1
                         :family ,(all-the-icons-icon-family-for-buffer)
                         :inherit)))
