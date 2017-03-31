@@ -79,13 +79,20 @@
      all-the-icons-time "")
     :separator (spaceline-all-the-icons--separator "|" " ") :face default-face)))
 
+;; Interactive Functions
 (defun spaceline-all-the-icons-theme ()
   "Set `mode-line-format' to be `spaceline-ml-all-the-icons'."
   (interactive)
-  (setq mode-line-format '("%e" (:eval (spaceline-ml-all-the-icons)))))
+  (setq-default mode-line-format '("%e" (:eval (spaceline-ml-all-the-icons)))))
 
 (defconst spaceline-all-the-icons-theme '("%e" (:eval (spaceline-ml-all-the-icons)))
   "Constant version of `spaceline-all-the-icons-theme' to allow to be set manually.")
+
+(defun spaceline-all-the-icons-toggle-slim ()
+  "Wrapper to toggle `spaceline-all-the-icons-slim-render' setting."
+  (interactive)
+  (setq spaceline-all-the-icons-slim-render
+        (not spaceline-all-the-icons-slim-render)))
 
 ;; Local Variables:
 ;; indent-tabs-mode: nil
