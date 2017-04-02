@@ -199,8 +199,8 @@ and shows three dots with numbers,  i.e.
 (defun spaceline-all-the-icons--separator (icon &optional left-padding right-padding)
   "Wrapper to render vertical line separator ICON with optional LEFT-PADDING & RIGHT-PADDING."
   (if spaceline-all-the-icons-slim-render " "
-    (let ((raise (if (equal "|" icon) 0.2 0.0))
-          (height (if (equal "|" icon) 0.9 1.2)))
+    (let ((raise (if (string= "|" icon) 0.2 0.0))
+          (height (if (string= "|" icon) 0.9 1.2)))
       (concat
        (propertize (or left-padding "") 'face '(:height 0.8 :inherit))
        (propertize icon
@@ -219,9 +219,9 @@ doesn't inherit all properties of a face."
   "An `all-the-icons' segment depiciting the current buffers state"
   (let* ((buffer-state (format-mode-line "%*"))
          (icon (cond
-                ((equal buffer-state "-") (car (spaceline-all-the-icons-icon-set-modified)))
-                ((equal buffer-state "*") (cdr (spaceline-all-the-icons-icon-set-modified)))
-                ((equal buffer-state "%") "lock"))))
+                ((string= buffer-state "-") (car (spaceline-all-the-icons-icon-set-modified)))
+                ((string= buffer-state "*") (cdr (spaceline-all-the-icons-icon-set-modified)))
+                ((string= buffer-state "%") "lock"))))
 
     (propertize (all-the-icons-faicon icon :v-adjust 0.0)
                 'face `(:family ,(all-the-icons-faicon-family) :height 1.1 :inherit)
@@ -235,7 +235,7 @@ doesn't inherit all properties of a face."
     (unless (boundp 'bookmark-alist) (bookmark-all-names)) ;; Force bookmarks to load
     (let-alist (spaceline-all-the-icons-icon-set-bookmark)
       (let* ((bookmark-name (buffer-file-name))
-             (bookmark (find-if (lambda (it) (equal bookmark-name (car it))) bookmark-alist)))
+             (bookmark (find-if (lambda (it) (string= bookmark-name (car it))) bookmark-alist)))
 
         (propertize (all-the-icons-faicon (if bookmark .icon.on .icon.off) :v-adjust 0.1)
                     'face      `(:family ,(all-the-icons-faicon-family) :inherit)
@@ -437,11 +437,11 @@ doesn't inherit all properties of a face."
 
 (spaceline-define-segment all-the-icons-text-scale
   "An `all-the-icons' indicator to show how much text has been scaled"
-  (let* ((zoom (if (equal (substring text-scale-mode-lighter 0 1) "+") "in" "out"))
+  (let* ((zoom (if (string= (substring text-scale-mode-lighter 0 1) "+") "in" "out"))
          (icon (all-the-icons-material (format "zoom_%s" zoom)))
          (text (substring text-scale-mode-lighter 1)))
 
-    (when (not (equal text "0"))
+    (when (not (string= text "0"))
       (concat
        (propertize icon
                    'display '(raise -0.2)
@@ -466,7 +466,7 @@ doesn't inherit all properties of a face."
 (defun spaceline-all-the-icons--vc-git ()
   "Get the formatted GIT Version Control Icon based on variable `vc-mode'."
   (let* ((branch (cadr (split-string vc-mode "Git[:-]")))
-         (git-branch (all-the-icons-octicon (if (equal branch "master") "git-merge" "git-branch")))
+         (git-branch (all-the-icons-octicon (if (string= branch "master") "git-merge" "git-branch")))
          (local-map (get-text-property 1 'local-map branch)))
     (propertize
      (concat
@@ -678,7 +678,7 @@ available updates then restores the current buffer."
                 'face default-face))
   :tight t
   :when (and active
-             (not (equal "All" (format-mode-line "%p")))))
+             (not (string= "All" (format-mode-line "%p")))))
 
 (spaceline-define-segment all-the-icons-buffer-position
   "An `all-the-icons' segment to show the buffer position as a percentage"
@@ -690,7 +690,7 @@ available updates then restores the current buffer."
 ;; Second Right divider segments
 (spaceline-define-segment all-the-icons-battery-status
   "An `all-the-icons' segment to show the battery information"
-  (let* ((charging?  (equal "AC" (alist-get ?L fancy-battery-last-status)))
+  (let* ((charging?  (string= "AC" (alist-get ?L fancy-battery-last-status)))
          (percent    (string-to-int (alist-get ?p fancy-battery-last-status)))
          (time       (alist-get ?t fancy-battery-last-status))
 
@@ -751,7 +751,7 @@ available updates then restores the current buffer."
 (spaceline-define-segment all-the-icons-which-function
   "An `all-the-icons' segment to show the `which-function-mode' function"
   (let* ((current (format-mode-line which-func-current))
-         (unknown? (equal current which-func-unknown))
+         (unknown? (string= current which-func-unknown))
          (function-icon (all-the-icons-fileicon "cold-fusion" :v-adjust 0))
          (question-icon (all-the-icons-faicon "question"))
 
