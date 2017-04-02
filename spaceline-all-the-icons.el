@@ -50,7 +50,7 @@
  '((all-the-icons-anzu
     :face mode-line
     :skip-alternate t)
-   
+
    ((all-the-icons-modified
      all-the-icons-bookmark
      all-the-icons-dedicated
@@ -92,12 +92,13 @@
     :face powerline-active2
     :separator ""))
 
- '(((all-the-icons-temperature
+ '(((all-the-icons-weather
+     all-the-icons-temperature
      all-the-icons-sunrise
      all-the-icons-sunset)
     :face powerline-active2
     :separator (spaceline-all-the-icons--separator "·" " "))
-   
+
    all-the-icons-separator-right-active-1
    ((all-the-icons-hud
      all-the-icons-buffer-position)
@@ -107,7 +108,7 @@
    all-the-icons-separator-right-inactive
 
    ((all-the-icons-battery-status
-     all-the-icons-time "")
+     all-the-icons-time)
     :separator (spaceline-all-the-icons--separator "|" " ") :face default-face)))
 
 ;; Interactive Functions

@@ -859,6 +859,7 @@ mouse-3: go to end")))
         'help-echo help-echo
         'mouse-face (spaceline-all-the-icons--highlight)))
      :tight t
+     :enabled nil
      :when (and active
                 (bound-and-true-p yahoo-weather-mode)
                 (bound-and-true-p yahoo-weather-info))))
@@ -889,7 +890,7 @@ mouse-3: go to end")))
   (let* ((yahoo-weather-temperture-format "%d")
          (temperature (yahoo-weather-info-format yahoo-weather-info "%(temperature)"))
          (icon (if yahoo-weather-use-F "°F" "°C"))
-         
+
          (icon-face `(:height 0.9
                       :family ,(all-the-icons-wicon-family)
                       :foreground ,(spaceline-all-the-icons--temperature-color)
@@ -906,6 +907,25 @@ mouse-3: go to end")))
      'mouse-face (spaceline-all-the-icons--highlight)
      'display '(raise 0.1)))
 
+  :tight t
+  :when (and active
+             (bound-and-true-p yahoo-weather-mode)
+             (bound-and-true-p yahoo-weather-info)))
+
+(spaceline-define-segment all-the-icons-weather
+  "An `all-the-icons' segment to display an icon for the current weather"
+  (let* ((weather (yahoo-weather-info-format yahoo-weather-info "%(weather)"))
+         (help-echo (format "The weather in `%s' is currently `%s'" yahoo-weather-location weather))
+         (icon (all-the-icons-icon-for-weather (downcase weather)))
+         (icon-face `(:height 0.9 :inherit)))
+    
+    (when (= 1 (length icon)) (plist-put icon-face :family (all-the-icons-wicon-family)))
+    
+    (propertize icon
+                'face icon-face
+                'display '(raise 0.1)
+                'help-echo help-echo
+                'mouse-face (spaceline-all-the-icons--highlight)))
   :tight t
   :when (and active
              (bound-and-true-p yahoo-weather-mode)
