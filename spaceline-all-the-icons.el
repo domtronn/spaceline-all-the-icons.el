@@ -70,7 +70,8 @@
      all-the-icons-region-info
      all-the-icons-fullscreen
      all-the-icons-text-scale)
-    :separator (spaceline-all-the-icons--separator "|" " ") :face highlight-face)
+    :face highlight-face
+    :separator (spaceline-all-the-icons--separator "|" " "))
 
    all-the-icons-separator-left-active-3
    all-the-icons-separator-left-inactive
@@ -81,7 +82,8 @@
      ((all-the-icons-flycheck-status
        all-the-icons-flycheck-status-info) :separator " ")
      all-the-icons-package-updates)
-    :separator (spaceline-all-the-icons--separator "·" " ") :face other-face)
+    :face other-face
+    :separator (spaceline-all-the-icons--separator "·" " "))
 
    all-the-icons-separator-left-active-4
 
@@ -89,7 +91,12 @@
     :face powerline-active2
     :separator ""))
 
- '(all-the-icons-separator-right-active-1
+ '(((all-the-icons-sunrise
+     all-the-icons-sunset)
+    :face powerline-active2
+    :separator (spaceline-all-the-icons--separator "·" " "))
+   
+   all-the-icons-separator-right-active-1
    ((all-the-icons-hud
      all-the-icons-buffer-position)
     :separator " " :when active)

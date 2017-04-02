@@ -91,6 +91,7 @@ These segments can have one of the following icon sets
 | `window-numbering` | `circle`, `solid`, `string`, `square` |
 | `git-stats` | `diff-icons`, `arrows` |
 | `flycheck-slim` | `solid`, `outline`, `dots` |
+| `sun-time` | `rise/set`, `sun/moon`, `arrows` |
 
 ### Separators
 

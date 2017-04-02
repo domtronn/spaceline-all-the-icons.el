@@ -157,6 +157,28 @@
               ,(all-the-icons-material-family)))
     (dots ("•" "•" "•"))))
 
+;; Sun Time Icons
+(define-icon-set-getter "sun-time")
+(defcustom spaceline-all-the-icons-icon-set-sun-time 'rise/set
+  "The Icon set to use for the `all-the-icons-flycheck-status' in SLIM mode."
+  :group 'spaceline-all-the-icons-icon-set
+  :type `(radio
+          (const :tag ,(format "Sun Up / Down Icons   - %s / %s"
+                               (all-the-icons-wicon "sunrise" :v-adjust -0.2)
+                               (all-the-icons-wicon "sunset" :v-adjust -0.2)) rise/set)
+          (const :tag ,(format "Sun / Moon Icons      - %s / %s"
+                               (all-the-icons-wicon "day-sunny" :v-adjust -0.2)
+                               (all-the-icons-wicon "night-clear" :v-adjust -0.2)) sun/moon)
+          (const :tag "Arrows                - 🡑 / 🡓" arrows)))
+
+(defconst spaceline-all-the-icons-icon-set--sun-time
+  `((rise/set ((sunrise . ,(all-the-icons-wicon "sunrise" :v-adjust 0))
+               (sunset . ,(all-the-icons-wicon "sunset" :v-adjust 0))))
+    (sun/moon ((sunrise . ,(all-the-icons-wicon "day-sunny" :v-adjust 0))
+               (sunset . ,(all-the-icons-wicon "night-clear" :v-adjust 0))))
+    (arrows   ((sunrise . ,(propertize "🡑" 'display '(raise 0.1)))
+               (sunset .  ,(propertize "🡓" 'display '(raise 0.1)))))))
+
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
   :group 'spaceline-all-the-icons
@@ -192,6 +214,16 @@ and shows three dots with numbers,  i.e.
 
 (defface spaceline-all-the-icons-info-face
   '((t (:foreground "#63B2FF")))
+  "Face for `all-the-icons' info feedback in the modeline."
+  :group 'spaceline-all-the-icons)
+
+(defface spaceline-all-the-icons-sunrise-face
+  '((t (:foreground "#f6c175" :inherit powerline-active2)))
+  "Face for `all-the-icons' info feedback in the modeline."
+  :group 'spaceline-all-the-icons)
+
+(defface spaceline-all-the-icons-sunset-face
+  '((t (:foreground "#fe7714" :inherit powerline-active2)))
   "Face for `all-the-icons' info feedback in the modeline."
   :group 'spaceline-all-the-icons)
 
@@ -802,6 +834,38 @@ mouse-3: go to end")))
   
   :when (and active
              (bound-and-true-p anzu--state)))
+
+;; Weather Segments
+(defmacro define-spaceline-sun-segment (type)
+  "Macro to declare `spaceline' segment to TYPE (one of \"sunset\" \"sunrise\") times."
+  `(spaceline-define-segment ,(intern (format "all-the-icons-%s" type))
+     ,(format "An `all-the-icons' segment to depict the %s time with icons." type)
+     (let* ((time (yahoo-weather-info-format yahoo-weather-info ,(format "%%(%s-time)" type)))
+            (icon (alist-get (quote ,(intern type)) (spaceline-all-the-icons-icon-set-sun-time)))
+
+            (help-echo (format "%s at %s" ,(capitalize type) time))
+
+            (text-face '(:height 0.9 :inherit))
+            (icon-face '(:height 0.9 :inherit ,(intern (format "spaceline-all-the-icons-%s-face" type)))))
+
+       (unless (eq spaceline-all-the-icons-icon-set-sun-time 'arrows)
+         (plist-put icon-face :family (all-the-icons-wicon-family)))
+
+       (propertize
+        (concat
+         (unless spaceline-all-the-icons-slim-render (propertize time 'face text-face 'display '(raise 0.1)))
+         (unless spaceline-all-the-icons-slim-render (propertize " " 'face '(:height 0.5 :inherit)))
+         (propertize icon 'face icon-face))
+        'help-echo help-echo
+        'mouse-face (spaceline-all-the-icons--highlight)))
+     :tight t
+     :when (and active
+                (bound-and-true-p yahoo-weather-mode)
+                (bound-and-true-p yahoo-weather-info))))
+
+(define-spaceline-sun-segment "sunrise")
+(define-spaceline-sun-segment "sunset")
+
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
