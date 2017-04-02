@@ -831,7 +831,7 @@ mouse-3: go to end")))
               (propertize (all-the-icons-material icon) 'face icon-face)
               (propertize status 'face text-face))))))
     (anzu--update-mode-line))
-  
+
   :when (and active
              (bound-and-true-p anzu--state)))
 
@@ -865,6 +865,51 @@ mouse-3: go to end")))
 
 (define-spaceline-sun-segment "sunrise")
 (define-spaceline-sun-segment "sunset")
+
+(defun spaceline-all-the-icons--temperature-color ()
+  "Convert CELSIUS into a color temperature Hex Code."
+  (let* ((yahoo-weather-use-F nil)
+         (celsius (string-to-number (yahoo-weather-info-format yahoo-weather-info "%(temperature)")))
+         (normal (max 13 (- 100 (* celsius 4))))
+         (clamp (lambda (i) (max 0 (min 255 i))))
+         (r (funcall clamp (if (< normal 67)
+                               255
+                               (* 329.698727446 (expt (- normal 60) -0.1332047592)))))
+         (g (funcall clamp (if (< normal 67)
+                               (- (* 99.4708025861 (log normal)) 161.1195681661)
+                               (* 288.1221695283 (expt (- normal 60) -0.0755148492)))))
+         (b (funcall clamp (cond
+                            ((> normal 65) 255)
+                            ((< normal 20) 0)
+                            (t (- (* 138.5177312231 (log (- normal 10))) 305.0447927307))))))
+    (format "#%02X%02X%02X" r g b)))
+
+(spaceline-define-segment all-the-icons-temperature
+  "An `all-the-icons' segment to display the current temperature"
+  (let* ((yahoo-weather-temperture-format "%d")
+         (temperature (yahoo-weather-info-format yahoo-weather-info "%(temperature)"))
+         (icon (if yahoo-weather-use-F "°F" "°C"))
+         
+         (icon-face `(:height 0.9
+                      :family ,(all-the-icons-wicon-family)
+                      :foreground ,(spaceline-all-the-icons--temperature-color)
+                      :background ,(face-background 'powerline-active2)))
+         (text-face '(:height 0.9 :inherit)))
+    (propertize
+     (concat
+      (propertize (all-the-icons-wicon "thermometer-exterior") 'face icon-face)
+      (unless spaceline-all-the-icons-slim-render (concat
+                            (propertize " " 'face '(:height 0.4 :inherit))
+                            (propertize temperature 'face text-face)
+                            (propertize icon 'face text-face))))
+     'help-echo (format "Temperature is currently %s%s" temperature icon)
+     'mouse-face (spaceline-all-the-icons--highlight)
+     'display '(raise 0.1)))
+
+  :tight t
+  :when (and active
+             (bound-and-true-p yahoo-weather-mode)
+             (bound-and-true-p yahoo-weather-info)))
 
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:

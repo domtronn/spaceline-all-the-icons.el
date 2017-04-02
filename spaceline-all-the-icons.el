@@ -48,7 +48,8 @@
 (spaceline-compile
  "all-the-icons"
  '((all-the-icons-anzu
-    :face mode-line)
+    :face mode-line
+    :skip-alternate t)
    
    ((all-the-icons-modified
      all-the-icons-bookmark
@@ -91,7 +92,8 @@
     :face powerline-active2
     :separator ""))
 
- '(((all-the-icons-sunrise
+ '(((all-the-icons-temperature
+     all-the-icons-sunrise
      all-the-icons-sunset)
     :face powerline-active2
     :separator (spaceline-all-the-icons--separator "·" " "))
