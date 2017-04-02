@@ -246,6 +246,10 @@ This is done as a function rather than a static face as it
 doesn't inherit all properties of a face."
   `((foreground-color . ,(face-foreground 'spaceline-all-the-icons-info-face))))
 
+(defun spaceline-all-the-icons--highlight-background ()
+  "Return a `mouse-face' to highlight the background when focussed."
+  `((background-color . ,(face-foreground 'spaceline-all-the-icons-info-face))))
+
 ;;; First Divider Segments
 (spaceline-define-segment all-the-icons-modified
   "An `all-the-icons' segment depiciting the current buffers state"
