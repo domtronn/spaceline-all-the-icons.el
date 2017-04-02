@@ -47,7 +47,10 @@
 ;;; Full Modeline Definition
 (spaceline-compile
  "all-the-icons"
- '(((all-the-icons-modified
+ '((all-the-icons-anzu
+    :face mode-line)
+   
+   ((all-the-icons-modified
      all-the-icons-bookmark
      all-the-icons-dedicated
      all-the-icons-window-number
