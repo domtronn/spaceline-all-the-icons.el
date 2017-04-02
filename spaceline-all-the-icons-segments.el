@@ -38,14 +38,8 @@
        (unless result (error "Unable to find key `%s' - See `spaceline-all-the-icons-icon-set-%s'" icon-name ,name))
        (car result))))
 
-;; Icon set getters
-(define-icon-set-getter "modified")
-(define-icon-set-getter "bookmark")
-(define-icon-set-getter "dedicated")
-(define-icon-set-getter "git-stats")
-(define-icon-set-getter "flycheck-slim")
-
 ;;; Modified Icon
+(define-icon-set-getter "modified")
 (defcustom spaceline-all-the-icons-icon-set-modified 'chain
   "The Icon set to use for the `all-the-icons-modified' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -66,6 +60,7 @@
     (circle ("circle-o" . "dot-circle-o"))))
 
 ;;; Bookmark Icon
+(define-icon-set-getter "bookmark")
 (defcustom spaceline-all-the-icons-icon-set-bookmark 'bookmark
   "The Icon set to use for the `all-the-icons-bookmark' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -89,6 +84,7 @@
                (echo (on . "Star") (off . "Unstar"))))))
 
 ;;; Dedicated Icon
+(define-icon-set-getter "dedicated")
 (defcustom spaceline-all-the-icons-icon-set-dedicated 'pin
   "The Icon set to use for the `all-the-icons-dedicated' window indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -102,9 +98,9 @@
 
 (defconst spaceline-all-the-icons-icon-set--dedicated
   '((sticky-note (("sticky-note" . faicon)
-                 ("sticky-note-o" . faicon)))
-    (pin        (("thumb-tack" . faicon)
-                 ("pin" . octicon)))))
+                  ("sticky-note-o" . faicon)))
+    (pin         (("thumb-tack" . faicon)
+                  ("pin" . octicon)))))
 
 ;; Window Numbering Icon
 (defcustom spaceline-all-the-icons-icon-set-window-numbering 'circle
@@ -117,22 +113,25 @@
           (const :tag ,(format "Square         - %s" (all-the-icons-material "filter_1" :v-adjust 0.0)) square)))
 
 ;; Git Statistics Icon
-(defcustom spaceline-all-the-icons-icon-set-git-stats 'github
+(define-icon-set-getter "git-stats")
+(defcustom spaceline-all-the-icons-icon-set-git-stats 'diff-icons
   "The Icon set to use for the `all-the-icons-git-status' indicator."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
           (const :tag ,(format "GitHub   - %s / %s"
                                (all-the-icons-octicon "diff-added" :v-adjust 0.0)
-                               (all-the-icons-octicon "diff-removed" :v-adjust 0.0)) github)
-          (const :tag "Arrows   - ↑ / ↓" arrows)))
+                               (all-the-icons-octicon "diff-removed" :v-adjust 0.0)) diff-icons)
+          (const :tag "Arrows   - 🡑 / 🡓" arrows)))
 
 (defconst spaceline-all-the-icons-icon-set--git-stats
-  `((github (,(all-the-icons-octicon "diff-added")
-             ,(all-the-icons-octicon "diff-removed")
-             ,(all-the-icons-octicon-family)))
-    (arrows ("↑" "↓"))))
+  `((diff-icons (,(all-the-icons-octicon "diff-added" :v-adjust 0.1)
+                 ,(all-the-icons-octicon "diff-removed" :v-adjust 0.1)
+                 ,(all-the-icons-octicon-family)))
+    (arrows (,(propertize "🡑" 'display '(raise 0.0))
+             ,(propertize "🡓" 'display '(raise 0.0))))))
 
 ;; Flycheck Slim Icons
+(define-icon-set-getter "flycheck-slim")
 (defcustom spaceline-all-the-icons-icon-set-flycheck-slim 'solid
   "The Icon set to use for the `all-the-icons-flycheck-status' in SLIM mode."
   :group 'spaceline-all-the-icons-icon-set
@@ -503,7 +502,7 @@ When FAMILY is provided, put `:family' property into face."
          (icon-face `(:foreground ,(face-foreground face) :height ,height)))
     (when family (plist-put icon-face :family family))
     (concat
-     (propertize icon 'face icon-face 'display '(raise 0.1))
+     (propertize icon 'face icon-face)
      (propertize " " 'face '(:height 0.2))
      (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face))))))
 

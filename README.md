@@ -85,12 +85,12 @@ These segments can have one of the following icon sets
 
 | Segment | Available Icons |
 | :-- | :-- |
-| `modified` | `'chain`, `'toggle`, `'circle` |
-| `bookmark` | `'bookmark`, `'heart`, `'star` |
-| `dedicated` | `'pin`, `'sticky-note` |
-| `window-numbering` | `'circle`, `'solid`, `'string`, `'square` |
-| `git-stats` | `'github`, `'arrows` |
-| `flycheck-slim` | `'solid`, `'outline`, `'dots` |
+| `modified` | `chain`, `toggle`, `circle` |
+| `bookmark` | `bookmark`, `heart`, `star` |
+| `dedicated` | `pin`, `sticky-note` |
+| `window-numbering` | `circle`, `solid`, `string`, `square` |
+| `git-stats` | `diff-icons`, `arrows` |
+| `flycheck-slim` | `solid`, `outline`, `dots` |
 
 ### Separators
 
