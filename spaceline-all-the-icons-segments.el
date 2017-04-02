@@ -809,31 +809,26 @@ mouse-3: go to end")))
              (bound-and-true-p which-func-mode)))
 
 ;; Optional Segments
-(spaceline-define-segment all-the-icons-anzu
-  "An `all-the-icons' segment to display the number of `anzu' matches"
-  (let ((anzu-mode-line-update-function
-         (lambda (here total)
-           (let* ((status (case anzu--state
-                            (search (format "(%s/%d%s)"
-                                            (anzu--format-here-position here total)
-                                            total (if anzu--overflow-p "+" "")))
-                            (replace (format "(%d/%d)" here total))
-                            (replace-query (format "(%d replace)" total))))
-                  (icon (case anzu--state
-                          (search "search")
-                          (replace "refresh")
-                          (replace-query "find_replace")))
-                  (text-face (if (and (zerop total)
-                                      (not (string= isearch-string "")))
-                                 'anzu-mode-line-no-match 'anzu-mode-line))
-                  (icon-face `(:height 0.9 :family ,(all-the-icons-material-family) :inherit ,text-face)))
-             (concat
-              (propertize (all-the-icons-material icon) 'face icon-face)
-              (propertize status 'face text-face))))))
-    (anzu--update-mode-line))
-
-  :when (and active
-             (bound-and-true-p anzu--state)))
+(defun spaceline-all-the-icons-anzu-update-func (here total)
+  "Update func to be set as `anzu-mode-line-update-function.'
+Displays HERE and TOTAL to indicate how many search results have been found."
+  (let* ((status (case anzu--state
+                   (search (format "(%s/%d%s)"
+                                   (anzu--format-here-position here total)
+                                   total (if anzu--overflow-p "+" "")))
+                   (replace (format "(%d/%d)" here total))
+                   (replace-query (format "(%d replace)" total))))
+         (icon (case anzu--state
+                 (search "search")
+                 (replace "refresh")
+                 (replace-query "find_replace")))
+         (text-face (if (and (zerop total)
+                             (not (string= isearch-string "")))
+                        'anzu-mode-line-no-match 'anzu-mode-line))
+         (icon-face `(:height 1.1 :family ,(all-the-icons-material-family) :inherit ,text-face)))
+    (concat " "
+     (propertize (all-the-icons-material icon) 'face icon-face)
+     (propertize status 'face text-face) " ")))
 
 ;; Weather Segments
 (defmacro define-spaceline-sun-segment (type)
