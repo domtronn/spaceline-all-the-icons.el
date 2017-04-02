@@ -279,7 +279,7 @@ doesn't inherit all properties of a face."
                                     (if ,(car bookmark)
                                         (bookmark-delete ,(car bookmark))
                                       (bookmark-set ,bookmark-name))
-                                    (force-window-update)))))))
+                                    (force-mode-line-update)))))))
 
   :when (buffer-file-name) :enabled nil)
 
@@ -302,7 +302,7 @@ doesn't inherit all properties of a face."
                              'mouse-1
                              `(lambda () (interactive)
                                 (set-window-dedicated-p ,window (not ,dedicated))
-                                (force-window-update)))))
+                                (force-mode-line-update)))))
   :enabled nil)
 
 (spaceline-define-segment all-the-icons-window-number
