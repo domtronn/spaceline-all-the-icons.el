@@ -27,8 +27,22 @@
 
 (require 'spaceline)
 
-(require 'spaceline-all-the-icons)
+(require 'spaceline-all-the-icons-segments)
 (require 'spaceline-all-the-icons-separators)
+
+;; Declare Customization Groups
+(defgroup spaceline-all-the-icons nil
+  "Customize the the Spaceline All The Icons mode line and theming."
+  :prefix "spaceline-all-the-icons-"
+  :group 'spaceline
+  :group 'appearance)
+
+(defgroup spaceline-all-the-icons-icon-set nil
+  "Customize which Icon Sets to use for various segments of the Spaceline All The Icons theme."
+  :prefix "spaceline-all-the-icons-icon-set-"
+  :group 'appearance
+  :group 'spaceline
+  :group 'spaceline-all-the-icons)
 
 ;;; Full Modeline Definition
 (spaceline-compile
@@ -99,9 +113,9 @@
   (setq spaceline-all-the-icons-slim-render
         (not spaceline-all-the-icons-slim-render)))
 
-(provide 'spaceline-all-the-icons-config)
+(provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
 ;; End:
 
-;;; spaceline-all-the-icons-config.el ends here
+;;; spaceline-all-the-icons.el ends here

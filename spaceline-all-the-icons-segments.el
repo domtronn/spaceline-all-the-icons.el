@@ -28,20 +28,6 @@
 (require 'spaceline)
 (require 'all-the-icons)
 
-;; Customization
-(defgroup spaceline-all-the-icons nil
-  "Customize the the Spaceline All The Icons mode line and theming."
-  :prefix "spaceline-all-the-icons-"
-  :group 'spaceline
-  :group 'appearance)
-
-(defgroup spaceline-all-the-icons-icon-set nil
-  "Customize which Icon Sets to use for various segments of the Spaceline All The Icons theme."
-  :prefix "spaceline-all-the-icons-icon-set-"
-  :group 'appearance
-  :group 'spaceline
-  :group 'spaceline-all-the-icons)
-
 (defmacro define-icon-set-getter (name)
   "Macro to create a getter function for icon set NAME."
   `(defun ,(intern (format "spaceline-all-the-icons-icon-set-%s" name)) ()
@@ -791,9 +777,9 @@ mouse-3: go to end")))
              (bound-and-true-p which-function-mode)
              (bound-and-true-p which-func-mode)))
 
-(provide 'spaceline-all-the-icons)
+(provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
 ;; End:
 
-;;; spaceline-all-the-icons.el ends here
+;;; spaceline-all-the-icons-segments.el ends here
