@@ -44,6 +44,12 @@
   :group 'spaceline
   :group 'spaceline-all-the-icons)
 
+(defun spaceline-all-the-icons--height (&optional height)
+  "Scale `powerline-height' by HEIGHT."
+  (if (bound-and-true-p powerline-height)
+      (* (or height 1) (or powerline-height 1))
+      (or height 1)))
+
 ;;; Full Modeline Definition
 (spaceline-compile
  "all-the-icons"

@@ -234,11 +234,11 @@ and shows three dots with numbers,  i.e.
     (let ((raise (if (string= "|" icon) 0.2 0.0))
           (height (if (string= "|" icon) 0.9 1.2)))
       (concat
-       (propertize (or left-padding "") 'face '(:height 0.8 :inherit))
+       (propertize (or left-padding "") 'face `(:height ,(spaceline-all-the-icons--height 0.8) :inherit))
        (propertize icon
-                   'face `(:height ,height :inherit)
+                   'face `(:height ,(spaceline-all-the-icons--height height) :inherit)
                    'display `(raise ,raise))
-       (propertize (or right-padding left-padding "") 'face '(:height 0.8 :inherit))))))
+       (propertize (or right-padding left-padding "") 'face `(:height ,(spaceline-all-the-icons--height 0.8) :inherit))))))
 
 (defun spaceline-all-the-icons--highlight ()
   "Return the `mouse-face' highlight face to be used when propertizing text.
@@ -260,7 +260,7 @@ doesn't inherit all properties of a face."
                 ((string= buffer-state "%") "lock"))))
 
     (propertize (all-the-icons-faicon icon :v-adjust 0.0)
-                'face `(:family ,(all-the-icons-faicon-family) :height 1.1 :inherit)
+                'face `(:family ,(all-the-icons-faicon-family) :height ,(spaceline-all-the-icons--height 1.1) :inherit)
                 'mouse-face (spaceline-all-the-icons--highlight)
                 'local-map (make-mode-line-mouse-map 'mouse-1 'read-only-mode)))
   :tight t)
@@ -274,7 +274,7 @@ doesn't inherit all properties of a face."
              (bookmark (find-if (lambda (it) (string= bookmark-name (car it))) bookmark-alist)))
 
         (propertize (all-the-icons-faicon (if bookmark .icon.on .icon.off) :v-adjust 0.1)
-                    'face      `(:family ,(all-the-icons-faicon-family) :inherit)
+                    'face      `(:family ,(all-the-icons-faicon-family) :height ,(spaceline-all-the-icons--height):inherit)
                     'help-echo  (if bookmark .echo.off .echo.on)
                     'mouse-face (spaceline-all-the-icons--highlight)
                     'local-map  (make-mode-line-mouse-map
@@ -299,7 +299,7 @@ doesn't inherit all properties of a face."
 
     (propertize (funcall icon-f icon)
                 'display    '(raise 0.1)
-                'face       `(:family ,(funcall family-f) :inherit)
+                'face       `(:family ,(funcall family-f) :height ,(spaceline-all-the-icons--height) :inherit)
                 'help-echo  "Toggle `window-dedidcated' for this window"
                 'mouse-face (spaceline-all-the-icons--highlight)
                 'local-map  (make-mode-line-mouse-map
@@ -311,7 +311,7 @@ doesn't inherit all properties of a face."
 
 (spaceline-define-segment all-the-icons-window-number
   "An `all-the-icons' segment depicting the current window number"
-  (let ((face '(:height 1.4 :inherit))
+  (let ((face `(:height ,(spaceline-all-the-icons--height 1.4) :inherit))
         (window-num
          (cond
           ((bound-and-true-p winum-mode) (winum-get-number))
@@ -322,10 +322,10 @@ doesn't inherit all properties of a face."
                ('solid   (format "%c" (+ window-num 10121)))
                ('circle  (format "%c" (+ window-num 9311)))
                ('string  (progn
-                           (plist-put face :height 1.2)
+                           (plist-put face :height (spaceline-all-the-icons--height 1.2))
                            (number-to-string window-num)))
                ('square  (progn
-                           (plist-put face :height 1.2)
+                           (plist-put face :height (spaceline-all-the-icons--height 1.2))
                            (plist-put face :family (all-the-icons-material-family))
                            (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
 
@@ -340,7 +340,7 @@ doesn't inherit all properties of a face."
 (spaceline-define-segment all-the-icons-buffer-size
   "An `all-the-icons' segment depicting the buffer size"
   (propertize (format-mode-line "%I")
-              'face '(:height 0.9 :inherit)
+              'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)
               'display '(raise 0.1))
   :tight t)
 
@@ -349,6 +349,7 @@ doesn't inherit all properties of a face."
   "An `all-the-icons' segment to indicate the current `projectile' project"
   (let ((help-echo "Switch Project")
         (raise (if spaceline-all-the-icons-slim-render 0.1 0.2))
+        (height (if spaceline-all-the-icons-slim-render 1.0 0.8))
         (local-map (make-mode-line-mouse-map 'mouse-1 'projectile-switch-project))
         (project-id (if (and (fboundp 'projectile-project-p) (projectile-project-p))
                         (projectile-project-name) "×")))
@@ -356,7 +357,7 @@ doesn't inherit all properties of a face."
     (concat
      (spaceline-all-the-icons--separator "|" nil " ")
      (propertize project-id
-                 'face `(:height ,(if spaceline-all-the-icons-slim-render 1.0 0.8) :inherit)
+                 'face `(:height ,(spaceline-all-the-icons--height height) :inherit)
                  'mouse-face (spaceline-all-the-icons--highlight)
                  'display `(raise ,raise)
                  'help-echo help-echo
@@ -370,7 +371,7 @@ doesn't inherit all properties of a face."
     (propertize icon
                 'help-echo (format "Major-mode: `%s'" major-mode)
                 'display '(raise 0)
-                'face `(:height 1.1
+                'face `(:height ,(spaceline-all-the-icons--height 1.1)
                         :family ,(all-the-icons-icon-family-for-buffer)
                         :inherit)))
   :when (not (symbolp (all-the-icons-icon-for-buffer))))
@@ -395,7 +396,7 @@ doesn't inherit all properties of a face."
          (raise  (if spaceline-all-the-icons-slim-render 0.1 0.2))
          (help-echo (format "Major-mode: `%s'" major-mode))
 
-         (file-face `(:height ,height))
+         (file-face `(:height ,(spaceline-all-the-icons--height height)))
          (show-path? (and (not spaceline-all-the-icons-slim-render) path active))
 
          (mouse-f (if (and (fboundp 'projectile-project-p)
@@ -412,7 +413,7 @@ doesn't inherit all properties of a face."
     (propertize
      (concat
       (propertize (if show-path? path "")
-                  'face `(:height ,height :inherit)
+                  'face `(:height ,(spaceline-all-the-icons--height height) :inherit)
                   'display `(raise ,raise)
                   'help-echo help-echo)
       (propertize file
@@ -430,14 +431,14 @@ doesn't inherit all properties of a face."
    (concat
     (when (or (symbolp (all-the-icons-icon-for-buffer)) mode-line-process) (format-mode-line "%m"))
     (when mode-line-process (format-mode-line mode-line-process)))
-   'face `(:height 0.8 :inherit)
+   'face `(:height ,(spaceline-all-the-icons--height 0.8) :inherit)
    'display '(raise 0.2))
   :tight t)
 
 (spaceline-define-segment all-the-icons-position
   "An `all-the-icons' Line & Column indicator"
   (propertize (format-mode-line "%l:%c")
-              'face `(:height 0.9 :inherit)
+              'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)
               'display '(raise 0.1))
   :tight t)
 
@@ -466,7 +467,7 @@ doesn't inherit all properties of a face."
                 'display '(raise -0.2)
                 'help-echo "Toggle frame fullscreen"
                 'mouse-face (spaceline-all-the-icons--highlight)
-                'face `(:height 1.3 :family ,(all-the-icons-material-family) :inherit)
+                'face `(:height ,(spaceline-all-the-icons--height 1.3) :family ,(all-the-icons-material-family) :inherit)
                 'local-map (make-mode-line-mouse-map 'mouse-1 'toggle-frame-fullscreen)))
 
   :tight t :enabled nil)
@@ -481,20 +482,20 @@ doesn't inherit all properties of a face."
       (concat
        (propertize icon
                    'display '(raise -0.2)
-                   'face `(:family ,(all-the-icons-material-family) :height 1.2 :inherit))
-       (propertize text 'display '(raise 0.1)))))
-  :tight t :enabled t)
+                   'face `(:family ,(all-the-icons-material-family) :height ,(spaceline-all-the-icons--height 1.2) :inherit))
+       (propertize text 'face `(:height ,(spaceline-all-the-icons--height)) 'display '(raise 0.1)))))
+  :tight t :enabled nil)
 
 ;; Fourth divider segments
 (spaceline-define-segment all-the-icons-vc-icon
   "An `all-the-icons' segment to depict the current VC system with an icon"
   (cond ((string-match "Git[:-]" vc-mode)
          (propertize (all-the-icons-alltheicon "git")
-                     'face `(:height 1.1 :family ,(all-the-icons-alltheicon-family) :inherit)
+                     'face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-alltheicon-family) :inherit)
                      'display '(raise 0.1)))
         ((string-match "SVN-" vc-mode)
          (propertize (all-the-icons-material "cloud_download" :v-adjust -0.2)
-                     'face `(:height 1.2 :family ,(all-the-icons-material-family))))
+                     'face `(:height ,(spaceline-all-the-icons--height 1.2) :family ,(all-the-icons-material-family))))
         (t ""))
 
   :when (and active vc-mode (not spaceline-all-the-icons-slim-render)))
@@ -507,10 +508,10 @@ doesn't inherit all properties of a face."
     (propertize
      (concat
       (propertize git-branch
-                  'face `(:family ,(all-the-icons-octicon-family) :inherit)
+                  'face `(:family ,(all-the-icons-octicon-family) :height ,(spaceline-all-the-icons--height) :inherit)
                   'display '(raise 0.1))
       (propertize (format " %s" branch)
-                  'face `(:height 0.9 :inherit)
+                  'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)
                   'display '(raise 0.1)))
      'mouse-face (spaceline-all-the-icons--highlight)
      'local-map local-map)))
@@ -520,7 +521,7 @@ doesn't inherit all properties of a face."
   (let ((revision (cadr (split-string vc-mode "-"))))
     (concat
      (propertize (format "%s" revision)
-                 'face '(:height 0.9)
+                 'face `(:height ,(spaceline-all-the-icons--height 0.9))
                  'display '(raise 0.1)))))
 
 (spaceline-define-segment all-the-icons-vc-status
@@ -535,12 +536,12 @@ doesn't inherit all properties of a face."
   "Wrapper to render git statistics ICON with TEXT using FACE.
 When FAMILY is provided, put `:family' property into face."
   (let* ((height (if (> (length (spaceline-all-the-icons-icon-set-git-stats)) 2) 1.0 1.2))
-         (icon-face `(:foreground ,(face-foreground face) :height ,height)))
+         (icon-face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height height))))
     (when family (plist-put icon-face :family family))
     (concat
      (propertize icon 'face icon-face)
-     (propertize " " 'face '(:height 0.2))
-     (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face))))))
+     (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.2)))
+     (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height))))))
 
 (spaceline-define-segment all-the-icons-git-status
   "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
@@ -569,12 +570,12 @@ When FAMILY is provided, put `:family' property into face."
 When FAMILY is provided, put `:family' property into face."
   (let* ((height 1.0)
          (raise (if (> (length (spaceline-all-the-icons-icon-set-flycheck-slim)) 3) -0.2 0.0))
-         (icon-face `(:foreground ,(face-foreground face) :height ,height)))
+         (icon-face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height height))))
     (when family (plist-put icon-face :family family))
     (when text
      (concat
       (propertize icon 'face icon-face 'display `(raise ,raise))
-      (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face)))))))
+      (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height)))))))
 
 (defun spaceline-all-the-icons--flycheck-status-slim ()
   "Render the mode line for Flycheck Status slim mode."
@@ -592,7 +593,7 @@ When FAMILY is provided, put `:family' property into face."
            (help-icon (caddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
 
            (family (cadddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
-           (space (propertize " " 'face '(:height 0.6))))
+           (space (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.6)))))
 
       (mapconcat
        'identity
@@ -620,11 +621,11 @@ When FAMILY is provided, put `:family' property into face."
                  (`errored     "⚠ Error")
                  (`interrupted "⛔ Interrupted")))
          (face (cond
-                ((string-match "✔" text) `(:height 0.9 :foreground ,(face-foreground 'success)))
-                ((string-match "⚠" text) `(:height 0.9 :foreground ,(face-foreground 'warning)))
-                ((string-match "✖ [0-9]" text) `(:height 0.9 :foreground ,(face-foreground 'error)))
-                ((string-match "✖ Disabled" text) `(:height 0.9 :foreground ,(face-foreground 'font-lock-comment-face)))
-                (t '(:height 0.9 :inherit)))))
+                ((string-match "✔" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(face-foreground 'success)))
+                ((string-match "⚠" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(face-foreground 'warning)))
+                ((string-match "✖ [0-9]" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(face-foreground 'error)))
+                ((string-match "✖ Disabled" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(face-foreground 'font-lock-comment-face)))
+                (t `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))))
 
      (propertize text 'face face 'display '(raise 0.1))))
 
@@ -645,7 +646,7 @@ When FAMILY is provided, put `:family' property into face."
   "An `all-the-icons' segment to show the info section of `flycheck-last-status-change'."
   (let-alist (flycheck-count-errors flycheck-current-errors)
     (unless (zerop (or .info 0))
-      (propertize (format "%s %s" .info (all-the-icons-faicon "info" :v-adjust 0.0 :height 0.8))
+      (propertize (format "%s %s" .info (all-the-icons-faicon "info" :v-adjust 0.0 :height (spaceline-all-the-icons--height 0.8)))
                   'face `(:foreground ,(face-foreground 'spaceline-all-the-icons-info-face))
                   'help-echo "Show Flycheck Errors"
                   'mouse-face (spaceline-all-the-icons--highlight)
@@ -674,7 +675,7 @@ available updates then restores the current buffer."
 
 (spaceline-define-segment all-the-icons-package-updates
   "An `all-the-icons' segment to display the number of package updates"
-  (let ((face '(:height 0.9))
+  (let ((face `(:height ,(spaceline-all-the-icons--height 0.9)))
         (new-text  (when spaceline-all-the-icons-slim-render
                        (format "%s" (all-the-icons-material "new_releases" :v-adjust -0.2))))
         (update-text (concat
@@ -684,10 +685,10 @@ available updates then restores the current buffer."
     (propertize
      (concat
       (propertize (all-the-icons-octicon "package" :v-adjust 0.1)
-                  'face `(:height 1.1 :family ,(all-the-icons-octicon-family)))
+                  'face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-octicon-family)))
       (propertize (or new-text "")
-                  'face `(:height 1.2 :family ,(all-the-icons-material-family)))
-      (propertize " " 'face '(:height 0.4))
+                  'face `(:height ,(spaceline-all-the-icons--height 1.2) :family ,(all-the-icons-material-family)))
+      (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.4)))
       (propertize update-text
                   'face face
                   'display '(raise 0.1)))
@@ -701,7 +702,7 @@ available updates then restores the current buffer."
 (spaceline-define-segment all-the-icons-hud
   "An `all-the-icons' segment to show the position through buffer HUD indicator."
   (let ((color (face-foreground default-face))
-        (height (or powerline-height (frame-char-height)))
+        (height (frame-char-height))
         (ws (window-start))
         (we (window-end))
         pmax pmin)
@@ -718,9 +719,11 @@ available updates then restores the current buffer."
 
 (spaceline-define-segment all-the-icons-buffer-position
   "An `all-the-icons' segment to show the buffer position as a percentage"
-  (if (string-match "\%" (format-mode-line "%p"))
-      (format-mode-line "%p%%")
-      (format-mode-line "%p"))
+  (propertize
+   (if (string-match "\%" (format-mode-line "%p"))
+       (format-mode-line "%p%%")
+     (format-mode-line "%p"))
+   'face `(:height ,(spaceline-all-the-icons--height) :inherit))
   :enabled nil :when (not spaceline-all-the-icons-slim-render))
 
 ;; Second Right divider segments
@@ -743,11 +746,11 @@ available updates then restores the current buffer."
          (icon-f   (all-the-icons--function-name icon-set))
          (family-f (all-the-icons--family-name icon-set))
 
-         (icon-face `(:height 1.0 :family ,(funcall family-f) :background ,(face-background default-face)))
-         (text-face `(:height 0.9 :background ,(face-background default-face))))
+         (icon-face `(:height ,(spaceline-all-the-icons--height) :family ,(funcall family-f) :background ,(face-background default-face)))
+         (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :background ,(face-background default-face))))
 
     (let-alist icon-alist
-      (when .height (plist-put icon-face :height .height))
+      (when .height (plist-put icon-face :height (spaceline-all-the-icons--height .height)))
       (when .inherit
         (plist-put icon-face :foreground (face-foreground .inherit))
         (plist-put text-face :foreground (face-foreground .inherit)))
@@ -774,9 +777,9 @@ available updates then restores the current buffer."
          (icon (all-the-icons-wicon (format "time-%s" time) :v-adjust 0.0)))
     (propertize
      (concat
-      (propertize (format-time-string "%H:%M ") 'face '(:height 0.9 :inherit) 'display '(raise 0.1))
+      (propertize (format-time-string "%H:%M ") 'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit) 'display '(raise 0.1))
       (propertize icon
-                  'face `(:height 0.9 :family ,(all-the-icons-wicon-family) :inherit)
+                  'face `(:height ,(spaceline-all-the-icons--height 0.9) :family ,(all-the-icons-wicon-family) :inherit)
                   'display '(raise 0.1)))
       'help-echo `(format-time-string "%H:%M")
       'mouse-face (spaceline-all-the-icons--highlight)))
@@ -800,7 +803,7 @@ available updates then restores the current buffer."
       (propertize
        (concat (propertize function-icon 'face icon-face) " "
                (propertize (if unknown? question-icon current)
-                           'face `(if unknown? ,text-face '(:height 0.8 :inherit))
+                           'face `(if unknown? ,text-face `(:height ,(spaceline-all-the-icons--height 0.8) :inherit))
                            'display '(raise 0.2)))
        'mouse-face (spaceline-all-the-icons--highlight)
        'local-map which-func-keymap
@@ -826,10 +829,12 @@ Displays HERE and TOTAL to indicate how many search results have been found."
                  (search "search")
                  (replace "refresh")
                  (replace-query "find_replace")))
-         (text-face (if (and (zerop total)
+         (anzu-face (if (and (zerop total)
                              (not (string= isearch-string "")))
                         'anzu-mode-line-no-match 'anzu-mode-line))
-         (icon-face `(:height 1.1 :family ,(all-the-icons-material-family) :inherit ,text-face)))
+         (text-face `(:height ,(spaceline-all-the-icons--height 1.1) :inherit ,anzu-face))
+         (icon-face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-material-family) :inherit ,anzu-face)))
+    
     (concat " "
      (propertize (all-the-icons-material icon) 'face icon-face)
      (propertize status 'face text-face) " ")))
@@ -844,8 +849,8 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 
             (help-echo (format "%s at %s" ,(capitalize type) time))
 
-            (text-face '(:height 0.9 :inherit))
-            (icon-face '(:height 0.9 :inherit ,(intern (format "spaceline-all-the-icons-%s-face" type)))))
+            (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit))
+            (icon-face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit ,(intern ,(format "spaceline-all-the-icons-%s-face" type)))))
 
        (unless (eq spaceline-all-the-icons-icon-set-sun-time 'arrows)
          (plist-put icon-face :family (all-the-icons-wicon-family)))
@@ -858,7 +863,6 @@ Displays HERE and TOTAL to indicate how many search results have been found."
         'help-echo help-echo
         'mouse-face (spaceline-all-the-icons--highlight)))
      :tight t
-     :enabled nil
      :when (and active
                 (bound-and-true-p yahoo-weather-mode)
                 (bound-and-true-p yahoo-weather-info))))
@@ -890,16 +894,16 @@ Displays HERE and TOTAL to indicate how many search results have been found."
          (temperature (yahoo-weather-info-format yahoo-weather-info "%(temperature)"))
          (icon (if yahoo-weather-use-F "°F" "°C"))
 
-         (icon-face `(:height 0.9
+         (icon-face `(:height ,(spaceline-all-the-icons--height 0.9)
                       :family ,(all-the-icons-wicon-family)
                       :foreground ,(spaceline-all-the-icons--temperature-color)
                       :background ,(face-background 'powerline-active2)))
-         (text-face '(:height 0.9 :inherit)))
+         (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
     (propertize
      (concat
       (propertize (all-the-icons-wicon "thermometer-exterior") 'face icon-face)
       (unless spaceline-all-the-icons-slim-render (concat
-                            (propertize " " 'face '(:height 0.4 :inherit))
+                            (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.4) :inherit))
                             (propertize temperature 'face text-face)
                             (propertize icon 'face text-face))))
      'help-echo (format "Temperature is currently %s%s" temperature icon)
@@ -916,7 +920,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
   (let* ((weather (yahoo-weather-info-format yahoo-weather-info "%(weather)"))
          (help-echo (format "The weather in `%s' is currently `%s'" yahoo-weather-location weather))
          (icon (all-the-icons-icon-for-weather (downcase weather)))
-         (icon-face `(:height 0.9 :inherit)))
+         (icon-face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
     
     (when (= 1 (length icon)) (plist-put icon-face :family (all-the-icons-wicon-family)))
     

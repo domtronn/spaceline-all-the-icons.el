@@ -86,7 +86,7 @@ separator."
 
        (unless (eq separator 'none)
         (propertize (all-the-icons-alltheicon (format "%s-%s" separator direction) :v-adjust 0.0)
-                    'face `(:height 1.6
+                    'face `(:height ,(spaceline-all-the-icons--height 1.6)
                                     :family ,(all-the-icons-alltheicon-family)
                                     :foreground ,(face-background sf)
                                     :background ,(face-background ef)))))
