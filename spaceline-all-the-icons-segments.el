@@ -656,7 +656,7 @@ When FAMILY is provided, put `:family' property into face."
                (bound-and-true-p flycheck-last-status-change)))
 
 (defvar spaceline-all-the-icons--package-updates nil)
-(defun spaceline-all-the-icons--count-package-udpates (&rest args)
+(defun spaceline-all-the-icons--count-package-updates (&rest args)
   "Function to count the number of package upgrades available.
 
 ARGS are provided as part of advice.  Opens a packages menu and
@@ -670,7 +670,7 @@ available updates then restores the current buffer."
 
 (defun spaceline-all-the-icons-setup-advice ()
   "Set up advice in order to count package upgrades."
-  (spaceline-all-the-icons--count-package-udpates)
+  (spaceline-all-the-icons--count-package-updates)
   (advice-add 'package-menu-execute :after 'spaceline-all-the-icons--count-package-updates)
   (advice-add 'package-refresh-contents :after 'spaceline-all-the-icons--count-package-updates))
 
