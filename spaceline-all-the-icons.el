@@ -1,10 +1,10 @@
-;;; spaceline-all-the-icons-config.el --- A Spaceline theme using All The Icons
+;;; spaceline-all-the-icons.el --- A Spaceline theme using All The Icons
 
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
-;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.3") (spaceline "2.0.0"))
+;; Package-Version: 0.0.1
+;; Package-Requires: ((emacs "24.4") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
 
@@ -98,12 +98,19 @@
     :face powerline-active2
     :separator ""))
 
- '(((all-the-icons-weather
+ '(
+   ((all-the-icons-weather
      all-the-icons-temperature
      all-the-icons-sunrise
      all-the-icons-sunset)
     :face powerline-active2
     :separator (spaceline-all-the-icons--separator "·" " "))
+
+   ((all-the-icons-player-volume
+     all-the-icons-player-controls
+     all-the-icons-track
+     all-the-icons-player-controls-shuffle)
+    :face powerline-active2)
 
    all-the-icons-separator-right-active-1
    ((all-the-icons-hud

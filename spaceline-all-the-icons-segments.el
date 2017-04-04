@@ -1,10 +1,10 @@
-;;; spaceline-all-the-icons.el --- A Spaceline theme using All The Icons
+;;; spaceline-all-the-icons-segments.el --- Segments used by Spaceline All The Icons Theme
 
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
-;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.3") (all-the-icons "2.4.0") (spaceline "2.0.0"))
+;; Package-Version: 0.0.1
+;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.0") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
 
@@ -28,18 +28,18 @@
 (require 'spaceline)
 (require 'all-the-icons)
 
-(defmacro define-icon-set-getter (name)
+(defmacro define-spaceline-all-the-icons--icon-set-getter (name)
   "Macro to create a getter function for icon set NAME."
   `(defun ,(intern (format "spaceline-all-the-icons-icon-set-%s" name)) ()
      ,(format "The Icon set to use for the `all-the-icons-%s' indicator." name)
      (let* ((icon-name (symbol-value (intern ,(format "spaceline-all-the-icons-icon-set-%s" name))))
             (icon-set (symbol-value (intern ,(format "spaceline-all-the-icons-icon-set--%s" name))))
-            (result (alist-get icon-name icon-set)))
+            (result (cdr (assoc icon-name icon-set))))
        (unless result (error "Unable to find key `%s' - See `spaceline-all-the-icons-icon-set-%s'" icon-name ,name))
        (car result))))
 
 ;;; Modified Icon
-(define-icon-set-getter "modified")
+(define-spaceline-all-the-icons--icon-set-getter "modified")
 (defcustom spaceline-all-the-icons-icon-set-modified 'chain
   "The Icon set to use for the `all-the-icons-modified' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -60,7 +60,7 @@
     (circle ("circle-o" . "dot-circle-o"))))
 
 ;;; Bookmark Icon
-(define-icon-set-getter "bookmark")
+(define-spaceline-all-the-icons--icon-set-getter "bookmark")
 (defcustom spaceline-all-the-icons-icon-set-bookmark 'bookmark
   "The Icon set to use for the `all-the-icons-bookmark' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -84,7 +84,7 @@
                (echo (on . "Star") (off . "Unstar"))))))
 
 ;;; Dedicated Icon
-(define-icon-set-getter "dedicated")
+(define-spaceline-all-the-icons--icon-set-getter "dedicated")
 (defcustom spaceline-all-the-icons-icon-set-dedicated 'pin
   "The Icon set to use for the `all-the-icons-dedicated' window indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -113,7 +113,7 @@
           (const :tag ,(format "Square         - %s" (all-the-icons-material "filter_1" :v-adjust 0.0)) square)))
 
 ;; Git Statistics Icon
-(define-icon-set-getter "git-stats")
+(define-spaceline-all-the-icons--icon-set-getter "git-stats")
 (defcustom spaceline-all-the-icons-icon-set-git-stats 'diff-icons
   "The Icon set to use for the `all-the-icons-git-status' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -131,7 +131,7 @@
              ,(propertize "🡓" 'display '(raise 0.0))))))
 
 ;; Flycheck Slim Icons
-(define-icon-set-getter "flycheck-slim")
+(define-spaceline-all-the-icons--icon-set-getter "flycheck-slim")
 (defcustom spaceline-all-the-icons-icon-set-flycheck-slim 'solid
   "The Icon set to use for the `all-the-icons-flycheck-status' in SLIM mode."
   :group 'spaceline-all-the-icons-icon-set
@@ -158,7 +158,7 @@
     (dots ("•" "•" "•"))))
 
 ;; Sun Time Icons
-(define-icon-set-getter "sun-time")
+(define-spaceline-all-the-icons--icon-set-getter "sun-time")
 (defcustom spaceline-all-the-icons-icon-set-sun-time 'rise/set
   "The Icon set to use for the `all-the-icons-flycheck-status' in SLIM mode."
   :group 'spaceline-all-the-icons-icon-set
@@ -670,6 +670,7 @@ available updates then restores the current buffer."
 
 (defun spaceline-all-the-icons-setup-advice ()
   "Set up advice in order to count package upgrades."
+  (spaceline-all-the-icons--count-package-udpates)
   (advice-add 'package-menu-execute :after 'spaceline-all-the-icons--count-package-updates)
   (advice-add 'package-refresh-contents :after 'spaceline-all-the-icons--count-package-updates))
 
@@ -729,9 +730,9 @@ available updates then restores the current buffer."
 ;; Second Right divider segments
 (spaceline-define-segment all-the-icons-battery-status
   "An `all-the-icons' segment to show the battery information"
-  (let* ((charging?  (string= "AC" (alist-get ?L fancy-battery-last-status)))
-         (percent    (string-to-int (alist-get ?p fancy-battery-last-status)))
-         (time       (alist-get ?t fancy-battery-last-status))
+  (let* ((charging?  (string= "AC" (cdr (assoc ?L fancy-battery-last-status))))
+         (percent    (string-to-int (cdr (assoc ?p fancy-battery-last-status))))
+         (time       (cdr (assoc ?t fancy-battery-last-status)))
 
          (icon-alist
           (cond
@@ -840,12 +841,12 @@ Displays HERE and TOTAL to indicate how many search results have been found."
      (propertize status 'face text-face) " ")))
 
 ;; Weather Segments
-(defmacro define-spaceline-sun-segment (type)
+(defmacro define-spaceline-all-the-icons--sun-segment (type)
   "Macro to declare `spaceline' segment to TYPE (one of \"sunset\" \"sunrise\") times."
   `(spaceline-define-segment ,(intern (format "all-the-icons-%s" type))
      ,(format "An `all-the-icons' segment to depict the %s time with icons." type)
      (let* ((time (yahoo-weather-info-format yahoo-weather-info ,(format "%%(%s-time)" type)))
-            (icon (alist-get (quote ,(intern type)) (spaceline-all-the-icons-icon-set-sun-time)))
+            (icon (cdr (assoc (quote ,(intern type))) (spaceline-all-the-icons-icon-set-sun-time)))
 
             (help-echo (format "%s at %s" ,(capitalize type) time))
 
@@ -867,8 +868,8 @@ Displays HERE and TOTAL to indicate how many search results have been found."
                 (bound-and-true-p yahoo-weather-mode)
                 (bound-and-true-p yahoo-weather-info))))
 
-(define-spaceline-sun-segment "sunrise")
-(define-spaceline-sun-segment "sunset")
+(define-spaceline-all-the-icons--sun-segment "sunrise")
+(define-spaceline-all-the-icons--sun-segment "sunset")
 
 (defun spaceline-all-the-icons--temperature-color ()
   "Convert CELSIUS into a color temperature Hex Code."

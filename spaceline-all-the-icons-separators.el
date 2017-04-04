@@ -4,8 +4,9 @@
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
+;; Package-Version: 0.0.1
 ;; Keywords: convenience
-;; Package-Requires: ((emacs "24.3") (all-the-icons "2.4.0") (spaceline "2.0.0"))
+;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.0") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Created: 30 Mar 2017
 
@@ -29,7 +30,7 @@
 (require 'all-the-icons)
 
 ;; Custom settings for separators
-(defcustom spaceline-all-the-icons-separators-type 'slant
+(defcustom spaceline-all-the-icons-separator-type 'slant
   "Choose the spaceline separator type to use."
   :group 'spaceline-all-the-icons
   :type `(radio
@@ -54,15 +55,15 @@
 
 ;; Functions to return separator specific render time info
 (defun spaceline-all-the-icons-separators--get-type ()
-  "Function to return `spaceline-all-the-icons-separators-type'."
-  spaceline-all-the-icons-separators-type)
+  "Function to return `spaceline-all-the-icons-separator-type'."
+  spaceline-all-the-icons-separator-type)
 
 (defun spaceline-all-the-icons-separators--get-direction (dir)
   "Function to get direction DIR based on `spaceline-all-the-icons-separators-invert-direction'."
   (if spaceline-all-the-icons-separators-invert-direction
       (if (equal dir "right") "left" "right") dir))
 
-(defmacro define-separator (name direction start-face end-face &optional invert)
+(defmacro define-spaceline-all-the-icons--separator (name direction start-face end-face &optional invert)
   "Macro to define separator used by `spaceline-all-the-icons'.
 
 Creates a separator with NAME choosing the icon DIRECTION while
@@ -92,16 +93,16 @@ separator."
                                     :background ,(face-background ef)))))
      :skip-alternate t :tight t :when (if ,invert (not active) active)))
 
-(define-separator left-active-1 "right" spaceline-highlight-face-func 'powerline-active1)
-(define-separator left-active-2 "right" 'powerline-active1 spaceline-highlight-face-func)
-(define-separator left-active-3 "right" spaceline-highlight-face-func 'mode-line)
-(define-separator left-active-4 "right" 'mode-line 'powerline-active2)
+(define-spaceline-all-the-icons--separator left-active-1 "right" spaceline-highlight-face-func 'powerline-active1)
+(define-spaceline-all-the-icons--separator left-active-2 "right" 'powerline-active1 spaceline-highlight-face-func)
+(define-spaceline-all-the-icons--separator left-active-3 "right" spaceline-highlight-face-func 'mode-line)
+(define-spaceline-all-the-icons--separator left-active-4 "right" 'mode-line 'powerline-active2)
 
-(define-separator right-active-1 "left" 'mode-line 'powerline-active2)
-(define-separator right-active-2 "left" 'powerline-active1 'mode-line)
+(define-spaceline-all-the-icons--separator right-active-1 "left" 'mode-line 'powerline-active2)
+(define-spaceline-all-the-icons--separator right-active-2 "left" 'powerline-active1 'mode-line)
 
-(define-separator left-inactive "right" 'powerline-inactive1 'powerline-inactive2 t)
-(define-separator right-inactive "left" 'powerline-inactive1 'powerline-inactive2 t)
+(define-spaceline-all-the-icons--separator left-inactive "right" 'powerline-inactive1 'powerline-inactive2 t)
+(define-spaceline-all-the-icons--separator right-inactive "left" 'powerline-inactive1 'powerline-inactive2 t)
 
 (provide 'spaceline-all-the-icons-separators)
 ;; Local Variables:
