@@ -846,7 +846,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
   `(spaceline-define-segment ,(intern (format "all-the-icons-%s" type))
      ,(format "An `all-the-icons' segment to depict the %s time with icons." type)
      (let* ((time (yahoo-weather-info-format yahoo-weather-info ,(format "%%(%s-time)" type)))
-            (icon (cdr (assoc (quote ,(intern type))) (spaceline-all-the-icons-icon-set-sun-time)))
+            (icon (cdr (assoc (quote ,(intern type)) (spaceline-all-the-icons-icon-set-sun-time))))
 
             (help-echo (format "%s at %s" ,(capitalize type) time))
 
