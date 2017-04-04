@@ -23,6 +23,47 @@
 
 ;;; Commentary:
 
+;; This package is a theme for `spaceline' and recreates most of the
+;; segments available in that package using icons from
+;; `all-the-icons'.  Icon fonts allow for more tailored and detailed
+;; information in the mode line.
+
+;; Currently this package provides segmets for the following functions
+;; without the need for optional dependencies
+
+;; - `modified'          Whether or not the current buffer has been modified
+;; - `dedicated'         Whether or not the current buffer is dedicated
+;; - `buffer-id'         The id of the current buffer
+;; - `buffer-size'       The size of the buffer
+;; - `mode-icon'         The Major Mode displayed as an icon
+;; - `process'           The currently running process
+;; - `position'          The Line/Column current position
+;; - `region-info'       Count of lines and words currently in region
+;; - `fullscreen'        An indicator of whether or not window is fullscreen
+;; - `text-scale'        The amount of global text scale
+;; - `vc-icon'           The current Version Control Icon
+;; - `vc-status'         The VC status, e.g. branch or revision
+;; - `package-updates'   The number of packages available for update
+;; - `hud'               A widget displaying how far through the buffer you are
+;; - `buffer-position'   A percentage or word describing buffer position
+;; - `time'              The Current Time with icon
+
+;; There are also some segments that require optional dependencies,
+;; this is a list of them and their required packages.
+
+;; - `bookmark' [`bookmark.el']                           Whether or not the current buffer has been modified
+;; - `window-number' [`winum.el' or `window-numbering']   The current window number
+;; - `projectile' [`projectile.el']                       The current project you're working in
+;; - `git-status' [`git-gutter.el']                       Number of added/removed lines in current buffer
+;; - `flycheck-status' [`flycheck.el']                    A summary of Errors/Warnings/Info in buffer
+;; - `flycheck-status-info' [`flycheck.el']               A summary dedicated to Info statuses in buffer
+;; - `which-function' [`which-function.el']               Display the name of function your point is in
+;; - `weather' [`yahoo-weather.el']                       Display an icon of the current weather
+;; - `temperature' [`yahoo-weather.el']                   Display the current temperature with a coloured thermometer
+;; - `sunrise' [`yahoo-weather.el']                       Display an icon to show todays sunrise time
+;; - `sunset' [`yahoo-weather.el']                        Display an icon to show todays sunset time
+;; - `battery-status' [`fancy-battery.el']                Display a colour coded battery with time remaining
+
 ;;; Code:
 
 (require 'spaceline)
