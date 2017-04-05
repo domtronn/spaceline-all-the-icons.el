@@ -193,6 +193,27 @@
     (commit ,(propertize (all-the-icons-octicon "git-commit" :v-adjust 0)
                          'face `(:family ,(all-the-icons-octicon-family) :inherit)))))
 
+;; Git Ahead
+(define-spaceline-all-the-icons--icon-set-getter "vc-icon-git")
+(defcustom spaceline-all-the-icons-icon-set-vc-icon-git 'git-logo
+  "The Icon set to use for the `all-the-icons-vc-icon' when in a git repository."
+  :group 'spaceline-all-the-icons-icon-set
+  :type `(radio
+          (const :tag ,(format "Git Name    - %s" (all-the-icons-faicon "git" :v-adjust -0.2)) git-name)
+          (const :tag ,(format "Git Logo    - %s" (all-the-icons-alltheicon "git" :v-adjust -0.2)) git-logo)
+          (const :tag ,(format "GitHub      - %s" (all-the-icons-faicon "github" :v-adjust -0.2)) github-logo)
+          (const :tag ,(format "GitHub Name - %s" (all-the-icons-octicon "logo-github" :v-adjust -0.2)) github-name)
+          (const :tag ,(format "Octocat     - %s" (all-the-icons-faicon "github-alt" :v-adjust -0.2)) octocat)
+          (const :tag ,(format "GitLab      - %s" (all-the-icons-faicon "gitlab" :v-adjust -0.2)) gitlab)))
+
+(defconst spaceline-all-the-icons-icon-set--vc-icon-git
+  `((git-name (,(all-the-icons-faicon "git") . ,(all-the-icons-faicon-family)))
+    (git-logo (,(all-the-icons-alltheicon "git") . ,(all-the-icons-alltheicon-family)))
+    (github-logo (,(all-the-icons-faicon "github") . ,(all-the-icons-faicon-family)))
+    (github-name (,(all-the-icons-octicon "logo-github") . ,(all-the-icons-octicon-family)))
+    (octocat (,(all-the-icons-faicon "github-alt") . ,(all-the-icons-faicon-family)))
+    (gitlab (,(all-the-icons-faicon "gitlab") . ,(all-the-icons-faicon-family)))))
+
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
   :group 'spaceline-all-the-icons
@@ -513,13 +534,14 @@ doesn't inherit all properties of a face."
 (spaceline-define-segment all-the-icons-vc-icon
   "An `all-the-icons' segment to depict the current VC system with an icon"
   (cond ((string-match "Git[:-]" vc-mode)
-         (propertize (all-the-icons-alltheicon "git")
-                     'face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-alltheicon-family) :inherit)
+         (propertize (car (spaceline-all-the-icons-icon-set-vc-icon-git))
+                     'face `(:height ,(spaceline-all-the-icons--height 1.1)
+                             :family ,(cdr (spaceline-all-the-icons-icon-set-vc-icon-git))
+                             :inherit)
                      'display '(raise 0.1)))
         ((string-match "SVN-" vc-mode)
          (propertize (all-the-icons-material "cloud_download" :v-adjust -0.2)
-                     'face `(:height ,(spaceline-all-the-icons--height 1.2) :family ,(all-the-icons-material-family))))
-        (t ""))
+                     'face `(:height ,(spaceline-all-the-icons--height 1.2) :family ,(all-the-icons-material-family)))))
 
   :when (and active vc-mode (not spaceline-all-the-icons-slim-render)))
 
