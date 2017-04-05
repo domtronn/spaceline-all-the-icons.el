@@ -574,6 +574,24 @@ When FAMILY is provided, put `:family' property into face."
              (fboundp 'git-gutter:statistic)
              (not (equal '(0 . 0) (git-gutter:statistic)))))
 
+(spaceline-define-segment all-the-icons-git-ahead
+  "An `all-the-icons' segment to display the number of commits a git branch is a head of upstream."
+  (let ((upstream (cadr (split-string vc-mode "Git[:-]")))
+        (ahead (with-temp-buffer
+                 (vc-git-log-outgoing (current-buffer) "")
+                 (count-lines (point-min) (point-max)))))
+    (when (> ahead 0)
+      (propertize
+       (concat
+        (propertize "🡅" 'face '(:inherit))
+        (propertize (format "%s" ahead) 'face '(:height 0.9 :inherit)))
+       'mouse-face (spaceline-all-the-icons--highlight)
+       'help-echo (format "You are currently %s commit%s ahead of `%s'" ahead (if (= ahead 1) "" "s") upstream))))
+  
+  :tight t
+  :when (and buffer-file-name active vc-mode
+             (string-match "Git" vc-mode)))
+
 (defun spaceline-all-the-icons--flycheck-pip (icon text face &optional family)
   "Wrapper to render flycheck status ICON with TEXT using FACE.
 When FAMILY is provided, put `:family' property into face."

@@ -43,6 +43,7 @@
 ;; - `text-scale'        The amount of global text scale
 ;; - `vc-icon'           The current Version Control Icon
 ;; - `vc-status'         The VC status, e.g. branch or revision
+;; - `git-ahead'         The number of commits ahead of upstream
 ;; - `package-updates'   The number of packages available for update
 ;; - `hud'               A widget displaying how far through the buffer you are
 ;; - `buffer-position'   A percentage or word describing buffer position
@@ -126,7 +127,8 @@
 
    ((all-the-icons-vc-icon
      all-the-icons-vc-status
-     all-the-icons-git-status
+     ((all-the-icons-git-ahead
+       all-the-icons-git-status) :separator " ")
      ((all-the-icons-flycheck-status
        all-the-icons-flycheck-status-info) :separator " ")
      all-the-icons-package-updates)
