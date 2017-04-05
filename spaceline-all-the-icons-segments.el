@@ -179,6 +179,20 @@
     (arrows   ((sunrise . ,(propertize "🡑" 'display '(raise 0.1)))
                (sunset .  ,(propertize "🡓" 'display '(raise 0.1)))))))
 
+;; Git Ahead
+(define-spaceline-all-the-icons--icon-set-getter "git-ahead")
+(defcustom spaceline-all-the-icons-icon-set-git-ahead 'arrow
+  "The Icon set to use for the `all-the-icons-git-ahead'."
+  :group 'spaceline-all-the-icons-icon-set
+  :type `(radio
+          (const :tag ,(format "Arrow   - 🡅") arrow)
+          (const :tag ,(format "Commit  - %s" (all-the-icons-octicon "git-commit" :v-adjust -0.2)) commit)))
+
+(defconst spaceline-all-the-icons-icon-set--git-ahead
+  `((arrow ,(propertize "🡅" 'face '(:inherit)))
+    (commit ,(propertize (all-the-icons-octicon "git-commit" :v-adjust 0)
+                         'face `(:family ,(all-the-icons-octicon-family) :inherit)))))
+
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
   :group 'spaceline-all-the-icons
@@ -583,11 +597,11 @@ When FAMILY is provided, put `:family' property into face."
     (when (> ahead 0)
       (propertize
        (concat
-        (propertize "🡅" 'face '(:inherit))
-        (propertize (format "%s" ahead) 'face '(:height 0.9 :inherit)))
+        (spaceline-all-the-icons-icon-set-git-ahead)
+        (propertize (format "%s" ahead) 'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
        'mouse-face (spaceline-all-the-icons--highlight)
        'help-echo (format "You are currently %s commit%s ahead of `%s'" ahead (if (= ahead 1) "" "s") upstream))))
-  
+
   :tight t
   :when (and buffer-file-name active vc-mode
              (string-match "Git" vc-mode)))
