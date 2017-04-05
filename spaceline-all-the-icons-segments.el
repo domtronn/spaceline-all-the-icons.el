@@ -427,12 +427,21 @@ doesn't inherit all properties of a face."
 ;;; Third Divider Segments
 (spaceline-define-segment all-the-icons-process
   "An `all-the-icons' segment to depict the current process"
-  (propertize
-   (concat
-    (when (or (symbolp (all-the-icons-icon-for-buffer)) mode-line-process) (format-mode-line "%m"))
-    (when mode-line-process (format-mode-line mode-line-process)))
-   'face `(:height ,(spaceline-all-the-icons--height 0.8) :inherit)
-   'display '(raise 0.2))
+  (let* ((process (format-mode-line mode-line-process))
+         (show-mode? (or (symbolp (all-the-icons-icon-for-buffer)) mode-line-process))
+         (finished? (string-match "finished" (or (get-text-property 0 'help-echo process) "")))
+         (spinner (propertize (all-the-icons-faicon "spinner")
+                              'face `(:family ,(all-the-icons-faicon-family)))))
+
+    (propertize
+     (concat
+      (when (and mode-line-process (not finished?)) (concat spinner " "))
+      (when show-mode? (format-mode-line "%m"))
+      (when process process))
+
+     'face `(:height ,(spaceline-all-the-icons--height 0.8) :inherit)
+     'mouse-face (spaceline-all-the-icons--highlight)
+     'display '(raise 0.2)))
   :tight t)
 
 (spaceline-define-segment all-the-icons-position
@@ -835,7 +844,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
                         'anzu-mode-line-no-match 'anzu-mode-line))
          (text-face `(:height ,(spaceline-all-the-icons--height 1.1) :inherit ,anzu-face))
          (icon-face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-material-family) :inherit ,anzu-face)))
-    
+
     (concat " "
      (propertize (all-the-icons-material icon) 'face icon-face)
      (propertize status 'face text-face) " ")))
@@ -922,9 +931,9 @@ Displays HERE and TOTAL to indicate how many search results have been found."
          (help-echo (format "The weather in `%s' is currently `%s'" yahoo-weather-location weather))
          (icon (all-the-icons-icon-for-weather (downcase weather)))
          (icon-face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
-    
+
     (when (= 1 (length icon)) (plist-put icon-face :family (all-the-icons-wicon-family)))
-    
+
     (propertize icon
                 'face icon-face
                 'display '(raise 0.1)
