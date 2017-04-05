@@ -386,7 +386,7 @@ doesn't inherit all properties of a face."
 
          (project-root    (ignore-errors (file-truename (projectile-project-root))))
          (buffer-relative (if project-root
-                              (or (cadr (split-string buffer-id project-root)) buffer-id)
+                              (or (cadr (split-string buffer-id project-root)) (format-mode-line "%b"))
                               buffer-id))
 
          (path (file-name-directory buffer-relative))
