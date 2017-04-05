@@ -620,6 +620,7 @@ When FAMILY is provided, put `:family' property into face."
       (propertize
        (concat
         (spaceline-all-the-icons-icon-set-git-ahead)
+        (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.3) :inherit))
         (propertize (format "%s" ahead) 'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
        'mouse-face (spaceline-all-the-icons--highlight)
        'help-echo (format "You are currently %s commit%s ahead of `%s'" ahead (if (= ahead 1) "" "s") upstream))))
