@@ -415,11 +415,13 @@ doesn't inherit all properties of a face."
   "An `all-the-icons' segment to display current buffer id"
   (let* ((buffer-id (if (and (buffer-file-name)
                              (fboundp 'projectile-project-p)
-                             (projectile-project-p))
+                             (projectile-project-p)
+                             spaceline-all-the-icons-projectile-p)
                         (file-truename (buffer-file-name))
                       (format-mode-line "%b")))
 
-         (project-root    (ignore-errors (file-truename (projectile-project-root))))
+         (project-root    (when spaceline-all-the-icons-projectile-p
+                           (ignore-errors (file-truename (projectile-project-root)))))
          (buffer-relative (if project-root
                               (or (cadr (split-string buffer-id project-root)) (format-mode-line "%b"))
                               buffer-id))
