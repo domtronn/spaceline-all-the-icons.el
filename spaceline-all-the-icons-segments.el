@@ -626,6 +626,7 @@ When FAMILY is provided, put `:family' property into face."
        'help-echo (format "You are currently %s commit%s ahead of `%s'" ahead (if (= ahead 1) "" "s") upstream))))
 
   :tight t
+  :enabled nil
   :when (and buffer-file-name active vc-mode
              (string-match "Git" vc-mode)))
 
