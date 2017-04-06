@@ -33,6 +33,7 @@
 
 ;; - `modified'          Whether or not the current buffer has been modified
 ;; - `dedicated'         Whether or not the current buffer is dedicated
+;; - `buffer-path'       The Path of the current buffer
 ;; - `buffer-id'         The id of the current buffer
 ;; - `buffer-size'       The size of the buffer
 ;; - `mode-icon'         The Major Mode displayed as an icon
@@ -109,7 +110,8 @@
 
    ((all-the-icons-projectile
      all-the-icons-mode-icon
-     all-the-icons-buffer-id)
+     ((all-the-icons-buffer-path
+       all-the-icons-buffer-id) :separator ""))
     :face default-face)
 
    all-the-icons-separator-left-active-2

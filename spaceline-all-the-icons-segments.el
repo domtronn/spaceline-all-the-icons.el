@@ -413,53 +413,71 @@ doesn't inherit all properties of a face."
 
 (spaceline-define-segment all-the-icons-buffer-id
   "An `all-the-icons' segment to display current buffer id"
-  (let* ((buffer-id (if (and (buffer-file-name)
-                             (fboundp 'projectile-project-p)
-                             (projectile-project-p)
-                             spaceline-all-the-icons-projectile-p)
-                        (file-truename (buffer-file-name))
-                      (format-mode-line "%b")))
-
-         (project-root    (when spaceline-all-the-icons-projectile-p
-                           (ignore-errors (file-truename (projectile-project-root)))))
-         (buffer-relative (if project-root
-                              (or (cadr (split-string buffer-id project-root)) (format-mode-line "%b"))
-                              buffer-id))
-
-         (path (file-name-directory buffer-relative))
-         (file (file-name-nondirectory buffer-relative))
-
-         (height (if spaceline-all-the-icons-slim-render 1.0 0.8))
+  (let* ((height (if spaceline-all-the-icons-slim-render 1.0 0.8))
          (raise  (if spaceline-all-the-icons-slim-render 0.1 0.2))
+
          (help-echo (format "Major-mode: `%s'" major-mode))
 
          (file-face `(:height ,(spaceline-all-the-icons--height height)))
-         (show-path? (and (not spaceline-all-the-icons-slim-render) path active))
+         (show-path? (and active
+                          spaceline-all-the-icons-buffer-path-p
+                          (spaceline-all-the-icons--buffer-path)
+                          (not spaceline-all-the-icons-slim-render)))
+
+         (buffer-id (if (or show-path?
+                            (and spaceline-all-the-icons-projectile-p
+                                 (projectile-project-p)))
+                        (file-name-nondirectory (buffer-file-name))
+                        (format-mode-line "%b")))
 
          (mouse-f (if (and (fboundp 'projectile-project-p)
                            (projectile-project-p))
                       'projectile-find-file
                       'find-file)))
 
-    (if (not (and spaceline-all-the-icons-highlight-file-name show-path?))
+    (if (not (and spaceline-all-the-icons-highlight-file-name
+                  show-path?))
         (add-to-list 'file-face :inherit t)
       (plist-put file-face :background (face-background default-face))
       (plist-put file-face :foreground (or spaceline-all-the-icons-file-name-highlight
                                            (face-background highlight-face))))
 
-    (propertize
-     (concat
-      (propertize (if show-path? path "")
-                  'face `(:height ,(spaceline-all-the-icons--height height) :inherit)
-                  'display `(raise ,raise)
-                  'help-echo help-echo)
-      (propertize file
-                  'face file-face
-                  'display `(raise ,raise)
-                  'help-echo help-echo))
-     'mouse-face (spaceline-all-the-icons--highlight)
-     'local-map (make-mode-line-mouse-map 'mouse-1 mouse-f)))
+    (propertize buffer-id
+                'face file-face
+                'display `(raise ,raise)
+                'help-echo help-echo
+                'mouse-face (spaceline-all-the-icons--highlight)
+                'local-map (make-mode-line-mouse-map 'mouse-1 mouse-f)))
   :tight t)
+
+(defun spaceline-all-the-icons--buffer-path ()
+  "Get buffer path based on home directory and `projectile-project-root'."
+  (when (buffer-file-name)
+    (let* ((name (file-truename (buffer-file-name)))
+
+           (project-root (when spaceline-all-the-icons-projectile-p
+                           (ignore-errors (file-truename (projectile-project-root)))))
+
+           (path-relative (or (cadr (split-string name project-root))
+                              (replace-regexp-in-string (getenv "HOME") "~" name))))
+
+      (file-name-directory path-relative))))
+
+(spaceline-define-segment all-the-icons-buffer-path
+  "An `all-the-icons' segment to display the path for the current buffer.
+It is only enabled when you're not in a project or if the projectile segment is disabled."
+  (let ((height (if spaceline-all-the-icons-slim-render 1.0 0.8))
+        (raise  (if spaceline-all-the-icons-slim-render 0.1 0.2))
+        (path   (spaceline-all-the-icons--buffer-path)))
+
+    (when path
+      (propertize path
+                  'face `(:height ,(spaceline-all-the-icons--height height) :inherit)
+                  'display `(raise ,raise))))
+
+  :when (and active
+             (buffer-file-name)
+             (not spaceline-all-the-icons-slim-render)))
 
 ;;; Third Divider Segments
 (spaceline-define-segment all-the-icons-process
