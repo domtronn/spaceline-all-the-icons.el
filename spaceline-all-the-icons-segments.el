@@ -768,7 +768,9 @@ available updates then restores the current buffer."
                        (format "%s" (all-the-icons-material "new_releases" :v-adjust -0.2))))
         (update-text (concat
                       (format "%s" spaceline-all-the-icons--package-updates)
-                      (unless spaceline-all-the-icons-slim-render " updates"))))
+                      (unless spaceline-all-the-icons-slim-render
+                        (format " update%s"
+                                (if (= 1 spaceline-all-the-icons--package-updates) "" "s"))))))
 
     (propertize
      (concat
