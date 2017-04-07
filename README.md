@@ -18,9 +18,9 @@ to the load path and then calling
 ```el
 (package-install 'spaceline-all-the-icons)
 
-(require 'spaceline-all-the-icons-config)
+(require 'spaceline-all-the-icons)
 ;; or
-(use-package spaceline-all-the-icons-config)
+(use-package spaceline-all-the-icons)
 ```
 
 *N.B.* This package is *_highly_* dependent
