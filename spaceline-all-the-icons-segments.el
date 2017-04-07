@@ -424,9 +424,11 @@ doesn't inherit all properties of a face."
                           (spaceline-all-the-icons--buffer-path)
                           (not spaceline-all-the-icons-slim-render)))
 
-         (buffer-id (if (or show-path?
-                            (and spaceline-all-the-icons-projectile-p
-                                 (projectile-project-p)))
+         (show-projectile? (and spaceline-all-the-icons-projectile-p
+                                (and (fboundp 'projectile-project-p) (projectile-project-p))))
+         
+         (buffer-id (if (and (buffer-file-name)
+                             (or show-path? show-projectile?))
                         (file-name-nondirectory (buffer-file-name))
                         (format-mode-line "%b")))
 
