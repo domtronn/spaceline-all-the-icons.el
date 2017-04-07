@@ -549,7 +549,7 @@ It is only enabled when you're not in a project or if the projectile segment is 
        (propertize icon
                    'display '(raise -0.2)
                    'face `(:family ,(all-the-icons-material-family) :height ,(spaceline-all-the-icons--height 1.2) :inherit))
-       (propertize text 'face `(:height ,(spaceline-all-the-icons--height)) 'display '(raise 0.1)))))
+       (propertize text 'face `(:height ,(spaceline-all-the-icons--height) :inherit) 'display '(raise 0.1)))))
   :tight t :enabled nil)
 
 ;; Fourth divider segments
