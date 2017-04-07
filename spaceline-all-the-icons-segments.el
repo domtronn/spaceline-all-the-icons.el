@@ -612,7 +612,7 @@ When FAMILY is provided, put `:family' property into face."
 
 (spaceline-define-segment all-the-icons-git-status
   "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
-  (destructuring-bind (added . removed) (git-gutter:statistic)
+  (cl-destructuring-bind (added . removed) (git-gutter:statistic)
     (let ((icon-fam (caddr (spaceline-all-the-icons-icon-set-git-stats)))
           (added-icon (car (spaceline-all-the-icons-icon-set-git-stats)))
           (removed-icon (cadr (spaceline-all-the-icons-icon-set-git-stats))))
