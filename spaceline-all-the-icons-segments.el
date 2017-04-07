@@ -306,7 +306,7 @@ doesn't inherit all properties of a face."
     (unless (boundp 'bookmark-alist) (bookmark-all-names)) ;; Force bookmarks to load
     (let-alist (spaceline-all-the-icons-icon-set-bookmark)
       (let* ((bookmark-name (buffer-file-name))
-             (bookmark (find-if (lambda (it) (string= bookmark-name (car it))) bookmark-alist)))
+             (bookmark (cl-find-if (lambda (it) (string= bookmark-name (car it))) bookmark-alist)))
 
         (propertize (all-the-icons-faicon (if bookmark .icon.on .icon.off) :v-adjust 0.1)
                     'face      `(:family ,(all-the-icons-faicon-family) :height ,(spaceline-all-the-icons--height):inherit)
