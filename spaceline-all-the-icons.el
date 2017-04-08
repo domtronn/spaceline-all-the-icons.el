@@ -53,18 +53,18 @@
 ;; There are also some segments that require optional dependencies,
 ;; this is a list of them and their required packages.
 
-;; - `bookmark' [`bookmark.el']                           Whether or not the current buffer has been modified
-;; - `window-number' [`winum.el' or `window-numbering']   The current window number
-;; - `projectile' [`projectile.el']                       The current project you're working in
-;; - `git-status' [`git-gutter.el']                       Number of added/removed lines in current buffer
-;; - `flycheck-status' [`flycheck.el']                    A summary of Errors/Warnings/Info in buffer
-;; - `flycheck-status-info' [`flycheck.el']               A summary dedicated to Info statuses in buffer
-;; - `which-function' [`which-function.el']               Display the name of function your point is in
-;; - `weather' [`yahoo-weather.el']                       Display an icon of the current weather
-;; - `temperature' [`yahoo-weather.el']                   Display the current temperature with a coloured thermometer
-;; - `sunrise' [`yahoo-weather.el']                       Display an icon to show todays sunrise time
-;; - `sunset' [`yahoo-weather.el']                        Display an icon to show todays sunset time
-;; - `battery-status' [`fancy-battery.el']                Display a colour coded battery with time remaining
+;; - `bookmark' [`bookmark']                           Whether or not the current buffer has been modified
+;; - `window-number' [`winum' or `window-numbering']   The current window number
+;; - `projectile' [`projectile']                       The current project you're working in
+;; - `git-status' [`git-gutter']                       Number of added/removed lines in current buffer
+;; - `flycheck-status' [`flycheck']                    A summary of Errors/Warnings/Info in buffer
+;; - `flycheck-status-info' [`flycheck']               A summary dedicated to Info statuses in buffer
+;; - `which-function' [`which-function']               Display the name of function your point is in
+;; - `weather' [`yahoo-weather']                       Display an icon of the current weather
+;; - `temperature' [`yahoo-weather']                   Display the current temperature with a coloured thermometer
+;; - `sunrise' [`yahoo-weather']                       Display an icon to show todays sunrise time
+;; - `sunset' [`yahoo-weather']                        Display an icon to show todays sunset time
+;; - `battery-status' [`fancy-battery']                Display a colour coded battery with time remaining
 
 ;;; Code:
 
