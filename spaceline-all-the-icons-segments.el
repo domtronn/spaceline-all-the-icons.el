@@ -836,8 +836,8 @@ available updates then restores the current buffer."
          (icon-f   (all-the-icons--function-name icon-set))
          (family-f (all-the-icons--family-name icon-set))
 
-         (icon-face `(:height ,(spaceline-all-the-icons--height) :family ,(funcall family-f) :background ,(face-background default-face)))
-         (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :background ,(face-background default-face))))
+         (icon-face `(:height ,(spaceline-all-the-icons--height) :family ,(funcall family-f) :background ,(face-background default-face) :inherit))
+         (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :background ,(face-background default-face) :inherit)))
 
     (let-alist icon-alist
       (when .height (plist-put icon-face :height (spaceline-all-the-icons--height .height)))
