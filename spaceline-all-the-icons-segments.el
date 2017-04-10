@@ -453,7 +453,7 @@ doesn't inherit all properties of a face."
   :tight t)
 
 (defun spaceline-all-the-icons--buffer-path ()
-  "Get buffer path based on home directory and `projectile-project-root'."
+  "Get buffer path based on home directory and function `projectile-project-root'."
   (when (buffer-file-name)
     (let* ((name (file-truename (buffer-file-name)))
 
