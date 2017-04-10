@@ -176,7 +176,7 @@
   (setq-default mode-line-format spaceline-all-the-icons-theme))
 
 (defconst spaceline-all-the-icons-theme '("%e" (:eval (spaceline-ml-all-the-icons)))
-  "Constant version of `spaceline-all-the-icons-theme' to allow to be set manually.")
+  "Constant version of variable `spaceline-all-the-icons-theme' to allow to be set manually.")
 
 (defun spaceline-all-the-icons-toggle-slim ()
   "Wrapper to toggle `spaceline-all-the-icons-slim-render' setting."

@@ -907,7 +907,7 @@ mouse-3: go to end")))
 
 ;; Optional Segments
 (defun spaceline-all-the-icons-anzu-update-func (here total)
-  "Update func to be set as `anzu-mode-line-update-function.'
+  "Update function to be set as `anzu-mode-line-update-function'.
 Displays HERE and TOTAL to indicate how many search results have been found."
   (let* ((status (case anzu--state
                    (search (format "(%s/%d%s)"
