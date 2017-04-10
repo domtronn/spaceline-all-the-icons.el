@@ -8,6 +8,8 @@
 <b><a href="#usage">Usage</a></b>
 |
 <b><a href="#customization">Customization</a></b>
+|
+<b><a href="#debugging">Debugging</a></b>
 </p>
 
 ## Installation
@@ -99,5 +101,26 @@ You can customize the divider separators using
 `spaceline-all-the-icons-separators-type`, the available types are:
 `'slant`, `'arrow`, `'cup`, `'wave`, `'none`
 
+### Debugging
+
+When a segment throws an error in Spaceline, this causes the entire
+mode line to disappear _(be blank)_, this is since the
+`mode-line-format` throws an error. 
+
+Spaceline unfortunately hides a lot of errors internally and doesn't
+given you information as to which segment is throwing an error.
+
+To debug this, try running 
+
+```el
+M-x spaceline-all-the-icons--debug-segments
+C-u M-x spaceline-all-th-icons--debug-segments
+```
+
+This will return a list of segments which are throwing errors and will
+help me to debug any issues you're having!
+
+Calling it with a `C-u` prefix will _(should)_ disable the segments
+that are currently erroring so that at least the mode line will work.
 
 [▲ back to top](#readme)
