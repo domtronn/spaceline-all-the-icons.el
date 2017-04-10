@@ -24,7 +24,7 @@ to the load path and then calling
 ```
 
 *N.B.* This package is *_highly_* dependent
-on [`all-the-icons.el`](github.com/domtronn/all-the-icons.el), so make
+on [`all-the-icons.el`](https://github.com/domtronn/all-the-icons.el), so make
 sure you have the [fonts](https://github.com/domtronn/all-the-icons.el/tree/master/fonts)
 installed correctly
 
