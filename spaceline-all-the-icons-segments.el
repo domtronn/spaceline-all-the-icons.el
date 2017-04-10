@@ -684,7 +684,7 @@ When FAMILY is provided, put `:family' property into face."
 
       (mapconcat
        'identity
-       (remove-if
+       (cl-remove-if
         'null
         `(,(spaceline-all-the-icons--flycheck-pip error-icon error-text 'error family)
           ,(spaceline-all-the-icons--flycheck-pip warn-icon warn-text 'warning family)
@@ -932,6 +932,8 @@ Displays HERE and TOTAL to indicate how many search results have been found."
      (propertize status 'face text-face) " ")))
 
 ;; Weather Segments
+(declare-function yahoo-weather-info-format "ext:yahoo-weather.el")
+
 (defmacro define-spaceline-all-the-icons--sun-segment (type)
   "Macro to declare `spaceline' segment to TYPE (one of \"sunset\" \"sunrise\") times."
   `(spaceline-define-segment ,(intern (format "all-the-icons-%s" type))
@@ -962,10 +964,11 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 (define-spaceline-all-the-icons--sun-segment "sunrise")
 (define-spaceline-all-the-icons--sun-segment "sunset")
 
-(defun spaceline-all-the-icons--temperature-color ()
-  "Convert CELSIUS into a color temperature Hex Code."
+(defun spaceline-all-the-icons--temperature-color (info)
+  "Convert weather INFO into a color temperature Hex Code.
+INFO should be an object similar to `yahoo-weather-info'."
   (let* ((yahoo-weather-use-F nil)
-         (celsius (string-to-number (yahoo-weather-info-format yahoo-weather-info "%(temperature)")))
+         (celsius (string-to-number (yahoo-weather-info-format info "%(temperature)")))
          (normal (max 13 (- 100 (* celsius 4))))
          (clamp (lambda (i) (max 0 (min 255 i))))
          (r (funcall clamp (if (< normal 67)
@@ -988,7 +991,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
 
          (icon-face `(:height ,(spaceline-all-the-icons--height 0.9)
                       :family ,(all-the-icons-wicon-family)
-                      :foreground ,(spaceline-all-the-icons--temperature-color)
+                      :foreground ,(spaceline-all-the-icons--temperature-color yahoo-weather-info)
                       :background ,(face-background 'powerline-active2)))
          (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
     (propertize
