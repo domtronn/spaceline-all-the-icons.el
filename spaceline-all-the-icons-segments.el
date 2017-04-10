@@ -786,7 +786,9 @@ available updates then restores the current buffer."
      'mouse-face (spaceline-all-the-icons--highlight)
      'local-map (make-mode-line-mouse-map 'mouse-1 'package-list-packages)))
 
-  :when (and active (> spaceline-all-the-icons--package-updates 0)))
+  :when (and active
+             (numberp spaceline-all-the-icons--package-updates)
+             (> spaceline-all-the-icons--package-updates 0)))
 
 ;; First Right divider segments
 (spaceline-define-segment all-the-icons-hud
