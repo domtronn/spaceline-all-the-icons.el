@@ -184,6 +184,37 @@
   (setq spaceline-all-the-icons-slim-render
         (not spaceline-all-the-icons-slim-render)))
 
+;; Debugging functions
+(defun spaceline-all-the-icons--turn-off (segment) "Turn spaceline SEGMENT off." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-off" segment))))
+(defun spaceline-all-the-icons--turn-on (segment) "Turn spaceline SEGMENT on." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-on" segment))))
+(defun spaceline-all-the-icons--get-active-segments ()
+  "Get a list of all currently active segment names."
+  (let* ((segments (apropos-internal "^spaceline-all-the-icons-.*-p$"))
+         (active-segments (cl-remove-if-not (lambda (s) (and (boundp s) (symbol-value s))) segments)))
+    (mapcar
+     (lambda (segment) (prog2
+                      (string-match "^spaceline-all-the-icons-\\(.*?\\)-p$" (format "%s" segment))
+                      (match-string 1 (format "%s" segment)))) active-segments)))
+
+(defun spaceline-all-the-icons--debug-segments (&optional pfx)
+  "Programatically toggle active segments and report any that throw errors.
+When PFX is non-nil, disable erroring segments at the same time."
+  (interactive "P")
+  (let* ((active-segments (spaceline-all-the-icons--get-active-segments))
+         (errors (cl-remove-if-not
+                  (lambda (segment)
+                    (mapc 'spaceline-all-the-icons--turn-off active-segments)
+                    (spaceline-all-the-icons--turn-on segment)
+                    (string= "" (format-mode-line spaceline-all-the-icons-theme)))
+                  active-segments)))
+    (mapc 'spaceline-all-the-icons--turn-on active-segments)
+    (if (not errors)
+        (message "%s Spaceline is working fine!" (all-the-icons-wicon "stars"))
+      (when pfx (mapc 'spaceline-all-the-icons--turn-off errors))
+      (error "%s Errors found in Spaceline Segments: [%s]"
+             (all-the-icons-faicon "fire-extinguisher")
+             (mapconcat 'identity errors ", ")))))
+
 (provide 'spaceline-all-the-icons)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
