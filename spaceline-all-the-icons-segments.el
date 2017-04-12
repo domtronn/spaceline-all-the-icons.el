@@ -28,6 +28,17 @@
 (require 'spaceline)
 (require 'all-the-icons)
 
+;;; Forward declarations of Optional Dependencies
+(declare-function projectile-project-root "ext:projectile.el")
+(declare-function yahoo-weather-info-format "ext:yahoo-weather.el")
+(declare-function flycheck-count-errors  "ext:flycheck.el")
+(declare-function anzu--format-here-position "ext:anzu.el")
+
+(defvar flycheck-current-errors)
+(defvar flycheck-last-status-change)
+(defvar anzu--state)
+(defvar anzu--overflow-p)
+
 (defmacro define-spaceline-all-the-icons--icon-set-getter (name)
   "Macro to create a getter function for icon set NAME."
   `(defun ,(intern (format "spaceline-all-the-icons-icon-set-%s" name)) ()
@@ -1101,16 +1112,7 @@ BODY is the form to evaluate to get the text to display."
 
   :when (derived-mode-p 'paradox-menu-mode))
 
-;;; Forward declarations of Optional Dependencies
-(declare-function projectile-project-root "ext:projectile.el")
-(declare-function yahoo-weather-info-format "ext:yahoo-weather.el")
-(declare-function flycheck-count-errors  "ext:flycheck.el")
-(declare-function anzu--format-here-position "ext:anzu.el")
 
-(defvar flycheck-current-errors)
-(defvar flycheck-last-status-change)
-(defvar anzu--state)
-(defvar anzu--overflow-p)
 
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
