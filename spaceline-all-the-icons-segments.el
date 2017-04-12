@@ -549,7 +549,7 @@ It is only enabled when you're not in a project or if the projectile segment is 
 (spaceline-define-segment all-the-icons-vc-icon
   "An `all-the-icons' segment to depict the current VC system with an icon"
   (cond ((string-match "Git[:-]" vc-mode)
-         (propertize (car (spaceline-all-the-icons-icon-set-vc-icon-git))
+         (propertize (spaceline-all-the-icons-icon-set-vc-icon-git)
                      'face `(:height ,(spaceline-all-the-icons--height 1.1)
                              :family ,(all-the-icons-icon-family (spaceline-all-the-icons-icon-set-vc-icon-git))
                              :inherit)
@@ -595,8 +595,8 @@ It is only enabled when you're not in a project or if the projectile segment is 
 (defun spaceline-all-the-icons--git-stats (icon text face)
   "Wrapper to render git statistics ICON with TEXT using FACE.
 When FAMILY is provided, put `:family' property into face."
-  (let* ((height (if (> (length (spaceline-all-the-icons-icon-set-git-stats)) 2) 1.0 1.2))
-         (family (all-the-icons-icon-family icon))
+  (let* ((family (all-the-icons-icon-family icon))
+         (height (if family 1.0 1.2))
          (icon-face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height height))))
     (when family (plist-put icon-face :family family))
     (concat
