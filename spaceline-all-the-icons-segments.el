@@ -4,7 +4,7 @@
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
 ;; Package-Version: 0.0.1
-;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.0") (spaceline "2.0.0"))
+;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.1") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
 
@@ -125,8 +125,7 @@
 
 (defconst spaceline-all-the-icons-icon-set--git-stats
   `((diff-icons (,(all-the-icons-octicon "diff-added" :v-adjust 0.1)
-                 ,(all-the-icons-octicon "diff-removed" :v-adjust 0.1)
-                 ,(all-the-icons-octicon-family)))
+                 ,(all-the-icons-octicon "diff-removed" :v-adjust 0.1)))
     (arrows (,(propertize "🡑" 'display '(raise 0.0))
              ,(propertize "🡓" 'display '(raise 0.0))))))
 
@@ -149,12 +148,10 @@
 (defconst spaceline-all-the-icons-icon-set--flycheck-slim
   `((solid   (,(all-the-icons-material "error" :v-adjust -0.2)
               ,(all-the-icons-material "help" :v-adjust -0.2)
-              ,(all-the-icons-material "info" :v-adjust -0.2)
-              ,(all-the-icons-material-family)))
+              ,(all-the-icons-material "info" :v-adjust -0.2)))
     (outline (,(all-the-icons-material "error_outline" :v-adjust -0.2)
               ,(all-the-icons-material "help_outline" :v-adjust -0.2)
-              ,(all-the-icons-material "info_outline" :v-adjust -0.2)
-              ,(all-the-icons-material-family)))
+              ,(all-the-icons-material "info_outline" :v-adjust -0.2)))
     (dots ("•" "•" "•"))))
 
 ;; Sun Time Icons
@@ -207,12 +204,12 @@
           (const :tag ,(format "GitLab      - %s" (all-the-icons-faicon "gitlab" :v-adjust -0.2)) gitlab)))
 
 (defconst spaceline-all-the-icons-icon-set--vc-icon-git
-  `((git-name (,(all-the-icons-faicon "git") . ,(all-the-icons-faicon-family)))
-    (git-logo (,(all-the-icons-alltheicon "git") . ,(all-the-icons-alltheicon-family)))
-    (github-logo (,(all-the-icons-faicon "github") . ,(all-the-icons-faicon-family)))
-    (github-name (,(all-the-icons-octicon "logo-github") . ,(all-the-icons-octicon-family)))
-    (octocat (,(all-the-icons-faicon "github-alt") . ,(all-the-icons-faicon-family)))
-    (gitlab (,(all-the-icons-faicon "gitlab") . ,(all-the-icons-faicon-family)))))
+  `((git-name ,(all-the-icons-faicon "git"))
+    (git-logo ,(all-the-icons-alltheicon "git"))
+    (github-logo ,(all-the-icons-faicon "github"))
+    (github-name ,(all-the-icons-octicon "logo-github"))
+    (octocat ,(all-the-icons-faicon "github-alt"))
+    (gitlab ,(all-the-icons-faicon "gitlab"))))
 
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
@@ -426,7 +423,7 @@ doesn't inherit all properties of a face."
 
          (show-projectile? (and spaceline-all-the-icons-projectile-p
                                 (and (fboundp 'projectile-project-p) (projectile-project-p))))
-         
+
          (buffer-id (if (and (buffer-file-name)
                              (or show-path? show-projectile?))
                         (file-name-nondirectory (buffer-file-name))
@@ -558,7 +555,7 @@ It is only enabled when you're not in a project or if the projectile segment is 
   (cond ((string-match "Git[:-]" vc-mode)
          (propertize (car (spaceline-all-the-icons-icon-set-vc-icon-git))
                      'face `(:height ,(spaceline-all-the-icons--height 1.1)
-                             :family ,(cdr (spaceline-all-the-icons-icon-set-vc-icon-git))
+                             :family ,(all-the-icons-icon-family (spaceline-all-the-icons-icon-set-vc-icon-git))
                              :inherit)
                      'display '(raise 0.1)))
         ((string-match "SVN-" vc-mode)
@@ -599,10 +596,11 @@ It is only enabled when you're not in a project or if the projectile segment is 
 
   :when (and active vc-mode))
 
-(defun spaceline-all-the-icons--git-stats (icon text face &optional family)
+(defun spaceline-all-the-icons--git-stats (icon text face)
   "Wrapper to render git statistics ICON with TEXT using FACE.
 When FAMILY is provided, put `:family' property into face."
   (let* ((height (if (> (length (spaceline-all-the-icons-icon-set-git-stats)) 2) 1.0 1.2))
+         (family (all-the-icons-icon-family icon))
          (icon-face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height height))))
     (when family (plist-put icon-face :family family))
     (concat
@@ -613,17 +611,16 @@ When FAMILY is provided, put `:family' property into face."
 (spaceline-define-segment all-the-icons-git-status
   "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
   (cl-destructuring-bind (added . removed) (git-gutter:statistic)
-    (let ((icon-fam (caddr (spaceline-all-the-icons-icon-set-git-stats)))
-          (added-icon (car (spaceline-all-the-icons-icon-set-git-stats)))
+    (let ((added-icon (car (spaceline-all-the-icons-icon-set-git-stats)))
           (removed-icon (cadr (spaceline-all-the-icons-icon-set-git-stats))))
       (propertize
        (concat
         (unless (zerop added)
-          (spaceline-all-the-icons--git-stats added-icon added 'success icon-fam))
+          (spaceline-all-the-icons--git-stats added-icon added 'success))
         (unless (or (zerop added) (zerop removed))
           (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
         (unless (zerop removed)
-          (spaceline-all-the-icons--git-stats removed-icon removed 'error icon-fam)))
+          (spaceline-all-the-icons--git-stats removed-icon removed 'error)))
        'help-echo "View Diff of current file"
        'mouse-face (spaceline-all-the-icons--highlight)
        'local-map (make-mode-line-mouse-map 'mouse-1 'vc-ediff))))
@@ -652,10 +649,11 @@ When FAMILY is provided, put `:family' property into face."
   :when (and buffer-file-name active vc-mode
              (string-match "Git" vc-mode)))
 
-(defun spaceline-all-the-icons--flycheck-pip (icon text face &optional family)
+(defun spaceline-all-the-icons--flycheck-pip (icon text face)
   "Wrapper to render flycheck status ICON with TEXT using FACE.
 When FAMILY is provided, put `:family' property into face."
   (let* ((height 1.0)
+         (family (all-the-icons-icon-family icon))
          (raise (if (> (length (spaceline-all-the-icons-icon-set-flycheck-slim)) 3) -0.2 0.0))
          (icon-face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height height))))
     (when family (plist-put icon-face :family family))
@@ -678,17 +676,16 @@ When FAMILY is provided, put `:family' property into face."
            (error-icon (car (spaceline-all-the-icons-icon-set-flycheck-slim)))
            (warn-icon (cadr (spaceline-all-the-icons-icon-set-flycheck-slim)))
            (help-icon (caddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
-
-           (family (cadddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
+           
            (space (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.6)))))
 
       (mapconcat
        'identity
        (cl-remove-if
         'null
-        `(,(spaceline-all-the-icons--flycheck-pip error-icon error-text 'error family)
-          ,(spaceline-all-the-icons--flycheck-pip warn-icon warn-text 'warning family)
-          ,(spaceline-all-the-icons--flycheck-pip help-icon info-text 'spaceline-all-the-icons-info-face family)))
+        `(,(spaceline-all-the-icons--flycheck-pip error-icon error-text 'error)
+          ,(spaceline-all-the-icons--flycheck-pip warn-icon warn-text 'warning)
+          ,(spaceline-all-the-icons--flycheck-pip help-icon info-text 'spaceline-all-the-icons-info-face)))
        space))))
 
 (defun spaceline-all-the-icons--flycheck-finished ()

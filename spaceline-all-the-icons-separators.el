@@ -6,7 +6,7 @@
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
 ;; Package-Version: 0.0.1
 ;; Keywords: convenience
-;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.0") (spaceline "2.0.0"))
+;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.1") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Created: 30 Mar 2017
 
@@ -88,9 +88,9 @@ separator."
        (unless (eq separator 'none)
         (propertize (all-the-icons-alltheicon (format "%s-%s" separator direction) :v-adjust 0.0)
                     'face `(:height ,(spaceline-all-the-icons--height 1.6)
-                                    :family ,(all-the-icons-alltheicon-family)
-                                    :foreground ,(face-background sf)
-                                    :background ,(face-background ef)))))
+                            :family ,(all-the-icons-alltheicon-family)
+                            :foreground ,(face-background sf)
+                            :background ,(face-background ef)))))
      :skip-alternate t :tight t :when (if ,invert (not active) active)))
 
 (define-spaceline-all-the-icons--separator left-active-1 "right" spaceline-highlight-face-func 'powerline-active1)
