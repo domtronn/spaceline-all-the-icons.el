@@ -217,6 +217,12 @@
   (spaceline-all-the-icons--count-package-updates)
   (advice-add 'package-menu-execute :after 'spaceline-all-the-icons--count-package-updates)
   (advice-add 'package-refresh-contents :after 'spaceline-all-the-icons--count-package-updates))
+
+(defun spaceline-all-the-icons--setup-paradox ()
+  "Set up advice required to make `spaceline-all-the-icons' work in `paradox-menu-mode'."
+  (add-hook 'paradox-menu-mode-hook (lambda () (setq-local mode-line-format spaceline-all-the-icons-paradox-theme)))
+  (advice-add 'paradox--update-mode-line :after  (lambda () (setq-local mode-line-format spaceline-all-the-icons-paradox-theme))))
+
 ;; Debugging functions
 (defun spaceline-all-the-icons--turn-off (segment) "Turn spaceline SEGMENT off." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-off" segment))))
 (defun spaceline-all-the-icons--turn-on (segment) "Turn spaceline SEGMENT on." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-on" segment))))
