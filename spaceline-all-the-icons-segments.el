@@ -672,7 +672,7 @@ When FAMILY is provided, put `:family' property into face."
            (error-icon (car (spaceline-all-the-icons-icon-set-flycheck-slim)))
            (warn-icon (cadr (spaceline-all-the-icons-icon-set-flycheck-slim)))
            (help-icon (caddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
-           
+
            (space (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.6)))))
 
       (mapconcat
@@ -1039,6 +1039,53 @@ INFO should be an object similar to `yahoo-weather-info'."
 
   :when (and (derived-mode-p 'paradox-menu-mode)
              paradox--current-filter))
+
+(defmacro define-spaceline-all-the-icons--paradox-segment (type icon mouse &rest body)
+  "Macro to declare `spaceline' segment for paradox information of TYPE.
+ICON should be an `all-the-icons' icon to display before the segment.
+MOUSE should be a cons cell containing a help-echo string and a function
+to call on MOUSE-1.
+BODY is the form to evaluate to get the text to display."
+  `(spaceline-define-segment ,(intern (format "all-the-icons-paradox-status-%s" type))
+     ,(format "An `all-the-icons' segment to depict the number of %s packages in `paradox'." type)
+     (let* ((text ,@body)
+            (text-face `(:foreground ,(face-foreground 'font-lock-keyword-face)
+                         :background ,(face-background 'powerline-active1)))
+            (icon-face (append `(:family ,(all-the-icons-icon-family ,icon)) text-face))
+            (num-face (cond
+                       ((eq ',type 'new) 'success)
+                       ((eq ',type 'upgrade) 'warning)
+                       ((eq ',type 'installed) 'spaceline-all-the-icons-info-face))))
+
+       (when (not (zerop text))
+         (propertize
+          (concat
+           (propertize ,icon 'face icon-face)
+           (propertize (capitalize ,(format " %s: " type)) 'face text-face 'display '(raise 0.1))
+           (propertize (int-to-string text) 'face `((foreground-color . ,(face-foreground num-face))) 'display '(raise 0.1)))
+          'help-echo ,(car mouse)
+          'local-map (make-mode-line-mouse-map 'mouse-1 ,(cdr mouse))
+          'mouse-face (spaceline-all-the-icons--highlight))))
+
+     :when (derived-mode-p 'paradox-menu-mode)))
+
+(define-spaceline-all-the-icons--paradox-segment upgrade
+  (all-the-icons-faicon "arrow-circle-up" :v-adjust 0.1)
+  ("Mark packages for upgrading" . 'package-menu-mark-upgrades)
+  paradox--upgradeable-packages-number)
+
+(define-spaceline-all-the-icons--paradox-segment new
+  (all-the-icons-material "new_releases" :v-adjust -0.1) nil
+  (paradox--cas "new"))
+
+(define-spaceline-all-the-icons--paradox-segment
+  installed
+  (all-the-icons-octicon "package" :v-adjust 0.1)
+  ("Filter to installed packages" . (lambda () (interactive) (package-menu-filter "status:installed")))
+  (+ (paradox--cas "installed")
+     (paradox--cas "dependency")
+     (paradox--cas "unsigned")))
+
 (spaceline-define-segment all-the-icons-paradox-total
   "An `all-the-icons' segment to display the total number of packages found"
   (let ((text-face `(:foreground ,(face-foreground 'font-lock-keyword-face)
