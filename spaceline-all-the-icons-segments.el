@@ -1039,6 +1039,20 @@ INFO should be an object similar to `yahoo-weather-info'."
 
   :when (and (derived-mode-p 'paradox-menu-mode)
              paradox--current-filter))
+(spaceline-define-segment all-the-icons-paradox-total
+  "An `all-the-icons' segment to display the total number of packages found"
+  (let ((text-face `(:foreground ,(face-foreground 'font-lock-keyword-face)
+                     :background ,(face-background 'powerline-active2))))
+    (propertize
+     (concat
+      (propertize "Total: " 'face text-face 'display '(raise 0.1))
+      (propertize (int-to-string (length package-archive-contents)) 'display '(raise 0.1)))
+     'mouse-face (spaceline-all-the-icons--highlight)
+     'help-echo "Refresh remote package data"
+     'local-map (make-mode-line-mouse-map 'mouse-1 'paradox--refresh-remote-data)))
+
+  :when (derived-mode-p 'paradox-menu-mode))
+
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
