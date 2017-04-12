@@ -482,14 +482,10 @@ It is only enabled when you're not in a project or if the projectile segment is 
 (spaceline-define-segment all-the-icons-process
   "An `all-the-icons' segment to depict the current process"
   (let* ((process (format-mode-line mode-line-process))
-         (show-mode? (or (symbolp (all-the-icons-icon-for-buffer)) mode-line-process))
-         (finished? (string-match "finished" (or (get-text-property 0 'help-echo process) "")))
-         (spinner (propertize (all-the-icons-faicon "spinner")
-                              'face `(:family ,(all-the-icons-faicon-family)))))
+         (show-mode? (or (symbolp (all-the-icons-icon-for-buffer)) mode-line-process)))
 
     (propertize
      (concat
-      (when (and mode-line-process (not finished?)) (concat spinner " "))
       (when show-mode? (format-mode-line "%m"))
       (when process process))
 
