@@ -169,7 +169,28 @@
      all-the-icons-time)
     :separator (spaceline-all-the-icons--separator "|" " ") :face default-face)))
 
-;; Interactive Functions
+(spaceline-compile
+ "all-the-icons-paradox"
+ '(((all-the-icons-paradox-line-count
+     all-the-icons-paradox-filter)
+    :separator (spaceline-all-the-icons--separator "|" " ")
+    :face highlight-face)
+
+   all-the-icons-separator-paradox-1
+   ((all-the-icons-paradox-status-new
+     all-the-icons-paradox-status-upgrade
+     all-the-icons-paradox-status-installed)
+    :separator "  "
+    :face powerline-active1)
+
+   all-the-icons-separator-paradox-2
+   ((all-the-icons-paradox-total) :face powerline-active2)
+
+   all-the-icons-separator-paradox-3
+   ((all-the-icons-process :tight t))
+   all-the-icons-separator-paradox-4) '())
+
+;; Interactive & Setup Functions
 (defun spaceline-all-the-icons-theme ()
   "Set `mode-line-format' to be `spaceline-ml-all-the-icons'."
   (interactive)
@@ -177,6 +198,9 @@
 
 (defconst spaceline-all-the-icons-theme '("%e" (:eval (spaceline-ml-all-the-icons)))
   "Constant version of variable `spaceline-all-the-icons-theme' to allow to be set manually.")
+
+(defconst spaceline-all-the-icons-paradox-theme '("%e" (:eval (spaceline-ml-all-the-icons-paradox)))
+  "Constant of paradox theme mode line format.")
 
 (defun spaceline-all-the-icons-toggle-slim ()
   "Wrapper to toggle `spaceline-all-the-icons-slim-render' setting."
