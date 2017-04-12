@@ -42,6 +42,17 @@ to be the `spaceline-all-the-icons` theme or by calling
   :config (spaceline-all-the-icons-theme))
 ```
 
+### Optional dependencies
+
+There are a few segments that require optional packages and custom
+setup functions in order to run.  Calling these two functions in your
+setup/config will enable the segments.
+
+```el
+(spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
+(spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
+```
+
 ## Customization
 
 The mode line is broken down into _segments_, where each segment can

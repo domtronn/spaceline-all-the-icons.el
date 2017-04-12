@@ -184,6 +184,15 @@
   (setq spaceline-all-the-icons-slim-render
         (not spaceline-all-the-icons-slim-render)))
 
+(defun spaceline-all-the-icons--setup-anzu ()
+  "Setup function for enabling command `anzu-mode' in `spaceline-all-the-icons' theme."
+  (setq-default anzu-mode-line-update-function 'spaceline-all-the-icons-anzu-update-func))
+
+(defun spaceline-all-the-icons--setup-package-updates ()
+  "Set up advice in order to count package upgrades."
+  (spaceline-all-the-icons--count-package-updates)
+  (advice-add 'package-menu-execute :after 'spaceline-all-the-icons--count-package-updates)
+  (advice-add 'package-refresh-contents :after 'spaceline-all-the-icons--count-package-updates))
 ;; Debugging functions
 (defun spaceline-all-the-icons--turn-off (segment) "Turn spaceline SEGMENT off." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-off" segment))))
 (defun spaceline-all-the-icons--turn-on (segment) "Turn spaceline SEGMENT on." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-on" segment))))

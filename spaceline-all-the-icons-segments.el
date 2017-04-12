@@ -748,12 +748,6 @@ available updates then restores the current buffer."
       (setq spaceline-all-the-icons--package-updates (length (package-menu--find-upgrades))))
     (switch-to-buffer cb)))
 
-(defun spaceline-all-the-icons-setup-advice ()
-  "Set up advice in order to count package upgrades."
-  (spaceline-all-the-icons--count-package-updates)
-  (advice-add 'package-menu-execute :after 'spaceline-all-the-icons--count-package-updates)
-  (advice-add 'package-refresh-contents :after 'spaceline-all-the-icons--count-package-updates))
-
 (spaceline-define-segment all-the-icons-package-updates
   "An `all-the-icons' segment to display the number of package updates"
   (let ((face `(:height ,(spaceline-all-the-icons--height 0.9)))
