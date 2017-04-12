@@ -300,7 +300,6 @@ doesn't inherit all properties of a face."
 (spaceline-define-segment all-the-icons-bookmark
   "An `all-the-icons' segment allowing for easy bookmarking of files"
   (progn
-    (unless (boundp 'bookmark-alist) (bookmark-all-names)) ;; Force bookmarks to load
     (let-alist (spaceline-all-the-icons-icon-set-bookmark)
       (let* ((bookmark-name (buffer-file-name))
              (bookmark (cl-find-if (lambda (it) (string= bookmark-name (car it))) bookmark-alist)))
@@ -317,7 +316,8 @@ doesn't inherit all properties of a face."
                                       (bookmark-set ,bookmark-name))
                                     (force-mode-line-update)))))))
 
-  :when (buffer-file-name) :enabled nil)
+  :when (and (buffer-file-name)
+             (boundp 'bookmark-alist)) :enabled nil)
 
 (spaceline-define-segment all-the-icons-dedicated
   "An `all-the-icons' segment to indicate and allow for making windows dedicated"
@@ -645,6 +645,7 @@ When FAMILY is provided, put `:family' property into face."
   :when (and buffer-file-name active vc-mode
              (string-match "Git" vc-mode)))
 
+;;; Flycheck
 (defun spaceline-all-the-icons--flycheck-pip (icon text face)
   "Wrapper to render flycheck status ICON with TEXT using FACE.
 When FAMILY is provided, put `:family' property into face."
@@ -895,6 +896,8 @@ mouse-3: go to end")))
              (bound-and-true-p which-func-mode)))
 
 ;; Optional Segments
+
+;;; Anzu
 (defun spaceline-all-the-icons-anzu-update-func (here total)
   "Update function to be set as `anzu-mode-line-update-function'.
 Displays HERE and TOTAL to indicate how many search results have been found."
@@ -919,8 +922,6 @@ Displays HERE and TOTAL to indicate how many search results have been found."
      (propertize status 'face text-face) " ")))
 
 ;; Weather Segments
-(declare-function yahoo-weather-info-format "ext:yahoo-weather.el")
-
 (defmacro define-spaceline-all-the-icons--sun-segment (type)
   "Macro to declare `spaceline' segment to TYPE (one of \"sunset\" \"sunrise\") times."
   `(spaceline-define-segment ,(intern (format "all-the-icons-%s" type))
@@ -1099,6 +1100,17 @@ BODY is the form to evaluate to get the text to display."
      'local-map (make-mode-line-mouse-map 'mouse-1 'paradox--refresh-remote-data)))
 
   :when (derived-mode-p 'paradox-menu-mode))
+
+;;; Forward declarations of Optional Dependencies
+(declare-function projectile-project-root "ext:projectile.el")
+(declare-function yahoo-weather-info-format "ext:yahoo-weather.el")
+(declare-function flycheck-count-errors  "ext:flycheck.el")
+(declare-function anzu--format-here-position "ext:anzu.el")
+
+(defvar flycheck-current-errors)
+(defvar flycheck-last-status-change)
+(defvar anzu--state)
+(defvar anzu--overflow-p)
 
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
