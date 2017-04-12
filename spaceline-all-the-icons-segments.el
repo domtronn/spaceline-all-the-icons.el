@@ -1016,6 +1016,13 @@ INFO should be an object similar to `yahoo-weather-info'."
              (bound-and-true-p yahoo-weather-mode)
              (bound-and-true-p yahoo-weather-info)))
 
+;; Paradox Segments
+(spaceline-define-segment all-the-icons-paradox-line-count
+  "An `all-the-icons' segment to display the line number created by `paradox--update-mode-line-front-space'"
+  (let* ((total-lines (int-to-string (length tabulated-list-entries)))
+         (current-line (format-mode-line (format "%%%sl" (length total-lines)))))
+    (format "(%s/%s)" current-line total-lines))
+  :when (derived-mode-p 'paradox-menu-mode))
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
