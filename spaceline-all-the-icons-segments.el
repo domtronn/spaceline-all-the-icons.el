@@ -1023,6 +1023,22 @@ INFO should be an object similar to `yahoo-weather-info'."
          (current-line (format-mode-line (format "%%%sl" (length total-lines)))))
     (format "(%s/%s)" current-line total-lines))
   :when (derived-mode-p 'paradox-menu-mode))
+
+(spaceline-define-segment all-the-icons-paradox-filter
+  "An `all-the-icons' segment to display the current `paradox--current-filter'"
+  (propertize
+   (concat
+    (propertize (all-the-icons-faicon "filter")
+                'face `(:family ,(all-the-icons-faicon-family) :inherit)
+                'display '(raise 0.1))
+    (propertize (format " %s" paradox--current-filter) 'display '(raise 0.1)))
+
+   'mouse-face (spaceline-all-the-icons--highlight)
+   'local-map (make-mode-line-mouse-map 'mouse-1 'paradox-filter-clear)
+   'help-echo (format "Clear current fitler: %s" paradox--current-filter))
+
+  :when (and (derived-mode-p 'paradox-menu-mode)
+             paradox--current-filter))
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
