@@ -1091,15 +1091,15 @@ BODY is the form to evaluate to get the text to display."
 
 (define-spaceline-all-the-icons--paradox-segment new
   (all-the-icons-material "new_releases" :v-adjust -0.1) nil
-  (paradox--cas "new"))
+  (cdr (assoc-string "new" paradox--package-count)))
 
 (define-spaceline-all-the-icons--paradox-segment
   installed
   (all-the-icons-octicon "package" :v-adjust 0.1)
   ("Filter to installed packages" . (lambda () (interactive) (package-menu-filter "status:installed")))
-  (+ (paradox--cas "installed")
-     (paradox--cas "dependency")
-     (paradox--cas "unsigned")))
+  (+ (cdr (assoc-string "installed" paradox--package-count))
+     (cdr (assoc-string "dependency" paradox--package-count))
+     (cdr (assoc-string "unsigned" paradox--package-count))));
 
 (spaceline-define-segment all-the-icons-paradox-total
   "An `all-the-icons' segment to display the total number of packages found"
