@@ -1136,6 +1136,35 @@ BODY is the form to evaluate to get the text to display."
   :when (and (derived-mode-p 'neotree-mode)
              (neo-buffer--get-filename-current-line)))
 
+(defmacro define-spaceline-all-the-icons--neotree-segment (type icon &rest body)
+  "Macro to declare `spaceline' segment for NeoTree segment TYPE.
+ICON should be an `all-the-icons' icon to display before number.
+BODY is the form to evaluate to get the number of things."
+  `(prog1
+       (defun ,(intern (format "spaceline-all-the-icons--neotree-%s" type)) ()
+         ,(format "Return the number of %s in `NeoTree'" type)
+         (unless (derived-mode-p 'neotree-mode) (error "Not in a NeoTree buffer"))
+         (let* ((icon-family (all-the-icons-icon-family ,icon))
+
+                (current (or (neo-buffer--get-filename-current-line)
+                             neo-buffer--start-node))
+                (parent  (file-name-directory current))
+                (things  (length ,@body)))
+
+           (when (not (zerop things))
+             (concat
+              (propertize ,icon 'face `(:family ,icon-family :inherit))
+              (propertize " " 'face `(:height 0.4 :inherit))
+              (format "%s" things)))))
+     (spaceline-define-segment ,(intern (format "all-the-icons-neotree-%s" type))
+       ,(format "An `all-the-icons' spaceline segment to the number of %s in `neotree'." type)
+       (,(intern (format "spaceline-all-the-icons--neotree-%s" type)))
+       :tight t
+       :when (derived-mode-p 'neotree-mode))))
+
+(define-spaceline-all-the-icons--neotree-segment dirs
+  (all-the-icons-faicon "folder" :v-adjust -0.1)
+  (car (neo-buffer--get-nodes parent)))
 
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
