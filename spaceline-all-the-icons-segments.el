@@ -1169,6 +1169,22 @@ BODY is the form to evaluate to get the number of things."
 (define-spaceline-all-the-icons--neotree-segment files
   (all-the-icons-faicon "file-text" :v-adjust -0.1 :height 0.8)
   (cdr (neo-buffer--get-nodes parent)))
+
+(spaceline-define-segment all-the-icons-neotree-open-bracket
+  "An `all-the-icons' segment to open bracket in neotree"
+  "("
+  :tight t
+  :when (and (derived-mode-p 'neotree-mode)
+             (or (and spaceline-all-the-icons-neotree-dirs-p (spaceline-all-the-icons--neotree-dirs))
+                 (and spaceline-all-the-icons-neotree-files-p (spaceline-all-the-icons--neotree-files)))))
+
+(spaceline-define-segment all-the-icons-neotree-close-bracket
+  "An `all-the-icons' segment to close bracket in neotree"
+  ")"
+  :tight t
+  :when (and (derived-mode-p 'neotree-mode)
+             (or (and spaceline-all-the-icons-neotree-dirs-p (spaceline-all-the-icons--neotree-dirs))
+                 (and spaceline-all-the-icons-neotree-files-p (spaceline-all-the-icons--neotree-files)))))
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
