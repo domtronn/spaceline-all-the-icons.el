@@ -1111,6 +1111,30 @@ BODY is the form to evaluate to get the text to display."
 
   :when (derived-mode-p 'paradox-menu-mode))
 
+;;; Neotree Segments
+(defun spaceline-all-the-icons--neotree-index ()
+  "Return the current index in a `NeoTree' buffer."
+  (unless (derived-mode-p 'neotree-mode) (error "Not in a NeoTree buffer"))
+  (when (neo-buffer--get-filename-current-line)
+   (let* ((current (neo-buffer--get-filename-current-line))
+          (parent  (file-name-directory current))
+
+          (dirs  (car (neo-buffer--get-nodes parent)))
+          (files (cdr (neo-buffer--get-nodes parent)))
+
+          (max   (+ (length dirs) (length files)))
+          (index (1+ (if (file-directory-p current)
+                         (neo-buffer--get-node-index current dirs)
+                       (+ (length dirs)
+                          (neo-buffer--get-node-index current files))))))
+
+     (format "[%s/%s]" index max))))
+
+(spaceline-define-segment all-the-icons-neotree-index
+  "An `all-the-icons' segment to display your current index within `NeoTree'."
+  (spaceline-all-the-icons--neotree-index)
+  :when (and (derived-mode-p 'neotree-mode)
+             (neo-buffer--get-filename-current-line)))
 
 
 (provide 'spaceline-all-the-icons-segments)
