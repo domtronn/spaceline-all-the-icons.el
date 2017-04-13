@@ -32,11 +32,15 @@
 (declare-function yahoo-weather-info-format "ext:yahoo-weather.el")
 (declare-function flycheck-count-errors  "ext:flycheck.el")
 (declare-function anzu--format-here-position "ext:anzu.el")
+(declare-function neo-buffer--get-filename-current-line "ext:neotree.el")
+(declare-function neo-buffer--get-node-index "ext:neotree.el")
+(declare-function neo-buffer--get-nodes "ext:neotree.el")
 
 (defvar flycheck-current-errors)
 (defvar flycheck-last-status-change)
 (defvar anzu--state)
 (defvar anzu--overflow-p)
+(defvar neo-buffer--start-node)
 
 (defmacro define-spaceline-all-the-icons--icon-set-getter (name)
   "Macro to create a getter function for icon set NAME."
