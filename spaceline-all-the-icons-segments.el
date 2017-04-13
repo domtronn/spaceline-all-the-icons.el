@@ -1185,6 +1185,45 @@ BODY is the form to evaluate to get the number of things."
   :when (and (derived-mode-p 'neotree-mode)
              (or (and spaceline-all-the-icons-neotree-dirs-p (spaceline-all-the-icons--neotree-dirs))
                  (and spaceline-all-the-icons-neotree-files-p (spaceline-all-the-icons--neotree-files)))))
+
+(spaceline-define-segment all-the-icons-neotree-context
+  "An `all-the-icons' segment to display the current context/directory your in in `NeoTree'"
+  (let* ((file-name (neo-buffer--get-filename-current-line))
+         (current (if file-name file-name neo-buffer--start-node))
+         (parent  (if file-name (file-name-directory current) current))
+
+         (index-s (spaceline-all-the-icons--neotree-index))
+         (file-s (spaceline-all-the-icons--neotree-files))
+         (dirs-s (spaceline-all-the-icons--neotree-dirs))
+
+         (context (file-name-nondirectory (directory-file-name parent)))
+         (context-max-length (- (window-width)
+                                (length file-s)
+                                (length dirs-s)
+                                (if index-s (1+ (length index-s)) 0)
+                                (when (or file-s dirs-s) 5)
+                                3))
+
+         (context-text (if (<= (length context) context-max-length) context
+                         (substring context 0 (- context-max-length 2)))))
+
+    (propertize
+
+     (concat
+      (propertize (format "%s "(all-the-icons-faicon "folder-open" :v-adjust 0))
+                  'face `(:foreground ,(face-background (funcall spaceline-highlight-face-func))
+                                      :background ,(face-background (if active 'powerline-active2 'mode-line))
+                                      :family ,(all-the-icons-faicon-family)))
+      (propertize context-text
+                  'face `((foreground-color . ,(face-background (funcall spaceline-highlight-face-func)))))
+      (unless (<= (length context) context-max-length) (propertize "..." 'face 'font-lock-comment-face)))
+
+     'mouse-face (spaceline-all-the-icons--highlight)
+     'help-echo (format "Open `%s' in %s" context (if (file-directory-p parent) "`dired'" "buffer"))
+     'local-map (make-mode-line-mouse-map 'mouse-1 `(lambda () (interactive) (find-file ,parent)))))
+
+  :when (derived-mode-p 'neotree-mode))
+
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
