@@ -6,7 +6,6 @@
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
 ;; Package-Version: 0.0.1
 ;; Keywords: convenience
-;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.1") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Created: 30 Mar 2017
 
