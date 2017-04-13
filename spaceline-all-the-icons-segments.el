@@ -1167,11 +1167,11 @@ BODY is the form to evaluate to get the number of things."
        :when (derived-mode-p 'neotree-mode))))
 
 (define-spaceline-all-the-icons--neotree-segment dirs
-  (all-the-icons-faicon "folder" :v-adjust -0.1)
+  (all-the-icons-faicon "folder-o" :v-adjust -0.1)
   (car (neo-buffer--get-nodes parent)))
 
 (define-spaceline-all-the-icons--neotree-segment files
-  (all-the-icons-faicon "file-text" :v-adjust -0.1 :height 0.8)
+  (all-the-icons-faicon "files-o" :v-adjust -0.1 :height 0.8)
   (cdr (neo-buffer--get-nodes parent)))
 
 (spaceline-define-segment all-the-icons-neotree-open-bracket
@@ -1214,7 +1214,7 @@ BODY is the form to evaluate to get the number of things."
     (propertize
 
      (concat
-      (propertize (format "%s "(all-the-icons-faicon "folder-open" :v-adjust 0))
+      (propertize (format "%s "(all-the-icons-faicon "folder-open-o" :v-adjust 0))
                   'face `(:foreground ,(face-background (funcall spaceline-highlight-face-func))
                                       :background ,(face-background line-face)
                                       :family ,(all-the-icons-faicon-family)))
