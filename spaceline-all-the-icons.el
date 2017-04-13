@@ -190,6 +190,17 @@
    ((all-the-icons-process :tight t))
    all-the-icons-separator-paradox-4) '())
 
+(spaceline-compile
+ "all-the-icons-neotree"
+ ;; Declare two active/inactive segments to get face inheritance correct
+ '(((all-the-icons-neotree-index
+     all-the-icons-neotree-context
+     all-the-icons-neotree-open-bracket
+     all-the-icons-neotree-dirs
+     all-the-icons-neotree-files
+     all-the-icons-neotree-close-bracket)
+    :face line-face)) '())
+
 ;; Interactive & Setup Functions
 (defun spaceline-all-the-icons-theme ()
   "Set `mode-line-format' to be `spaceline-ml-all-the-icons'."
