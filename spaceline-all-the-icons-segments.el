@@ -1166,6 +1166,9 @@ BODY is the form to evaluate to get the number of things."
   (all-the-icons-faicon "folder" :v-adjust -0.1)
   (car (neo-buffer--get-nodes parent)))
 
+(define-spaceline-all-the-icons--neotree-segment files
+  (all-the-icons-faicon "file-text" :v-adjust -0.1 :height 0.8)
+  (cdr (neo-buffer--get-nodes parent)))
 (provide 'spaceline-all-the-icons-segments)
 ;; Local Variables:
 ;; indent-tabs-mode: nil
