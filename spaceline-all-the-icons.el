@@ -234,6 +234,11 @@
   (add-hook 'paradox-menu-mode-hook (lambda () (setq-local mode-line-format spaceline-all-the-icons-paradox-theme)))
   (advice-add 'paradox--update-mode-line :after  (lambda () (setq-local mode-line-format spaceline-all-the-icons-paradox-theme))))
 
+(defun spaceline-all-the-icons--setup-neotree ()
+  "Set up advice required to make `spaceline-all-the-icons' work in `neotree-mode'."
+  (setq neo-mode-line-type 'custom)
+  (setq neo-mode-line-custom-format '("%e" (:eval (spaceline-ml-all-the-icons-neotree)))))
+
 ;; Debugging functions
 (defun spaceline-all-the-icons--turn-off (segment) "Turn spaceline SEGMENT off." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-off" segment))))
 (defun spaceline-all-the-icons--turn-on (segment) "Turn spaceline SEGMENT on." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-on" segment))))
