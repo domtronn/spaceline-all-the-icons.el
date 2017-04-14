@@ -3,9 +3,7 @@
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
-;; Package-Version: 0.0.1
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
-;; Keywords: convenience, lisp, tools
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License
