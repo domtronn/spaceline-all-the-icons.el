@@ -88,9 +88,9 @@
   :group 'spaceline-all-the-icons)
 
 (defun spaceline-all-the-icons--height (&optional height)
-  "Scale `powerline-height' by HEIGHT."
-  (if (bound-and-true-p powerline-height)
-      (* (or height 1) (or powerline-height 1))
+  "Scale `powerline-text-scale-factor' by HEIGHT."
+  (if (bound-and-true-p powerline-text-scale-factor)
+      (* (or height 1) (or powerline-text-scale-factor 1))
       (or height 1)))
 
 ;;; Full Modeline Definition
