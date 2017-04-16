@@ -130,16 +130,19 @@
   "The Icon set to use for the `all-the-icons-git-status' indicator."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
-          (const :tag ,(format "GitHub   - %s / %s"
+          (const :tag ,(format "GitHub   - %s / %s / %s"
                                (all-the-icons-octicon "diff-added" :v-adjust 0.0)
-                               (all-the-icons-octicon "diff-removed" :v-adjust 0.0)) diff-icons)
-          (const :tag "Arrows   - 🡑 / 🡓" arrows)))
+                               (all-the-icons-octicon "diff-removed" :v-adjust 0.0)
+                               (all-the-icons-octicon "diff-modified" :v-adjust 0.0)) diff-icons)
+          (const :tag "Arrows   - 🡑 / 🡓 / •" arrows)))
 
 (defconst spaceline-all-the-icons-icon-set--git-stats
   `((diff-icons (,(all-the-icons-octicon "diff-added" :v-adjust 0.1)
-                 ,(all-the-icons-octicon "diff-removed" :v-adjust 0.1)))
+                 ,(all-the-icons-octicon "diff-removed" :v-adjust 0.1)
+                 ,(all-the-icons-octicon "diff-modified" :v-adjust 0.1)))
     (arrows (,(propertize "🡑" 'display '(raise 0.0))
-             ,(propertize "🡓" 'display '(raise 0.0))))))
+             ,(propertize "🡓" 'display '(raise 0.0))
+             ,(propertize "•" 'display '(raise 0.0))))))
 
 ;; Flycheck Slim Icons
 (define-spaceline-all-the-icons--icon-set-getter "flycheck-slim")
@@ -616,19 +619,34 @@ When FAMILY is provided, put `:family' property into face."
      (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.2)))
      (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height))))))
 
+(defun spaceline-all-the-icons--git-statistics ()
+  "Function to return a list of added, removed and modified lines in current file."
+  (cond
+   ((bound-and-true-p git-gutter+-diffinfos)
+    (let ((reducer (lambda (sym acc it) (if (not (eq sym (plist-get it :type))) acc
+                                     (+ (or acc 0) (- (1+ (or (plist-get it :end-line) 0)) (or (plist-get it :start-line)))) ))))
+      `(,(reduce (apply-partially reducer 'added) git-gutter+-diffinfos :initial-value 0)
+        ,(reduce (apply-partially reducer 'removed) git-gutter+-diffinfos :initial-value 0)
+        ,(reduce (apply-partially reducer 'modified) git-gutter+-diffinfos :initial-value 0))))
+   ((and (fboundp 'git-gutter:statistic)
+         (bound-and-true-p git-gutter-mode))
+    (cl-destructuring-bind (added . removed) (git-gutter:statistic)
+      (list added removed 0)))))
+
 (spaceline-define-segment all-the-icons-git-status
   "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
-  (cl-destructuring-bind (added . removed) (git-gutter:statistic)
-    (let ((added-icon (car (spaceline-all-the-icons-icon-set-git-stats)))
-          (removed-icon (cadr (spaceline-all-the-icons-icon-set-git-stats))))
+  (cl-destructuring-bind (added removed modified) (spaceline-all-the-icons--git-statistics)
+    (let* ((added-icon (car (spaceline-all-the-icons-icon-set-git-stats)))
+           (removed-icon (cadr (spaceline-all-the-icons-icon-set-git-stats)))
+           (modified-icon (caddr (spaceline-all-the-icons-icon-set-git-stats)))
+
+           (space (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
+           (icons (list
+                   (unless (zerop added) (spaceline-all-the-icons--git-stats added-icon added 'success))
+                   (unless (zerop removed) (spaceline-all-the-icons--git-stats removed-icon removed 'error))
+                   (unless (zerop modified) (spaceline-all-the-icons--git-stats modified-icon modified 'warning)))))
       (propertize
-       (concat
-        (unless (zerop added)
-          (spaceline-all-the-icons--git-stats added-icon added 'success))
-        (unless (or (zerop added) (zerop removed))
-          (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
-        (unless (zerop removed)
-          (spaceline-all-the-icons--git-stats removed-icon removed 'error)))
+       (mapconcat 'identity (cl-remove-if 'not icons) space)
        'help-echo "View Diff of current file"
        'mouse-face (spaceline-all-the-icons--highlight)
        'local-map (make-mode-line-mouse-map 'mouse-1 'vc-ediff))))
