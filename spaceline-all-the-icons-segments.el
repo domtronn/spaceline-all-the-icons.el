@@ -1213,9 +1213,9 @@ BODY is the form to evaluate to get the number of things."
 
      (concat
       (propertize (format "%s "(all-the-icons-faicon "folder-open-o" :v-adjust 0))
-                  'face `(:foreground ,(face-background (funcall spaceline-highlight-face-func))
-                                      :background ,(face-background line-face)
-                                      :family ,(all-the-icons-faicon-family)))
+                  'face `( :foreground ,(face-background (funcall spaceline-highlight-face-func))
+                           :background ,(face-background line-face)
+                           :family ,(all-the-icons-faicon-family)))
       (propertize context-text
                   'face `((foreground-color . ,(face-background (funcall spaceline-highlight-face-func)))))
       (unless (<= (length context) context-max-length) (propertize "..." 'face 'font-lock-comment-face)))

@@ -73,6 +73,10 @@
 (require 'spaceline-all-the-icons-segments)
 (require 'spaceline-all-the-icons-separators)
 
+;;; Forward declarations of Optional Dependencies
+(defvar neo-mode-line-type)
+(defvar neo-mode-line-custom-format)
+
 ;; Declare Customization Groups
 (defgroup spaceline-all-the-icons nil
   "Customize the the Spaceline All The Icons mode line and theming."
