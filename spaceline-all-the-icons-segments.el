@@ -33,12 +33,19 @@
 (declare-function neo-buffer--get-filename-current-line "ext:neotree.el")
 (declare-function neo-buffer--get-node-index "ext:neotree.el")
 (declare-function neo-buffer--get-nodes "ext:neotree.el")
+(declare-function git-gutter-hunk-end-line "ext:git-gutter.el")
+(declare-function git-gutter-hunk-start-line "ext:git-gutter.el")
+(declare-function git-gutter-hunk-type "ext:git-gutter.el")
+(declare-function git-gutter-hunk-content "ext:git-gutter.el")
+
 
 (defvar flycheck-current-errors)
 (defvar flycheck-last-status-change)
 (defvar anzu--state)
 (defvar anzu--overflow-p)
 (defvar neo-buffer--start-node)
+(defvar git-gutter:diffinfos)
+(defvar git-gutter+-diffinfos)
 
 (defmacro define-spaceline-all-the-icons--icon-set-getter (name)
   "Macro to create a getter function for icon set NAME."
@@ -644,29 +651,25 @@ type, (i.e. added, deleted, modified) of a diff/hunk."
   "Function to return a list of added, removed and modified lines in current file."
   (cond
    ((bound-and-true-p git-gutter+-diffinfos)
-    (reduce 'spaceline-all-the-icons--git-stats-reducer-+diffinfos git-gutter+-diffinfos :initial-value '(0 0 0)))
-   ((and (fboundp 'git-gutter:statistic)
-         (bound-and-true-p git-gutter-mode))
-    (reduce 'spaceline-all-the-icons--git-stats-reducer-diffinfos git-gutter:diffinfos :initial-value '(0 0 0)))
+    (cl-reduce 'spaceline-all-the-icons--git-stats-reducer-+diffinfos git-gutter+-diffinfos :initial-value '(0 0 0)))
+   ((bound-and-true-p git-gutter-mode)
+    (cl-reduce 'spaceline-all-the-icons--git-stats-reducer-diffinfos git-gutter:diffinfos :initial-value '(0 0 0)))
    (t '(0 0 0))))
 
 (spaceline-define-segment all-the-icons-git-status
   "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
   (cl-destructuring-bind (added removed modified) (spaceline-all-the-icons--git-statistics)
-    (let* ((added-icon (car (spaceline-all-the-icons-icon-set-git-stats)))
-           (removed-icon (cadr (spaceline-all-the-icons-icon-set-git-stats)))
-           (modified-icon (caddr (spaceline-all-the-icons-icon-set-git-stats)))
-
-           (space (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
-           (icons (list
-                   (unless (zerop added) (spaceline-all-the-icons--git-stats added-icon added 'success))
-                   (unless (zerop removed) (spaceline-all-the-icons--git-stats removed-icon removed 'error))
-                   (unless (zerop modified) (spaceline-all-the-icons--git-stats modified-icon modified 'warning)))))
-      (propertize
-       (mapconcat 'identity (cl-remove-if 'not icons) space)
-       'help-echo "View Diff of current file"
-       'mouse-face (spaceline-all-the-icons--highlight)
-       'local-map (make-mode-line-mouse-map 'mouse-1 'vc-ediff))))
+    (cl-destructuring-bind (added-icon removed-icon modified-icon) (spaceline-all-the-icons-icon-set-git-stats)
+      (let* ((space (propertize " " 'face `(:height ,(if spaceline-all-the-icons-slim-render 0.2 1.0))))
+             (icons (list
+                     (unless (zerop added) (spaceline-all-the-icons--git-stats added-icon added 'success))
+                     (unless (zerop removed) (spaceline-all-the-icons--git-stats removed-icon removed 'error))
+                     (unless (zerop modified) (spaceline-all-the-icons--git-stats modified-icon modified 'warning)))))
+        (propertize
+         (mapconcat 'identity (cl-remove-if 'not icons) space)
+         'help-echo "View Diff of current file"
+         'mouse-face (spaceline-all-the-icons--highlight)
+         'local-map (make-mode-line-mouse-map 'mouse-1 'vc-ediff)))))
 
   :when (and active
              (not (equal '(0 0 0) (spaceline-all-the-icons--git-statistics)))))
