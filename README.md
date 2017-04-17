@@ -4,8 +4,6 @@
 <img src="logo.png" width="1200">
 </p>
 
-
-
 <p align="center">
 <b><a href="#installation">Installation</a></b>
 |
