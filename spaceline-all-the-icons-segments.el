@@ -619,19 +619,34 @@ When FAMILY is provided, put `:family' property into face."
      (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.2)))
      (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height))))))
 
+(defmacro spaceline-all-the-icons--git-stats-reducer (name el-f sl-f type-f)
+  "Macro to define reducer to calculate Added, Deleted & Modified lines in git.
+NAME should be an id to define that reducer.  EL-F & SL-F are
+forms that, will calculate the end & start lines of a diff
+respetively.  TYPE-F is a form which will evaluate the
+type, (i.e. added, deleted, modified) of a diff/hunk."
+  `(defun ,(intern (format "spaceline-all-the-icons--git-stats-reducer-%s" name)) (acc it)
+     ,(format "A reducer to count added, deleted & modified lines for `%s'" name)
+     (cl-destructuring-bind (added removed modified) acc
+       (let ((lines (1+ (- ,el-f ,sl-f)))
+             (type ,type-f))
+         (pcase type
+           ('added (list (+ added lines) removed modified))
+           ('deleted (list added (+ removed lines) modified))
+           ('modified (list added removed (+ modified lines))))))))
+
+(spaceline-all-the-icons--git-stats-reducer diffinfos (git-gutter-hunk-end-line it) (git-gutter-hunk-start-line it) (git-gutter-hunk-type it))
+(spaceline-all-the-icons--git-stats-reducer +diffinfos (plist-get it :end-line) (plist-get it :start-line) (plist-get it :type))
+
 (defun spaceline-all-the-icons--git-statistics ()
   "Function to return a list of added, removed and modified lines in current file."
   (cond
    ((bound-and-true-p git-gutter+-diffinfos)
-    (let ((reducer (lambda (sym acc it) (if (not (eq sym (plist-get it :type))) acc
-                                     (+ (or acc 0) (- (1+ (or (plist-get it :end-line) 0)) (or (plist-get it :start-line)))) ))))
-      `(,(reduce (apply-partially reducer 'added) git-gutter+-diffinfos :initial-value 0)
-        ,(reduce (apply-partially reducer 'removed) git-gutter+-diffinfos :initial-value 0)
-        ,(reduce (apply-partially reducer 'modified) git-gutter+-diffinfos :initial-value 0))))
+    (reduce 'spaceline-all-the-icons--git-stats-reducer-+diffinfos git-gutter+-diffinfos :initial-value '(0 0 0)))
    ((and (fboundp 'git-gutter:statistic)
          (bound-and-true-p git-gutter-mode))
-    (cl-destructuring-bind (added . removed) (git-gutter:statistic)
-      (list added removed 0)))))
+    (reduce 'spaceline-all-the-icons--git-stats-reducer-diffinfos git-gutter:diffinfos :initial-value '(0 0 0)))
+   (t '(0 0 0))))
 
 (spaceline-define-segment all-the-icons-git-status
   "An `all-the-icons' segment to display Added/Removed stats for files under git VC."
@@ -652,8 +667,7 @@ When FAMILY is provided, put `:family' property into face."
        'local-map (make-mode-line-mouse-map 'mouse-1 'vc-ediff))))
 
   :when (and active
-             (fboundp 'git-gutter:statistic)
-             (not (equal '(0 . 0) (git-gutter:statistic)))))
+             (not (equal '(0 0 0) (spaceline-all-the-icons--git-statistics)))))
 
 (spaceline-define-segment all-the-icons-git-ahead
   "An `all-the-icons' segment to display the number of commits a git branch is a head of upstream."
