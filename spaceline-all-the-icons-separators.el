@@ -102,8 +102,8 @@ separator."
 
 (define-spaceline-all-the-icons--separator paradox-1 "right" spaceline-highlight-face-func 'powerline-active1)
 (define-spaceline-all-the-icons--separator paradox-2 "right" 'powerline-active1 'powerline-active2)
-(define-spaceline-all-the-icons--separator paradox-3 "left" 'mode-line 'powerline-active2) 
-(define-spaceline-all-the-icons--separator paradox-4 "right" 'mode-line 'powerline-active2) 
+(define-spaceline-all-the-icons--separator paradox-3 "left" 'mode-line 'powerline-active2)
+(define-spaceline-all-the-icons--separator paradox-4 "right" 'mode-line 'powerline-active2)
 
 (provide 'spaceline-all-the-icons-separators)
 ;; Local Variables:
