@@ -206,6 +206,7 @@
     :face line-face)) '())
 
 ;; Interactive & Setup Functions
+;;;###autoload
 (defun spaceline-all-the-icons-theme ()
   "Set `mode-line-format' to be `spaceline-ml-all-the-icons'."
   (interactive)
