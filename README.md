@@ -15,6 +15,7 @@
 <p align="center">
 <b><img src="https://melpa.org/packages/spaceline-all-the-icons-badge.svg" /></b>
 <b><img src="https://img.shields.io/github/tag/domtronn/spaceline-all-the-icons.el.svg" /></b>
+<b><img src="https://img.shields.io/github/license/mashape/apistatus.svg" /></b>
 </p>
 
 ## Installation
