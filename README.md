@@ -2,8 +2,6 @@
 <img src="logo.png" width="1200">
 </p>
 
-![badge](https://melpa.org/packages/all-the-icons-badge.svg)
-
 <p align="center">
 <b><a href="#installation">Installation</a></b>
 |
@@ -12,6 +10,12 @@
 <b><a href="#customization">Customization</a></b>
 |
 <b><a href="#debugging">Debugging</a></b>
+</p>
+
+<p align="center">
+<b><img src="https://melpa.org/packages/spaceline-all-the-icons-badge.svg" /></b>
+|
+<b><img src="https://img.shields.io/github/tag/domtronn/spaceline-all-the-icons.el.svg" /></b>
 </p>
 
 ## Installation
