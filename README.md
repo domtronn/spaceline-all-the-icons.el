@@ -2,6 +2,8 @@
 <img src="logo.png" width="1200">
 </p>
 
+![badge](https://melpa.org/packages/all-the-icons-badge.svg)
+
 <p align="center">
 <b><a href="#installation">Installation</a></b>
 |
