@@ -13,11 +13,36 @@
 </p>
 
 <p align="center">
-<b><img src="https://melpa.org/packages/spaceline-all-the-icons-badge.svg" /></b>
-<b><img src="https://img.shields.io/github/tag/domtronn/spaceline-all-the-icons.el.svg" /></b>
-<b><img src="https://img.shields.io/issuestats/i/github/domtronn/spaceline-all-the-icons.el.svg" /></b>
-<b><img src="https://img.shields.io/issuestats/p/github/domtronn/spaceline-all-the-icons.el.svg" /></b>
-<b><img src="https://img.shields.io/github/license/mashape/apistatus.svg" /></b>
+  <b>
+    <a href="https://melpa.org/#/spaceline-all-the-icons">
+      <img src="https://melpa.org/packages/spaceline-all-the-icons-badge.svg" />
+    </a>
+  </b>
+  <b>
+    <a href="https://stable.melpa.org/#/spaceline-all-the-icons">
+      <img src="https://stable.melpa.org/packages/spaceline-all-the-icons-badge.svg" />
+    </a>
+  </b>
+  <b>
+    <a href="https://github.com/domtronn/spaceline-all-the-icons.el/releases">
+      <img src="https://img.shields.io/github/tag/domtronn/spaceline-all-the-icons.el.svg" />
+    </a>
+  </b>
+  <b>
+    <a href="https://github.com/domtronn/spaceline-all-the-icons.el/issues">
+      <img src="https://img.shields.io/issuestats/i/github/domtronn/spaceline-all-the-icons.el.svg" />
+    </a>
+  </b>
+  <b>
+    <a href="https://github.com/domtronn/spaceline-all-the-icons.el/pulls">
+      <img src="https://img.shields.io/issuestats/p/github/domtronn/spaceline-all-the-icons.el.svg" />
+    </a>
+  </b>
+  <b>
+    <a href="https://choosealicense.com/licenses/mit/">
+      <img src="https://img.shields.io/github/license/mashape/apistatus.svg" />
+    </a>
+  </b>
 </p>
 
 ## Installation
