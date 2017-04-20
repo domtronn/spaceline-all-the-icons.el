@@ -28,7 +28,7 @@
   <a href="https://github.com/domtronn/spaceline-all-the-icons.el/pulls">
     <img src="https://img.shields.io/issuestats/p/github/domtronn/spaceline-all-the-icons.el.svg" />
   </a>
-  <a href="https://choosealicense.com/licenses/mit/">
+  <a href="https://github.com/domtronn/spaceline-all-the-icons.el/blob/master/LICENSE">
     <img src="https://img.shields.io/github/license/mashape/apistatus.svg" />
   </a>
 </p>
