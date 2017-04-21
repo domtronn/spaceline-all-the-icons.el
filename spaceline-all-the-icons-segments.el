@@ -365,25 +365,23 @@ doesn't inherit all properties of a face."
 
 (spaceline-define-segment all-the-icons-window-number
   "An `all-the-icons' segment depicting the current window number"
-  (let ((face `(:height ,(spaceline-all-the-icons--height 1.4) :inherit))
+  (let* ((face `(:height ,(spaceline-all-the-icons--height 1.4) :inherit))
         (window-num
          (cond
           ((bound-and-true-p winum-mode) (winum-get-number))
-          ((bound-and-true-p window-numbering-mode) (window-numbering-get-number)))))
-    (if (> window-num 9) window-num ;; Return the string version of the window number
-      (let ((icon
-             (pcase spaceline-all-the-icons-icon-set-window-numbering
-               ('solid   (format "%c" (+ window-num 10121)))
-               ('circle  (format "%c" (+ window-num 9311)))
-               ('string  (progn
+          ((bound-and-true-p window-numbering-mode) (window-numbering-get-number))))
+        (icon-set (if (> window-num 9) 'string spaceline-all-the-icons-icon-set-window-numbering))
+        (icon (cl-case icon-set
+                (solid   (format "%c" (+ window-num 10121)))
+                (circle  (format "%c" (+ window-num 9311)))
+                (string  (progn
                            (plist-put face :height (spaceline-all-the-icons--height 1.2))
                            (number-to-string window-num)))
-               ('square  (progn
+                (square  (progn
                            (plist-put face :height (spaceline-all-the-icons--height 1.2))
                            (plist-put face :family (all-the-icons-material-family))
                            (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
-
-        (propertize icon 'face face))))
+    (propertize icon 'face face))
 
   :when (and
          (or (bound-and-true-p winum-mode)
