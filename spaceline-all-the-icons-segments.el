@@ -563,7 +563,8 @@ It is only enabled when you're not in a project or if the projectile segment is 
                    'display '(raise -0.2)
                    'face `(:family ,(all-the-icons-material-family) :height ,(spaceline-all-the-icons--height 1.2) :inherit))
        (propertize text 'face `(:height ,(spaceline-all-the-icons--height) :inherit) 'display '(raise 0.1)))))
-  :tight t :enabled nil)
+  :tight t :enabled nil
+  :when (bound-and-true-p text-scale-mode-lighter))
 
 ;; Fourth divider segments
 (spaceline-define-segment all-the-icons-vc-icon
