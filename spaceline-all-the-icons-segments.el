@@ -256,6 +256,14 @@ and shows three dots with numbers,  i.e.
   :group 'spaceline-all-the-icons
   :type 'boolean)
 
+(defcustom spaceline-all-the-icons-clock-always-visible t
+  "Whether or not to always show the time & clock segment.
+
+When non-nil, this will display the clock & time segment all the time.
+When nil, this segment will only display when in a fullscreen frame."
+  :group 'spaceline-all-the-icons
+  :type 'boolean)
+
 (defcustom spaceline-all-the-icons-highlight-file-name nil
   "Whether or not to highlight the file name as part of the buffer id."
   :group 'spaceline-all-the-icons
@@ -889,8 +897,8 @@ available updates then restores the current buffer."
                     'display `(raise ,(or .raise 0.0)))
         (propertize (cond
                      (spaceline-all-the-icons-slim-render "")
-                     (charging? (format " %s%%%%" percent))
-                     (t (format " %s" time)))
+                     (charging? (format " %s%%%% " percent))
+                     (t (format " %s " time)))
                     'face text-face
                     'display '(raise 0.1)))
        'help-echo `(format "%s Remaining" ,time)
@@ -911,8 +919,9 @@ available updates then restores the current buffer."
                   'display '(raise 0.1)))
       'help-echo `(format-time-string "%H:%M")
       'mouse-face (spaceline-all-the-icons--highlight)))
-  :tight t
-  :enabled t)
+  :tight t :enabled t
+  :when (or spaceline-all-the-icons-clock-always-visible
+            (frame-parameter nil 'fullscreen)))
 
 ;; Middle Divider Segments
 (spaceline-define-segment all-the-icons-which-function
