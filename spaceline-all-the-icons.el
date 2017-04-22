@@ -98,87 +98,99 @@
       (or height 1)))
 
 ;;; Full Modeline Definition
-(spaceline-compile
- "all-the-icons"
- '((all-the-icons-anzu
-    :face mode-line
-    :skip-alternate t)
+(defconst spaceline-all-the-icons-theme '("%e" (:eval (spaceline-ml-all-the-icons)))
+  "Constant version of variable `spaceline-all-the-icons-theme' to allow to be set manually.")
 
-   ((all-the-icons-modified
-     all-the-icons-bookmark
-     all-the-icons-dedicated
-     all-the-icons-window-number
-     all-the-icons-buffer-size) :face highlight-face :skip-alternate t)
+;;;###autoload
+(defun spaceline-all-the-icons-theme (&rest additional-segments)
+  "Install the `spaceline-ml-all-the-icons'.
+Add ADDITIONAL-SEGMENTS to the end of the theme."
+  (interactive)
+  (spaceline-compile
+   "all-the-icons"
+   '((all-the-icons-anzu
+      :face mode-line
+      :skip-alternate t)
 
-   all-the-icons-separator-left-active-1
+     ((all-the-icons-modified
+       all-the-icons-bookmark
+       all-the-icons-dedicated
+       all-the-icons-window-number
+       all-the-icons-buffer-size) :face highlight-face :skip-alternate t)
 
-   ((all-the-icons-projectile
-     all-the-icons-mode-icon
-     ((all-the-icons-buffer-path
-       all-the-icons-buffer-id) :separator ""))
-    :face default-face)
+     all-the-icons-separator-left-active-1
 
-   all-the-icons-separator-left-active-2
+     ((all-the-icons-projectile
+       all-the-icons-mode-icon
+       ((all-the-icons-buffer-path
+         all-the-icons-buffer-id) :separator ""))
+      :face default-face)
 
-   ((all-the-icons-process
-     all-the-icons-position
-     all-the-icons-region-info
-     all-the-icons-fullscreen
-     all-the-icons-text-scale)
-    :face highlight-face
-    :separator (spaceline-all-the-icons--separator "|" " "))
+     all-the-icons-separator-left-active-2
 
-   all-the-icons-separator-left-active-3
-   all-the-icons-separator-left-inactive
+     ((all-the-icons-process
+       all-the-icons-position
+       all-the-icons-region-info
+       all-the-icons-fullscreen
+       all-the-icons-text-scale)
+      :face highlight-face
+      :separator (spaceline-all-the-icons--separator "|" " "))
 
-   ((all-the-icons-vc-icon
-     all-the-icons-vc-status
-     ((all-the-icons-git-ahead
-       all-the-icons-git-status) :separator " ")
-     ((all-the-icons-flycheck-status
-       all-the-icons-flycheck-status-info) :separator " ")
-     all-the-icons-package-updates)
-    :face other-face
-    :separator (spaceline-all-the-icons--separator "·" " "))
+     all-the-icons-separator-left-active-3
+     all-the-icons-separator-left-inactive
 
-   all-the-icons-separator-left-active-4
+     ((all-the-icons-vc-icon
+       all-the-icons-vc-status
+       ((all-the-icons-git-ahead
+         all-the-icons-git-status) :separator " ")
+       ((all-the-icons-flycheck-status
+         all-the-icons-flycheck-status-info) :separator " ")
+       all-the-icons-package-updates)
+      :face other-face
+      :separator (spaceline-all-the-icons--separator "·" " "))
 
-   ((all-the-icons-separator-minor-mode-left
-     all-the-icons-minor-modes
-     all-the-icons-separator-minor-mode-right)
-    :tight t
-    :face highlight-face
-    :when spaceline-all-the-icons-minor-modes-p)
-   
-   ((all-the-icons-which-function)
-    :face powerline-active2
-    :separator ""))
+     all-the-icons-separator-left-active-4
 
- '(
-   ((all-the-icons-weather
-     all-the-icons-temperature
-     all-the-icons-sunrise
-     all-the-icons-sunset)
-    :face powerline-active2
-    :separator (spaceline-all-the-icons--separator "·" " "))
+     ((all-the-icons-separator-minor-mode-left
+       all-the-icons-minor-modes
+       all-the-icons-separator-minor-mode-right)
+      :tight t
+      :face highlight-face
+      :when spaceline-all-the-icons-minor-modes-p)
 
-   ((all-the-icons-player-volume
-     all-the-icons-player-controls
-     all-the-icons-track
-     all-the-icons-player-controls-shuffle)
-    :face powerline-active2)
+     ((all-the-icons-which-function)
+      :face powerline-active2
+      :separator ""))
 
-   all-the-icons-separator-right-active-1
-   ((all-the-icons-hud
-     all-the-icons-buffer-position)
-    :separator " " :when active)
+   `(((,@additional-segments)
+      :face powerline-active2)
+     
+     ((all-the-icons-weather
+       all-the-icons-temperature
+       all-the-icons-sunrise
+       all-the-icons-sunset)
+      :face powerline-active2
+      :separator (spaceline-all-the-icons--separator "·" " "))
 
-   all-the-icons-separator-right-active-2
-   all-the-icons-separator-right-inactive
+     ((all-the-icons-player-volume
+       all-the-icons-player-controls
+       all-the-icons-track
+       all-the-icons-player-controls-shuffle)
+      :face powerline-active2)
 
-   ((all-the-icons-battery-status
-     all-the-icons-time)
-    :separator (spaceline-all-the-icons--separator "|" " ") :face default-face)))
+     all-the-icons-separator-right-active-1
+     ((all-the-icons-hud
+       all-the-icons-buffer-position)
+      :separator " " :when active)
+
+     all-the-icons-separator-right-active-2
+     all-the-icons-separator-right-inactive
+
+     ((all-the-icons-battery-status
+       all-the-icons-time)
+      :separator (spaceline-all-the-icons--separator "|" " ") :face default-face)))
+
+  (setq-default mode-line-format spaceline-all-the-icons-theme))
 
 (spaceline-compile
  "all-the-icons-paradox"
@@ -213,15 +225,6 @@
     :face line-face)) '())
 
 ;; Interactive & Setup Functions
-;;;###autoload
-(defun spaceline-all-the-icons-theme ()
-  "Set `mode-line-format' to be `spaceline-ml-all-the-icons'."
-  (interactive)
-  (setq-default mode-line-format spaceline-all-the-icons-theme))
-
-(defconst spaceline-all-the-icons-theme '("%e" (:eval (spaceline-ml-all-the-icons)))
-  "Constant version of variable `spaceline-all-the-icons-theme' to allow to be set manually.")
-
 (defconst spaceline-all-the-icons-paradox-theme '("%e" (:eval (spaceline-ml-all-the-icons-paradox)))
   "Constant of paradox theme mode line format.")
 
