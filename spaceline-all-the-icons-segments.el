@@ -1078,7 +1078,7 @@ INFO should be an object similar to `yahoo-weather-info'."
   "An `all-the-icons' segment to display minor modes, prefering to use the diminished values."
   (reduce
    (lambda (acc minor-mode)
-     (let* ((lighter  (string-trim (format-mode-line (cadr minor-mode))))
+     (let* ((lighter  (mapconcat 'identity (split-string (format-mode-line (cadr minor-mode))) " "))
             (display? (and (not (string= "" lighter))
                            (boundp (car minor-mode))
                            (symbol-value (car minor-mode))))
