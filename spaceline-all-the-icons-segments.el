@@ -1102,7 +1102,8 @@ INFO should be an object similar to `yahoo-weather-info'."
        (append acc (if display? `(,lighter) '()))))
    minor-mode-alist
    :initial-value '())
-  :separator spaceline-minor-modes-separator)
+  :enabled nil
+  :separator (spaceline-all-the-icons--separator "|"))
 
 ;; Paradox Segments
 (spaceline-define-segment all-the-icons-paradox-line-count
