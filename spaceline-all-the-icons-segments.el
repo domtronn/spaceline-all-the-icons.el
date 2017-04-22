@@ -1084,6 +1084,8 @@ INFO should be an object similar to `yahoo-weather-info'."
                            (symbol-value (car minor-mode))))
             (lighter (propertize
                       lighter
+                      'face '(:height 0.9 :inherit)
+                      'display '(raise 0.1)
                       'mouse-face (spaceline-all-the-icons--highlight)
                       'help-echo (concat (symbol-name (car minor-mode))
                                          "\nmouse-1: Display minor mode menu"
