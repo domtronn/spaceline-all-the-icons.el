@@ -90,6 +90,19 @@ You can see all of these options by calling
 M-x customize-group spaceline-all-the-icons
 ```
 
+### Custom Segments
+
+You can add your own custom segments to the theme by installing it
+using the `spaceline-all-the-icons-theme` function and passing the
+segment symbols as arguments.
+
+```el
+(spaceline-all-the-icons-theme 'your-segment-symbol "Hello" 'etc)
+```
+
+These segments will appear in order on the right side of the mode
+line, in the empty middle section before all other right aligned segments.
+
 ### Disabled Segments
 
 Some segments are _disabled by default_ you can turn them on by
