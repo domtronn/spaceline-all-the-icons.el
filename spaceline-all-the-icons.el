@@ -143,6 +143,13 @@
 
    all-the-icons-separator-left-active-4
 
+   ((all-the-icons-separator-minor-mode-left
+     all-the-icons-minor-modes
+     all-the-icons-separator-minor-mode-right)
+    :tight t
+    :face highlight-face
+    :when spaceline-all-the-icons-minor-modes-p)
+   
    ((all-the-icons-which-function)
     :face powerline-active2
     :separator ""))

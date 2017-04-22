@@ -1074,6 +1074,36 @@ INFO should be an object similar to `yahoo-weather-info'."
              (bound-and-true-p yahoo-weather-mode)
              (bound-and-true-p yahoo-weather-info)))
 
+(spaceline-define-segment all-the-icons-minor-modes
+  "An `all-the-icons' segment to display minor modes, prefering to use the diminished values."
+  (reduce
+   (lambda (acc minor-mode)
+     (let* ((lighter  (string-trim (format-mode-line (cadr minor-mode))))
+            (display? (and (not (string= "" lighter))
+                           (boundp (car minor-mode))
+                           (symbol-value (car minor-mode))))
+            (lighter (propertize
+                      lighter
+                      'mouse-face (spaceline-all-the-icons--highlight)
+                      'help-echo (concat (symbol-name (car minor-mode))
+                                         "\nmouse-1: Display minor mode menu"
+                                         "\nmouse-2: Show help for minor mode"
+                                         "\nmouse-3: Toggle minor mode")
+                      'local-map (let ((map (make-sparse-keymap)))
+                                   (define-key map [mode-line down-mouse-1]
+                                     (powerline-mouse 'minor 'menu lighter))
+                                   (define-key map [mode-line mouse-2]
+                                     (powerline-mouse 'minor 'help lighter))
+                                   (define-key map [mode-line down-mouse-3]
+                                     (powerline-mouse 'minor 'menu lighter))
+                                   (define-key map [header-line down-mouse-3]
+                                     (powerline-mouse 'minor 'menu lighter))
+                                   map))))
+       (append acc (if display? `(,lighter) '()))))
+   minor-mode-alist
+   :initial-value '())
+  :separator spaceline-minor-modes-separator)
+
 ;; Paradox Segments
 (spaceline-define-segment all-the-icons-paradox-line-count
   "An `all-the-icons' segment to display the line number created by `paradox--update-mode-line-front-space'"
