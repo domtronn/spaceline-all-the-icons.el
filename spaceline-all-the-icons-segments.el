@@ -1082,12 +1082,12 @@ INFO should be an object similar to `yahoo-weather-info'."
             (display? (and (not (string= "" lighter))
                            (boundp (car minor-mode))
                            (symbol-value (car minor-mode))))
-            (inherit (get-text-property 0 'face lighter))
-            (face (append (when inherit inherit) '(:height 0.9 :inherit)))
+            (display (or (get-text-property 0 'display lighter) '(raise 0.1)))
+            (face (append (get-text-property 0 'face lighter) '(:height 0.9 :inherit)))
             (lighter (propertize
                       lighter
                       'face face
-                      'display '(raise 0.1)
+                      'display display
                       'mouse-face (spaceline-all-the-icons--highlight)
                       'help-echo (concat (symbol-name (car minor-mode))
                                          "\nmouse-1: Display minor mode menu"
