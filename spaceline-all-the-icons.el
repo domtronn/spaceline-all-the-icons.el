@@ -162,8 +162,8 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
       :face powerline-active2
       :separator ""))
 
-   `(((,@additional-segments)
-      :face powerline-active2)
+   `(((,@additional-segments) :when active :face powerline-active2)
+     ((,@additional-segments) :when (not active) :face powerline-inactive2)
      
      ((all-the-icons-weather
        all-the-icons-temperature
