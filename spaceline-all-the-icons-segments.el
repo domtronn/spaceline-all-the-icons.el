@@ -466,8 +466,8 @@ doesn't inherit all properties of a face."
                   show-path?))
         (add-to-list 'file-face :inherit t)
       (setq file-face (append `(:background ,(face-background default-face)) file-face))
-      (setq file-face (append `(:foreground (or spaceline-all-the-icons-file-name-highlight
-                                           ,(face-background highlight-face)) file-face))))
+      (setq file-face (append `(:foreground ,(or spaceline-all-the-icons-file-name-highlight
+                                           (face-background highlight-face)) file-face))))
 
     (propertize buffer-id
                 'face file-face
