@@ -383,11 +383,11 @@ doesn't inherit all properties of a face."
                 (solid   (format "%c" (+ window-num 10121)))
                 (circle  (format "%c" (+ window-num 9311)))
                 (string  (progn
-                           (plist-put face :height (spaceline-all-the-icons--height 1.2))
+                           (setq face (append `(:height ,(spaceline-all-the-icons--height 1.2)) face))
                            (number-to-string window-num)))
                 (square  (progn
-                           (plist-put face :height (spaceline-all-the-icons--height 1.2))
-                           (plist-put face :family (all-the-icons-material-family))
+                           (setq face (append `(:height ,(spaceline-all-the-icons--height 1.2)) face))
+                           (setq face (append `(:family ,(all-the-icons-material-family)) face))
                            (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
     (propertize icon 'face face))
 
@@ -465,9 +465,9 @@ doesn't inherit all properties of a face."
     (if (not (and spaceline-all-the-icons-highlight-file-name
                   show-path?))
         (add-to-list 'file-face :inherit t)
-      (plist-put file-face :background (face-background default-face))
-      (plist-put file-face :foreground (or spaceline-all-the-icons-file-name-highlight
-                                           (face-background highlight-face))))
+      (setq file-face (append `(:background ,(face-background default-face)) file-face))
+      (setq file-face (append `(:foreground (or spaceline-all-the-icons-file-name-highlight
+                                           ,(face-background highlight-face)) file-face))))
 
     (propertize buffer-id
                 'face file-face
@@ -627,7 +627,7 @@ When FAMILY is provided, put `:family' property into face."
   (let* ((family (all-the-icons-icon-family icon))
          (height (if family 1.0 1.2))
          (icon-face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height height))))
-    (when family (plist-put icon-face :family family))
+    (when family (setq icon-face (append `(:family ,family) icon-face)))
     (concat
      (propertize icon 'face icon-face)
      (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.2)))
@@ -709,7 +709,7 @@ When FAMILY is provided, put `:family' property into face."
          (family (all-the-icons-icon-family icon))
          (raise (if (> (length (spaceline-all-the-icons-icon-set-flycheck-slim)) 3) -0.2 0.0))
          (icon-face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height height))))
-    (when family (plist-put icon-face :family family))
+    (when family (setq icon-face (append `(:family ,family) icon-face)))
     (when text
      (concat
       (propertize icon 'face icon-face 'display `(raise ,raise))
@@ -886,10 +886,10 @@ available updates then restores the current buffer."
          (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :background ,(face-background default-face) :inherit)))
 
     (let-alist icon-alist
-      (when .height (plist-put icon-face :height (spaceline-all-the-icons--height .height)))
+      (when .height (setq icon-face (append `(:height ,(spaceline-all-the-icons--height .height)) icon-face)))
       (when .inherit
-        (plist-put icon-face :foreground (face-foreground .inherit))
-        (plist-put text-face :foreground (face-foreground .inherit)))
+        (setq icon-face (append `(:foreground ,(face-foreground .inherit)) icon-face))
+        (setq text-face (append `(:foreground ,(face-foreground .inherit)) text-face)))
       (propertize
        (concat
         (propertize (funcall icon-f (format "battery-%s" .icon))
@@ -992,7 +992,7 @@ Displays HERE and TOTAL to indicate how many search results have been found."
             (icon-face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit ,(intern ,(format "spaceline-all-the-icons-%s-face" type)))))
 
        (unless (eq spaceline-all-the-icons-icon-set-sun-time 'arrows)
-         (plist-put icon-face :family (all-the-icons-wicon-family)))
+         (setq icon-face (append `(:family ,(all-the-icons-wicon-family)) icon-face)))
 
        (propertize
         (concat
@@ -1062,7 +1062,7 @@ INFO should be an object similar to `yahoo-weather-info'."
          (icon (all-the-icons-icon-for-weather (downcase weather)))
          (icon-face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
 
-    (when (= 1 (length icon)) (plist-put icon-face :family (all-the-icons-wicon-family)))
+    (when (= 1 (length icon)) (setq icon-face (append `(:family ,(all-the-icons-wicon-family)) icon-face)))
 
     (propertize icon
                 'face icon-face
@@ -1109,7 +1109,7 @@ BODY is the form to evaluate to get the text to display."
      (let* ((text ,@body)
             (text-face `(:foreground ,(face-foreground 'font-lock-keyword-face)
                          :background ,(face-background 'powerline-active1)))
-            (icon-face (append `(:family ,(all-the-icons-icon-family ,icon)) text-face))
+            (icon-face (setq icon-face (append `(:family ,(all-the-icons-icon-family ,icon)) icon-face)))
             (num-face (cond
                        ((eq ',type 'new) 'success)
                        ((eq ',type 'upgrade) 'warning)
