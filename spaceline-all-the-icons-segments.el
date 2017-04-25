@@ -689,7 +689,8 @@ type, (i.e. added, deleted, modified) of a diff/hunk."
     (setq-local spaceline-all-the-icons--git-ahead
                 (with-temp-buffer
                   (ignore-errors (vc-git-log-outgoing (current-buffer) ""))
-                  (count-lines (point-min) (point-max))))))
+                  (if (string-match-p "^fatal:" (buffer-string)) 0
+                    (count-lines (point-min) (point-max)))))))
 
 (spaceline-define-segment all-the-icons-git-ahead
   "An `all-the-icons' segment to display the number of commits a git branch is a head of upstream."
