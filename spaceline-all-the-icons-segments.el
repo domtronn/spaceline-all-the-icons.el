@@ -681,24 +681,32 @@ type, (i.e. added, deleted, modified) of a diff/hunk."
   :when (and active
              (not (equal '(0 0 0) (spaceline-all-the-icons--git-statistics)))))
 
+(defvar spaceline-all-the-icons--git-ahead 0 "The number of commits ahead the current buffer is.")
+(defun spaceline-all-the-icons--git-ahead-update (&rest args)
+  "Update the current git ahead  ARGS is just placeholder."
+  (when (and spaceline-all-the-icons-git-ahead-p
+             buffer-file-name vc-mode (string-match "Git" vc-mode))
+    (setq-local spaceline-all-the-icons--git-ahead
+                (with-temp-buffer
+                  (ignore-errors (vc-git-log-outgoing (current-buffer) ""))
+                  (count-lines (point-min) (point-max))))))
+
 (spaceline-define-segment all-the-icons-git-ahead
   "An `all-the-icons' segment to display the number of commits a git branch is a head of upstream."
-  (let ((upstream (cadr (split-string vc-mode "Git[:-]")))
-        (ahead (with-temp-buffer
-                 (vc-git-log-outgoing (current-buffer) "")
-                 (count-lines (point-min) (point-max)))))
-    (when (> ahead 0)
-      (propertize
-       (concat
-        (spaceline-all-the-icons-icon-set-git-ahead)
-        (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.3) :inherit))
-        (propertize (format "%s" ahead) 'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
-       'mouse-face (spaceline-all-the-icons--highlight)
-       'help-echo (format "You are currently %s commit%s ahead of `%s'" ahead (if (= ahead 1) "" "s") upstream))))
-
+  (when (> spaceline-all-the-icons--git-ahead 0)
+    (propertize
+     (concat
+      (spaceline-all-the-icons-icon-set-git-ahead)
+      (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.3) :inherit))
+      (propertize (format "%s" spaceline-all-the-icons--git-ahead) 'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
+     'mouse-face (spaceline-all-the-icons--highlight)
+     'help-echo (format "You are currently %s commit%s ahead of `%s'"
+                        spaceline-all-the-icons--git-ahead
+                        (if (= spaceline-all-the-icons--git-ahead 1) "" "s")
+                        (cadr (split-string vc-mode "Git[:-]")))))
   :tight t
   :enabled nil
-  :when (and buffer-file-name active vc-mode
+  :when (and active vc-mode buffer-file-name
              (string-match "Git" vc-mode)))
 
 ;;; Flycheck

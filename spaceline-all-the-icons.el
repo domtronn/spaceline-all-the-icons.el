@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
-;; Package-Version: 1.0.3
+;; Package-Version: 1.0.5
 ;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.1") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
@@ -164,7 +164,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
 
    `(((,@additional-segments) :when active :face powerline-active2)
      ((,@additional-segments) :when (not active) :face powerline-inactive2)
-     
+
      ((all-the-icons-weather
        all-the-icons-temperature
        all-the-icons-sunrise
@@ -253,6 +253,11 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
   "Set up advice required to make `spaceline-all-the-icons' work in `neotree-mode'."
   (setq neo-mode-line-type 'custom)
   (setq neo-mode-line-custom-format '("%e" (:eval (spaceline-ml-all-the-icons-neotree)))))
+
+(defun spaceline-all-the-icons--setup-git-ahead ()
+  "Set up advice required to count the number of git commits ahead of upstream."
+  (spaceline-all-the-icons--git-ahead-update)
+  (advice-add 'select-window :after 'spaceline-all-the-icons--git-ahead-update))
 
 ;; Debugging functions
 (defun spaceline-all-the-icons--turn-off (segment) "Turn spaceline SEGMENT off." (funcall (intern (format "spaceline-toggle-all-the-icons-%s-off" segment))))
