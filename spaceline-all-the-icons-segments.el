@@ -37,7 +37,7 @@
 (declare-function git-gutter-hunk-start-line "ext:git-gutter.el")
 (declare-function git-gutter-hunk-type "ext:git-gutter.el")
 (declare-function git-gutter-hunk-content "ext:git-gutter.el")
-
+(declare-function paradox-list-packages "ext:paradox.el")
 
 (defvar flycheck-current-errors)
 (defvar flycheck-last-status-change)
@@ -825,7 +825,8 @@ available updates then restores the current buffer."
 (spaceline-define-segment all-the-icons-package-updates
   "An `all-the-icons' segment to display the number of package updates"
   (let ((face `(:height ,(spaceline-all-the-icons--height 0.9)))
-        (new-text  (when spaceline-all-the-icons-slim-render
+        (mouse-f (if (fboundp 'paradox-list-packages) 'paradox-list-packages 'package-list-packages))
+        (new-text    (when spaceline-all-the-icons-slim-render
                        (format "%s" (all-the-icons-material "new_releases" :v-adjust -0.2))))
         (update-text (concat
                       (format "%s" spaceline-all-the-icons--package-updates)
@@ -845,7 +846,7 @@ available updates then restores the current buffer."
                   'display '(raise 0.1)))
      'help-echo "Open Packages Menu"
      'mouse-face (spaceline-all-the-icons--highlight)
-     'local-map (make-mode-line-mouse-map 'mouse-1 'package-list-packages)))
+     'local-map (make-mode-line-mouse-map 'mouse-1 mouse-f)))
 
   :when (and active
              (numberp spaceline-all-the-icons--package-updates)
