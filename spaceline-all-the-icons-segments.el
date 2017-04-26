@@ -737,7 +737,7 @@ When FAMILY is provided, put `:family' property into face."
 
            (error-icon (car (spaceline-all-the-icons-icon-set-flycheck-slim)))
            (warn-icon (cadr (spaceline-all-the-icons-icon-set-flycheck-slim)))
-           (help-icon (caddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
+           (help-icon (cl-caddr (spaceline-all-the-icons-icon-set-flycheck-slim)))
 
            (space (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.6)))))
 
@@ -967,13 +967,13 @@ mouse-3: go to end")))
 (defun spaceline-all-the-icons-anzu-update-func (here total)
   "Update function to be set as `anzu-mode-line-update-function'.
 Displays HERE and TOTAL to indicate how many search results have been found."
-  (let* ((status (case anzu--state
+  (let* ((status (cl-case anzu--state
                    (search (format "(%s/%d%s)"
                                    (anzu--format-here-position here total)
                                    total (if anzu--overflow-p "+" "")))
                    (replace (format "(%d/%d)" here total))
                    (replace-query (format "(%d replace)" total))))
-         (icon (case anzu--state
+         (icon (cl-case anzu--state
                  (search "search")
                  (replace "refresh")
                  (replace-query "find_replace")))
