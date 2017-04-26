@@ -274,6 +274,11 @@ When nil, this segment will only display when in a fullscreen frame."
   :group 'spaceline-all-the-icons
   :type 'string)
 
+(defcustom spaceline-all-the-icons-hide-long-buffer-path nil
+  "Whether or not to hide the buffer path when longer than 1/4 `window-text-width'."
+  :group 'spaceline-all-the-icons
+  :type 'boolean)
+
 (defface spaceline-all-the-icons-info-face
   '((t (:foreground "#63B2FF")))
   "Face for `all-the-icons' info feedback in the modeline."
@@ -486,9 +491,12 @@ doesn't inherit all properties of a face."
                            (ignore-errors (file-truename (projectile-project-root)))))
 
            (path-relative (or (cadr (split-string name project-root))
-                              (replace-regexp-in-string (getenv "HOME") "~" name))))
+                              (replace-regexp-in-string (getenv "HOME") "~" name)))
+           (limit (/ (window-text-width) 4))
+           (result (file-name-directory path-relative)))
 
-      (file-name-directory path-relative))))
+      (unless (and spaceline-all-the-icons-hide-long-buffer-path
+                   (> (length result) limit)) result))))
 
 (spaceline-define-segment all-the-icons-buffer-path
   "An `all-the-icons' segment to display the path for the current buffer.
