@@ -891,14 +891,17 @@ available updates then restores the current buffer."
          (icon-f   (all-the-icons--function-name icon-set))
          (family-f (all-the-icons--family-name icon-set))
 
-         (icon-face `(:height ,(spaceline-all-the-icons--height) :family ,(funcall family-f) :background ,(face-background default-face) :inherit))
-         (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :background ,(face-background default-face) :inherit)))
+         (icon-face `(:height ,(spaceline-all-the-icons--height) :family ,(funcall family-f) :background ,(face-background default-face)))
+         (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :background ,(face-background default-face))))
 
     (let-alist icon-alist
-      (when .height (setq icon-face (append `(:height ,(spaceline-all-the-icons--height .height)) icon-face)))
-      (when .inherit
-        (setq icon-face (append `(:foreground ,(face-foreground .inherit)) icon-face))
-        (setq text-face (append `(:foreground ,(face-foreground .inherit)) text-face)))
+      (when .height (setq icon-face (plist-put icon-face :height (spaceline-all-the-icons--height .height))))
+      (if (not .inherit)
+          (setq icon-face (append icon-face '(:inherit))
+                text-face (append text-face '(:inherit)))
+        (setq icon-face (append `(:foreground ,(face-foreground .inherit)) icon-face)
+              text-face (append `(:foreground ,(face-foreground .inherit)) text-face)))
+
       (propertize
        (concat
         (propertize (funcall icon-f (format "battery-%s" .icon))
