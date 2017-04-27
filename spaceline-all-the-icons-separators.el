@@ -81,7 +81,8 @@ separator."
                   (equal direction "left"))      ;; need to invert the faces for left direction
          (setq sf (prog1 ef (setq ef sf))))
 
-       (unless (eq separator 'none)
+       (unless (or (eq separator 'none)
+                   (string= (face-background sf) (face-background ef)))
         (propertize (all-the-icons-alltheicon (format "%s-%s" separator direction) :v-adjust 0.0)
                     'face `(:height ,(spaceline-all-the-icons--height 1.6)
                             :family ,(all-the-icons-alltheicon-family)
