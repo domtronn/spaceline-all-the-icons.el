@@ -37,6 +37,7 @@
 (declare-function git-gutter-hunk-start-line "ext:git-gutter.el")
 (declare-function git-gutter-hunk-type "ext:git-gutter.el")
 (declare-function git-gutter-hunk-content "ext:git-gutter.el")
+(declare-function diff-hl-changes "ext:diff-hl.el")
 (declare-function paradox-list-packages "ext:paradox.el")
 
 (defvar flycheck-current-errors)
@@ -661,6 +662,7 @@ type, (i.e. added, deleted, modified) of a diff/hunk."
 
 (spaceline-all-the-icons--git-stats-reducer diffinfos (git-gutter-hunk-end-line it) (git-gutter-hunk-start-line it) (git-gutter-hunk-content it) (git-gutter-hunk-type it))
 (spaceline-all-the-icons--git-stats-reducer +diffinfos (plist-get it :end-line) (plist-get it :start-line) (plist-get it :content) (plist-get it :type))
+(spaceline-all-the-icons--git-stats-reducer diffhl (cadr it) 1 (make-string (1+ (cadr it)) 10) (cl-case (cl-caddr it) (insert 'added) (change 'modified) ('delete 'deleted)))
 
 (defun spaceline-all-the-icons--git-statistics ()
   "Function to return a list of added, removed and modified lines in current file."
@@ -669,6 +671,8 @@ type, (i.e. added, deleted, modified) of a diff/hunk."
     (cl-reduce 'spaceline-all-the-icons--git-stats-reducer-+diffinfos git-gutter+-diffinfos :initial-value '(0 0 0)))
    ((bound-and-true-p git-gutter-mode)
     (cl-reduce 'spaceline-all-the-icons--git-stats-reducer-diffinfos git-gutter:diffinfos :initial-value '(0 0 0)))
+   ((bound-and-true-p diff-hl-mode)
+    (cl-reduce 'spaceline-all-the-icons--git-stats-reducer-diffhl (diff-hl-changes) :initial-value '(0 0 0)))
    (t '(0 0 0))))
 
 (spaceline-define-segment all-the-icons-git-status
