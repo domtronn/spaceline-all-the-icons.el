@@ -1304,14 +1304,12 @@ BODY is the form to evaluate to get the number of things."
                                 (length file-s)
                                 (length dirs-s)
                                 (if index-s (1+ (length index-s)) 0)
-                                (when (or file-s dirs-s) 5)
-                                3))
+                                (when (or file-s dirs-s) 5) 1))
 
          (context-text (if (<= (length context) context-max-length) context
                          (substring context 0 (- context-max-length 2)))))
 
     (propertize
-
      (concat
       (propertize (format "%s "(all-the-icons-faicon "folder-open-o" :v-adjust 0))
                   'face `( :foreground ,(face-background (funcall spaceline-highlight-face-func))
@@ -1319,7 +1317,7 @@ BODY is the form to evaluate to get the number of things."
                            :family ,(all-the-icons-faicon-family)))
       (propertize context-text
                   'face `((foreground-color . ,(face-background (funcall spaceline-highlight-face-func)))))
-      (unless (<= (length context) context-max-length) (propertize "..." 'face 'font-lock-comment-face)))
+      (unless (<= (length context) context-max-length) (propertize "…" 'face 'font-lock-comment-face)))
 
      'mouse-face (spaceline-all-the-icons--highlight)
      'help-echo (format "Open `%s' in %s" context (if (file-directory-p parent) "`dired'" "buffer"))
