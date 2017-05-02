@@ -391,7 +391,7 @@ doesn't inherit all properties of a face."
                            (setq face (append `(:height ,(spaceline-all-the-icons--height 1.2)) face))
                            (number-to-string window-num)))
                 (square  (progn
-                           (setq face (append `(:height ,(spaceline-all-the-icons--height 1.2)) face))
+                           (setq face (append `(:height ,(spaceline-all-the-icons--height 0.8)) face))
                            (setq face (append `(:family ,(all-the-icons-material-family)) face))
                            (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
     (propertize icon 'face face))
