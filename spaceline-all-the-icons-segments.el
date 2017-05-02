@@ -837,7 +837,7 @@ available updates then restores the current buffer."
 ;; First Right divider segments
 (spaceline-define-segment all-the-icons-hud
   "An `all-the-icons' segment to show the position through buffer HUD indicator."
-  (let ((color (face-foreground default-face))
+  (let ((color (face-foreground 'spaceline-all-the-icons-info-face))
         (height (frame-char-height))
         (ws (window-start))
         (we (window-end))
