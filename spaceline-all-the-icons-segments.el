@@ -859,7 +859,7 @@ available updates then restores the current buffer."
 ;; First Right divider segments
 (spaceline-define-segment all-the-icons-hud
   "An `all-the-icons' segment to show the position through buffer HUD indicator."
-  (let ((color (face-foreground default-face))
+  (let ((color (face-foreground 'spaceline-all-the-icons-info-face))
         (height (frame-char-height))
         (ws (window-start))
         (we (window-end))
@@ -1169,7 +1169,7 @@ BODY is the form to evaluate to get the text to display."
      (let* ((text ,@body)
             (text-face `(:foreground ,(face-foreground 'font-lock-keyword-face)
                          :background ,(face-background 'powerline-active1)))
-            (icon-face (setq icon-face (append `(:family ,(all-the-icons-icon-family ,icon)) icon-face)))
+            (icon-face `(:family ,(all-the-icons-icon-family ,icon)))
             (num-face (cond
                        ((eq ',type 'new) 'success)
                        ((eq ',type 'upgrade) 'warning)
