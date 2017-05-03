@@ -671,7 +671,7 @@ type, (i.e. added, deleted, modified) of a diff/hunk."
     (cl-reduce 'spaceline-all-the-icons--git-stats-reducer-+diffinfos git-gutter+-diffinfos :initial-value '(0 0 0)))
    ((bound-and-true-p git-gutter-mode)
     (cl-reduce 'spaceline-all-the-icons--git-stats-reducer-diffinfos git-gutter:diffinfos :initial-value '(0 0 0)))
-   ((bound-and-true-p diff-hl-mode)
+   ((and (bound-and-true-p diff-hl-mode) (ignore-errors (diff-hl-changes)))
     (cl-reduce 'spaceline-all-the-icons--git-stats-reducer-diffhl (diff-hl-changes) :initial-value '(0 0 0)))
    (t '(0 0 0))))
 
