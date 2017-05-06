@@ -377,31 +377,39 @@ doesn't inherit all properties of a face."
                                 (force-mode-line-update)))))
   :enabled nil)
 
+(defun spaceline-all-the-icons--window-number-show-p ()
+  "Function to decide whether `window-number' segment should be shown."
+  (or spaceline-all-the-icons-window-number-always-visible
+      (> (length (window-list)) 1)))
+
+(defun spaceline-all-the-icons--window-number ()
+  "Ubiquitous function to return the current window number."
+  (let ((window-num
+         (cond
+           ((bound-and-true-p winum-mode) (winum-get-number))
+           ((bound-and-true-p window-numbering-mode) (window-numbering-get-number)))))
+    (when (numberp window-num) window-num)))
+
 (spaceline-define-segment all-the-icons-window-number
   "An `all-the-icons' segment depicting the current window number"
   (let* ((face `(:height ,(spaceline-all-the-icons--height 1.4) :inherit))
-        (window-num
-         (cond
-          ((bound-and-true-p winum-mode) (winum-get-number))
-          ((bound-and-true-p window-numbering-mode) (window-numbering-get-number))))
-        (icon-set (if (> window-num 9) 'string spaceline-all-the-icons-icon-set-window-numbering))
-        (icon (cl-case icon-set
-                (solid   (format "%c" (+ window-num 10121)))
-                (circle  (format "%c" (+ window-num 9311)))
-                (string  (progn
-                           (setq face (append `(:height ,(spaceline-all-the-icons--height 1.2)) face))
-                           (number-to-string window-num)))
-                (square  (progn
-                           (setq face (append `(:height ,(spaceline-all-the-icons--height 0.8)) face))
-                           (setq face (append `(:family ,(all-the-icons-material-family)) face))
-                           (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
+         (window-num (spaceline-all-the-icons--window-number))
+         (icon-set (if (> window-num 9) 'string spaceline-all-the-icons-icon-set-window-numbering))
+         (icon (cl-case icon-set
+                 (solid   (format "%c" (+ window-num 10121)))
+                 (circle  (format "%c" (+ window-num 9311)))
+                 (string  (progn
+                            (setq face (append `(:height ,(spaceline-all-the-icons--height 1.2)) face))
+                            (number-to-string window-num)))
+                 (square  (progn
+                            (setq face (append `(:height ,(spaceline-all-the-icons--height 0.8)) face))
+                            (setq face (append `(:family ,(all-the-icons-material-family)) face))
+                            (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
     (propertize icon 'face face))
 
   :when (and
-         (or (bound-and-true-p winum-mode)
-             (bound-and-true-p window-numbering-mode))
-         (or spaceline-all-the-icons-window-number-always-visible
-             (> (length (window-list)) 1))))
+         (spaceline-all-the-icons--window-number)
+         (spaceline-all-the-icons--window-number-show-p)))
 
 (spaceline-define-segment all-the-icons-buffer-size
   "An `all-the-icons' segment depicting the buffer size"
