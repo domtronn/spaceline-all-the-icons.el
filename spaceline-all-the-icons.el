@@ -3,8 +3,8 @@
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
-;; Package-Version: 1.0.7
-;; Package-Requires: ((emacs "24.4") (all-the-icons "2.4.1") (spaceline "2.0.0"))
+;; Package-Version: 1.1.0
+;; Package-Requires: ((emacs "24.4") (all-the-icons "2.6.0") (spaceline "2.0.0"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
 
@@ -91,11 +91,22 @@
   :group 'spaceline
   :group 'spaceline-all-the-icons)
 
+;;; Global helper functions
 (defun spaceline-all-the-icons--height (&optional height)
   "Scale `powerline-text-scale-factor' by HEIGHT."
   (if (bound-and-true-p powerline-text-scale-factor)
       (* (or height 1) (or powerline-text-scale-factor 1))
       (or height 1)))
+
+(defun spaceline-all-the-icons--face-background (face)
+  "Get the background of FACE or `default' face."
+  (or (face-background face)
+      (face-background 'default)))
+
+(defun spaceline-all-the-icons--face-foreground (face)
+  "Get the foreground of FACE or `default' face."
+  (or (face-foreground face)
+      (face-foreground 'default)))
 
 ;;; Full Modeline Definition
 (defconst spaceline-all-the-icons-theme '("%e" (:eval (spaceline-ml-all-the-icons)))

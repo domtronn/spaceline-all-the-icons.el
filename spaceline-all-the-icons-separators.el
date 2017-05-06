@@ -82,12 +82,12 @@ separator."
          (setq sf (prog1 ef (setq ef sf))))
 
        (unless (or (eq separator 'none)
-                   (string= (face-background sf) (face-background ef)))
+                   (string= (spaceline-all-the-icons--face-background sf) (spaceline-all-the-icons--face-background ef)))
         (propertize (all-the-icons-alltheicon (format "%s-%s" separator direction) :v-adjust 0.0)
                     'face `(:height ,(spaceline-all-the-icons--height 1.6)
                             :family ,(all-the-icons-alltheicon-family)
-                            :foreground ,(face-background sf)
-                            :background ,(face-background ef)))))
+                            :foreground ,(spaceline-all-the-icons--face-background sf)
+                            :background ,(spaceline-all-the-icons--face-background ef)))))
      :skip-alternate t :tight t :when (if ,invert (not active) active)))
 
 (define-spaceline-all-the-icons--separator left-active-1 "right" spaceline-highlight-face-func 'powerline-active1)

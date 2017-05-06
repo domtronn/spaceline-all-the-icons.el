@@ -312,11 +312,11 @@ When nil, this segment will only display when in a fullscreen frame."
   "Return the `mouse-face' highlight face to be used when propertizing text.
 This is done as a function rather than a static face as it
 doesn't inherit all properties of a face."
-  `((foreground-color . ,(face-foreground 'spaceline-all-the-icons-info-face))))
+  `((foreground-color . ,(spaceline-all-the-icons--face-foreground 'spaceline-all-the-icons-info-face))))
 
 (defun spaceline-all-the-icons--highlight-background ()
   "Return a `mouse-face' to highlight the background when focussed."
-  `((background-color . ,(face-foreground 'spaceline-all-the-icons-info-face))))
+  `((background-color . ,(spaceline-all-the-icons--face-foreground 'spaceline-all-the-icons-info-face))))
 
 ;;; First Divider Segments
 (spaceline-define-segment all-the-icons-modified
@@ -433,14 +433,14 @@ doesn't inherit all properties of a face."
 
 (spaceline-define-segment all-the-icons-mode-icon
   "An `all-the-icons' segment indicating the current buffer's mode with an icon"
-  (let ((icon (all-the-icons-icon-for-buffer)))
-    (propertize icon
-                'help-echo (format "Major-mode: `%s'" major-mode)
-                'display '(raise 0)
-                'face `(:height ,(spaceline-all-the-icons--height 1.1)
-                        :family ,(all-the-icons-icon-family-for-buffer)
-                        :inherit)))
-  :when (not (symbolp (all-the-icons-icon-for-buffer))))
+  (let ((icon (all-the-icons-icon-for-mode major-mode)))
+    (unless (symbolp icon)
+      (propertize icon
+                  'help-echo (format "Major-mode: `%s'" major-mode)
+                  'display '(raise 0)
+                  'face `(:height ,(spaceline-all-the-icons--height 1.1)
+                          :family ,(all-the-icons-icon-family-for-mode major-mode)
+                          :inherit)))))
 
 (spaceline-define-segment all-the-icons-buffer-id
   "An `all-the-icons' segment to display current buffer id"
@@ -471,9 +471,9 @@ doesn't inherit all properties of a face."
     (if (not (and spaceline-all-the-icons-highlight-file-name
                   show-path?))
         (add-to-list 'file-face :inherit t)
-      (setq file-face (append `(:background ,(face-background default-face)) file-face))
+      (setq file-face (append `(:background ,(spaceline-all-the-icons--face-background default-face)) file-face))
       (setq file-face (append `(:foreground ,(or spaceline-all-the-icons-file-name-highlight
-                                                 (face-background highlight-face))) file-face)))
+                                                 (spaceline-all-the-icons--face-background highlight-face))) file-face)))
 
     (propertize buffer-id
                 'face file-face
@@ -519,7 +519,7 @@ It is only enabled when you're not in a project or if the projectile segment is 
 (spaceline-define-segment all-the-icons-process
   "An `all-the-icons' segment to depict the current process"
   (let* ((process (format-mode-line mode-line-process))
-         (show-mode? (or (symbolp (all-the-icons-icon-for-buffer)) mode-line-process)))
+         (show-mode? (or (symbolp (all-the-icons-icon-for-mode major-mode)) mode-line-process)))
 
     (propertize
      (concat
@@ -635,12 +635,16 @@ It is only enabled when you're not in a project or if the projectile segment is 
 When FAMILY is provided, put `:family' property into face."
   (let* ((family (all-the-icons-icon-family icon))
          (height (if family 1.0 1.2))
-         (icon-face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height height))))
+         (icon-face `(:foreground ,(spaceline-all-the-icons--face-foreground face)
+                      :height ,(spaceline-all-the-icons--height height))))
+
     (when family (setq icon-face (append `(:family ,family) icon-face)))
     (concat
      (propertize icon 'face icon-face)
      (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.2)))
-     (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height))))))
+     (propertize (format "%s" text)
+                 'face `(:foreground ,(spaceline-all-the-icons--face-foreground face)
+                         :height ,(spaceline-all-the-icons--height))))))
 
 (defmacro spaceline-all-the-icons--git-stats-reducer (name el-f sl-f hunk-f type-f)
   "Macro to define reducer to calculate Added, Deleted & Modified lines in git.
@@ -729,12 +733,15 @@ When FAMILY is provided, put `:family' property into face."
   (let* ((height 1.0)
          (family (all-the-icons-icon-family icon))
          (raise (if (> (length (spaceline-all-the-icons-icon-set-flycheck-slim)) 3) -0.2 0.0))
-         (icon-face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height height))))
+         (icon-face `(:foreground ,(spaceline-all-the-icons--face-foreground face)
+                      :height ,(spaceline-all-the-icons--height height))))
     (when family (setq icon-face (append `(:family ,family) icon-face)))
     (when text
      (concat
       (propertize icon 'face icon-face 'display `(raise ,raise))
-      (propertize (format "%s" text) 'face `(:foreground ,(face-foreground face) :height ,(spaceline-all-the-icons--height)))))))
+      (propertize (format "%s" text)
+                  'face `(:foreground ,(spaceline-all-the-icons--face-foreground face)
+                          :height ,(spaceline-all-the-icons--height)))))))
 
 (defun spaceline-all-the-icons--flycheck-status-slim ()
   "Render the mode line for Flycheck Status slim mode."
@@ -779,10 +786,10 @@ When FAMILY is provided, put `:family' property into face."
                  (`errored     "⚠ Error")
                  (`interrupted "⛔ Interrupted")))
          (face (cond
-                ((string-match "✔" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(face-foreground 'success)))
-                ((string-match "⚠" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(face-foreground 'warning)))
-                ((string-match "✖ [0-9]" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(face-foreground 'error)))
-                ((string-match "✖ Disabled" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(face-foreground 'font-lock-comment-face)))
+                ((string-match "✔" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(spaceline-all-the-icons--face-foreground 'success)))
+                ((string-match "⚠" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(spaceline-all-the-icons--face-foreground 'warning)))
+                ((string-match "✖ [0-9]" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(spaceline-all-the-icons--face-foreground 'error)))
+                ((string-match "✖ Disabled" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(spaceline-all-the-icons--face-foreground 'font-lock-comment-face)))
                 (t `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))))
 
      (propertize text 'face face 'display '(raise 0.1))))
@@ -805,7 +812,7 @@ When FAMILY is provided, put `:family' property into face."
   (let-alist (flycheck-count-errors flycheck-current-errors)
     (unless (zerop (or .info 0))
       (propertize (format "%s %s" .info (all-the-icons-faicon "info" :v-adjust 0.0 :height (spaceline-all-the-icons--height 0.8)))
-                  'face `(:foreground ,(face-foreground 'spaceline-all-the-icons-info-face))
+                  'face `(:foreground ,(spaceline-all-the-icons--face-foreground 'spaceline-all-the-icons-info-face))
                   'help-echo "Show Flycheck Errors"
                   'mouse-face (spaceline-all-the-icons--highlight)
                   'local-map (make-mode-line-mouse-map 'mouse-1 'flycheck-list-errors))))
@@ -859,7 +866,7 @@ available updates then restores the current buffer."
 ;; First Right divider segments
 (spaceline-define-segment all-the-icons-hud
   "An `all-the-icons' segment to show the position through buffer HUD indicator."
-  (let ((color (face-foreground 'spaceline-all-the-icons-info-face))
+  (let ((color (spaceline-all-the-icons--face-foreground default-face))
         (height (frame-char-height))
         (ws (window-start))
         (we (window-end))
@@ -904,16 +911,16 @@ available updates then restores the current buffer."
          (icon-f   (all-the-icons--function-name icon-set))
          (family-f (all-the-icons--family-name icon-set))
 
-         (icon-face `(:height ,(spaceline-all-the-icons--height) :family ,(funcall family-f) :background ,(face-background default-face)))
-         (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :background ,(face-background default-face))))
+         (icon-face `(:height ,(spaceline-all-the-icons--height) :family ,(funcall family-f) :background ,(spaceline-all-the-icons--face-background default-face)))
+         (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :background ,(spaceline-all-the-icons--face-background default-face))))
 
     (let-alist icon-alist
       (when .height (setq icon-face (plist-put icon-face :height (spaceline-all-the-icons--height .height))))
       (if (not .inherit)
           (setq icon-face (append icon-face '(:inherit))
                 text-face (append text-face '(:inherit)))
-        (setq icon-face (append `(:foreground ,(face-foreground .inherit)) icon-face)
-              text-face (append `(:foreground ,(face-foreground .inherit)) text-face)))
+        (setq icon-face (append `(:foreground ,(spaceline-all-the-icons--face-foreground .inherit)) icon-face)
+              text-face (append `(:foreground ,(spaceline-all-the-icons--face-foreground .inherit)) text-face)))
 
       (propertize
        (concat
@@ -1062,7 +1069,7 @@ INFO should be an object similar to `yahoo-weather-info'."
          (icon-face `(:height ,(spaceline-all-the-icons--height 0.9)
                       :family ,(all-the-icons-wicon-family)
                       :foreground ,(spaceline-all-the-icons--temperature-color yahoo-weather-info)
-                      :background ,(face-background 'powerline-active2)))
+                      :background ,(spaceline-all-the-icons--face-background 'powerline-active2)))
          (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
     (propertize
      (concat
@@ -1167,8 +1174,8 @@ BODY is the form to evaluate to get the text to display."
   `(spaceline-define-segment ,(intern (format "all-the-icons-paradox-status-%s" type))
      ,(format "An `all-the-icons' segment to depict the number of %s packages in `paradox'." type)
      (let* ((text ,@body)
-            (text-face `(:foreground ,(face-foreground 'font-lock-keyword-face)
-                         :background ,(face-background 'powerline-active1)))
+            (text-face `(:foreground ,(spaceline-all-the-icons--face-foreground 'font-lock-keyword-face)
+                         :background ,(spaceline-all-the-icons--face-background 'powerline-active1)))
             (icon-face `(:family ,(all-the-icons-icon-family ,icon)))
             (num-face (cond
                        ((eq ',type 'new) 'success)
@@ -1180,7 +1187,7 @@ BODY is the form to evaluate to get the text to display."
           (concat
            (propertize ,icon 'face icon-face)
            (propertize (capitalize ,(format " %s: " type)) 'face text-face 'display '(raise 0.1))
-           (propertize (int-to-string text) 'face `((foreground-color . ,(face-foreground num-face))) 'display '(raise 0.1)))
+           (propertize (int-to-string text) 'face `((foreground-color . ,(spaceline-all-the-icons--face-foreground num-face))) 'display '(raise 0.1)))
           'help-echo ,(car mouse)
           'local-map (make-mode-line-mouse-map 'mouse-1 ,(cdr mouse))
           'mouse-face (spaceline-all-the-icons--highlight))))
@@ -1206,8 +1213,8 @@ BODY is the form to evaluate to get the text to display."
 
 (spaceline-define-segment all-the-icons-paradox-total
   "An `all-the-icons' segment to display the total number of packages found"
-  (let ((text-face `(:foreground ,(face-foreground 'font-lock-keyword-face)
-                     :background ,(face-background 'powerline-active2))))
+  (let ((text-face `(:foreground ,(spaceline-all-the-icons--face-foreground 'font-lock-keyword-face)
+                     :background ,(spaceline-all-the-icons--face-background 'powerline-active2))))
     (propertize
      (concat
       (propertize "Total: " 'face text-face 'display '(raise 0.1))
@@ -1316,11 +1323,11 @@ BODY is the form to evaluate to get the number of things."
     (propertize
      (concat
       (propertize (format "%s "(all-the-icons-faicon "folder-open-o" :v-adjust 0))
-                  'face `( :foreground ,(face-background (funcall spaceline-highlight-face-func))
-                           :background ,(face-background line-face)
+                  'face `( :foreground ,(spaceline-all-the-icons--face-background (funcall spaceline-highlight-face-func))
+                           :background ,(spaceline-all-the-icons--face-background line-face)
                            :family ,(all-the-icons-faicon-family)))
       (propertize context-text
-                  'face `((foreground-color . ,(face-background (funcall spaceline-highlight-face-func)))))
+                  'face `((foreground-color . ,(spaceline-all-the-icons--face-background (funcall spaceline-highlight-face-func)))))
       (unless (<= (length context) context-max-length) (propertize "…" 'face 'font-lock-comment-face)))
 
      'mouse-face (spaceline-all-the-icons--highlight)
