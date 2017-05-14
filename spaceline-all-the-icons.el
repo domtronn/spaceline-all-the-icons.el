@@ -3,8 +3,8 @@
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
-;; Package-Version: 1.1.1
-;; Package-Requires: ((emacs "24.4") (all-the-icons "2.6.0") (spaceline "2.0.0"))
+;; Package-Version: 1.1.2
+;; Package-Requires: ((emacs "24.4") (all-the-icons "2.6.0") (spaceline "2.0.0") (memoize "1.0.1"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
 

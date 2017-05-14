@@ -22,6 +22,7 @@
 
 ;;; Code:
 
+(require 'memoize)
 (require 'spaceline)
 (require 'all-the-icons)
 
@@ -310,6 +311,11 @@ When nil, this segment will only display when in a fullscreen frame."
                    'display `(raise ,raise))
        (propertize (or right-padding left-padding "") 'face `(:height ,(spaceline-all-the-icons--height 0.8) :inherit))))))
 
+(defun spaceline-all-the-icons--memoized-file-truename (file-path)
+  "A function to be memoized when calculating the truename of FILE-PATH."
+  (ignore-errors (file-truename file-path)))
+(memoize 'spaceline-all-the-icons--memoized-file-truename)
+
 (defun spaceline-all-the-icons--highlight ()
   "Return the `mouse-face' highlight face to be used when propertizing text.
 This is done as a function rather than a static face as it
@@ -491,10 +497,10 @@ doesn't inherit all properties of a face."
 (defun spaceline-all-the-icons--buffer-path ()
   "Get buffer path based on home directory and function `projectile-project-root'."
   (when (buffer-file-name)
-    (let* ((name (file-truename (buffer-file-name)))
+    (let* ((name (spaceline-all-the-icons--memoized-file-truename (buffer-file-name)))
 
            (project-root (when spaceline-all-the-icons-projectile-p
-                           (ignore-errors (file-truename (projectile-project-root)))))
+                           (spaceline-all-the-icons--memoized-file-truename (projectile-project-root))))
 
            (path-relative (or (cadr (split-string name project-root))
                               (replace-regexp-in-string (getenv "HOME") "~" name)))
