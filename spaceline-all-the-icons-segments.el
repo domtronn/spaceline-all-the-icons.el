@@ -39,6 +39,8 @@
 (declare-function git-gutter-hunk-content "ext:git-gutter.el")
 (declare-function diff-hl-changes "ext:diff-hl.el")
 (declare-function paradox-list-packages "ext:paradox.el")
+(declare-function winum-get-number "ext:winum.el")
+(declare-function window-numbering-get-number "ext:window-numbering.el")
 
 (defvar flycheck-current-errors)
 (defvar flycheck-last-status-change)
@@ -392,15 +394,13 @@ doesn't inherit all properties of a face."
 
 (spaceline-define-segment all-the-icons-window-number
   "An `all-the-icons' segment depicting the current window number"
-  (let* ((face `(:height ,(spaceline-all-the-icons--height 1.4) :inherit))
+  (let* ((face `(:height ,(spaceline-all-the-icons--height 1.2) :inherit))
          (window-num (spaceline-all-the-icons--window-number))
          (icon-set (if (> window-num 9) 'string spaceline-all-the-icons-icon-set-window-numbering))
          (icon (cl-case icon-set
                  (solid   (format "%c" (+ window-num 10121)))
                  (circle  (format "%c" (+ window-num 9311)))
-                 (string  (progn
-                            (setq face (append `(:height ,(spaceline-all-the-icons--height 1.2)) face))
-                            (number-to-string window-num)))
+                 (string  (progn (number-to-string window-num)))
                  (square  (progn
                             (setq face (append `(:height ,(spaceline-all-the-icons--height 0.8)) face))
                             (setq face (append `(:family ,(all-the-icons-material-family)) face))
