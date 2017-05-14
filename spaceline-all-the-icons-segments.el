@@ -462,19 +462,16 @@ doesn't inherit all properties of a face."
                           spaceline-all-the-icons-buffer-path-p
                           (spaceline-all-the-icons--buffer-path)
                           (not spaceline-all-the-icons-slim-render)))
-
-         (show-projectile? (and spaceline-all-the-icons-projectile-p
-                                (and (fboundp 'projectile-project-p) (projectile-project-p))))
+         
+         (have-projectile? (and (fboundp 'projectile-project-p) (projectile-project-p)))
+         (show-projectile? (and spaceline-all-the-icons-projectile-p have-projectile?))
 
          (buffer-id (if (and (buffer-file-name)
                              (or show-path? show-projectile?))
                         (file-name-nondirectory (buffer-file-name))
                         (format-mode-line "%b")))
 
-         (mouse-f (if (and (fboundp 'projectile-project-p)
-                           (projectile-project-p))
-                      'projectile-find-file
-                      'find-file)))
+         (mouse-f (if have-projectile? 'projectile-find-file 'find-file)))
 
     (if (not (and spaceline-all-the-icons-highlight-file-name
                   show-path?))
