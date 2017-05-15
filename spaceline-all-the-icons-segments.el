@@ -500,7 +500,7 @@ doesn't inherit all properties of a face."
     (let* ((name (spaceline-all-the-icons--memoized-file-truename (buffer-file-name)))
 
            (project-root (when spaceline-all-the-icons-projectile-p
-                           (spaceline-all-the-icons--memoized-file-truename (projectile-project-root))))
+                           (spaceline-all-the-icons--memoized-file-truename (ignore-errors (projectile-project-root)))))
 
            (path-relative (or (cadr (split-string name project-root))
                               (replace-regexp-in-string (getenv "HOME") "~" name)))
