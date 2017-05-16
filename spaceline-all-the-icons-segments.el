@@ -313,7 +313,7 @@ When nil, this segment will only display when in a fullscreen frame."
 
 (defun spaceline-all-the-icons--memoized-file-truename (file-path)
   "A function to be memoized when calculating the truename of FILE-PATH."
-  (ignore-errors (file-truename file-path)))
+  (file-truename file-path))
 (memoize 'spaceline-all-the-icons--memoized-file-truename)
 
 (defun spaceline-all-the-icons--highlight ()
@@ -500,7 +500,8 @@ doesn't inherit all properties of a face."
     (let* ((name (spaceline-all-the-icons--memoized-file-truename (buffer-file-name)))
 
            (project-root (when spaceline-all-the-icons-projectile-p
-                           (spaceline-all-the-icons--memoized-file-truename (projectile-project-root))))
+                           (spaceline-all-the-icons--memoized-file-truename
+                            (ignore-errors (projectile-project-root)))))
 
            (path-relative (or (cadr (split-string name project-root))
                               (replace-regexp-in-string (getenv "HOME") "~" name)))
