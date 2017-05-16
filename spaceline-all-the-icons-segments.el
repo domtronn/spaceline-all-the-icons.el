@@ -499,7 +499,9 @@ doesn't inherit all properties of a face."
   (when (buffer-file-name)
     (let* ((name (spaceline-all-the-icons--memoized-file-truename (buffer-file-name)))
 
-           (project-root (when spaceline-all-the-icons-projectile-p
+           (project-root (when (and spaceline-all-the-icons-projectile-p
+                                    (fboundp 'projectile-project-p)
+                                    (projectile-project-p))
                            (spaceline-all-the-icons--memoized-file-truename
                             (ignore-errors (projectile-project-root)))))
 
