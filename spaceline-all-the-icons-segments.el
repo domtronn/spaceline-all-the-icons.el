@@ -42,6 +42,7 @@
 (declare-function paradox-list-packages "ext:paradox.el")
 (declare-function winum-get-number "ext:winum.el")
 (declare-function window-numbering-get-number "ext:window-numbering.el")
+(declare-function mc/num-cursors "ext:multiple-cursors.el")
 
 (defvar flycheck-current-errors)
 (defvar flycheck-last-status-change)
@@ -468,7 +469,7 @@ doesn't inherit all properties of a face."
                           spaceline-all-the-icons-buffer-path-p
                           (spaceline-all-the-icons--buffer-path)
                           (not spaceline-all-the-icons-slim-render)))
-         
+
          (have-projectile? (and (fboundp 'projectile-project-p) (projectile-project-p)))
          (show-projectile? (and spaceline-all-the-icons-projectile-p have-projectile?))
 
@@ -597,7 +598,17 @@ It is only enabled when you're not in a project or if the projectile segment is 
   :tight t :enabled nil
   :when (bound-and-true-p text-scale-mode-lighter))
 
-;; Fourth divider segments
+(spaceline-define-segment all-the-icons-multiple-cursors
+  "An `all-the-icons' segment to display the number of multiple cursors active."
+  (concat
+   (propertize (all-the-icons-faicon "i-cursor" :v-adjust 0.1)
+               'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit))
+   (propertize " " 'display '(space . (:width (2))))
+   (format "%d" (mc/num-cursors)))
+
+  :when (bound-and-true-p multiple-cursors-mode))
+
+;;; Fourth divider segments
 (spaceline-define-segment all-the-icons-vc-icon
   "An `all-the-icons' segment to depict the current VC system with an icon"
   (cond ((string-match "Git[:-]" vc-mode)
@@ -877,7 +888,7 @@ available updates then restores the current buffer."
              (numberp spaceline-all-the-icons--package-updates)
              (> spaceline-all-the-icons--package-updates 0)))
 
-;; First Right divider segments
+;;; First Right divider segments
 (spaceline-define-segment all-the-icons-hud
   "An `all-the-icons' segment to show the position through buffer HUD indicator."
   (let ((color (spaceline-all-the-icons--face-foreground default-face))
@@ -905,7 +916,7 @@ available updates then restores the current buffer."
    'face `(:height ,(spaceline-all-the-icons--height) :inherit))
   :enabled nil :when (not spaceline-all-the-icons-slim-render))
 
-;; Second Right divider segments
+;;; Second Right divider segments
 (spaceline-define-segment all-the-icons-battery-status
   "An `all-the-icons' segment to show the battery information"
   (let* ((charging?  (string= "AC" (cdr (assoc ?L fancy-battery-last-status))))

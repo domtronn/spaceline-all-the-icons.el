@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
-;; Package-Version: 1.1.3
+;; Package-Version: 1.2.0
 ;; Package-Requires: ((emacs "24.4") (all-the-icons "2.6.0") (spaceline "2.0.0") (memoize "1.0.1"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
@@ -56,6 +56,7 @@
 ;; - `bookmark' [`bookmark']                           Whether or not the current buffer has been modified
 ;; - `window-number' [`winum' or `window-numbering']   The current window number
 ;; - `projectile' [`projectile']                       The current project you're working in
+;; - `multiple-cursors' [`multiple-cursors']           Show the number of active multiple cursors in use
 ;; - `git-status' [`git-gutter']                       Number of added/removed lines in current buffer
 ;; - `flycheck-status' [`flycheck']                    A summary of Errors/Warnings/Info in buffer
 ;; - `flycheck-status-info' [`flycheck']               A summary dedicated to Info statuses in buffer
@@ -143,7 +144,8 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
        all-the-icons-position
        all-the-icons-region-info
        all-the-icons-fullscreen
-       all-the-icons-text-scale)
+       all-the-icons-text-scale
+       all-the-icons-multiple-cursors)
       :face highlight-face
       :separator (spaceline-all-the-icons--separator "|" " "))
 
