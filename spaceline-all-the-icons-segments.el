@@ -977,7 +977,7 @@ available updates then restores the current buffer."
          (function-icon (all-the-icons-fileicon "cold-fusion" :v-adjust 0))
          (question-icon (all-the-icons-faicon "question"))
 
-         (text-face '(:family ,(all-the-icons-faicon-family) :inherit))
+         (text-face `(:family ,(all-the-icons-faicon-family) :inherit))
          (icon-face `(:family ,(all-the-icons-fileicon-family) :inherit)))
 
     (when (string-match "{\\(.*\\)}" current) (setq current (match-string 1 current)))
@@ -986,7 +986,7 @@ available updates then restores the current buffer."
       (propertize
        (concat (propertize function-icon 'face icon-face) " "
                (propertize (if unknown? question-icon current)
-                           'face `(if unknown? ,text-face `(:height ,(spaceline-all-the-icons--height 0.8) :inherit))
+                           'face (if unknown? text-face `(:height ,(spaceline-all-the-icons--height 0.8) :inherit))
                            'display '(raise 0.2)))
        'mouse-face (spaceline-all-the-icons--highlight)
        'local-map which-func-keymap
