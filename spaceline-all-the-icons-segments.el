@@ -618,7 +618,8 @@ It is only enabled when you're not in a project or if the projectile segment is 
    (propertize (spaceline-all-the-icons-icon-set-mc)
                'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit))
    (propertize " " 'display '(space . (:width (2))))
-   (format "%d" (mc/num-cursors)))
+   (propertize (format "%d" (mc/num-cursors)) 'face `(:height (spaceline-all-the-icons--height 0.9) :inherit)
+               'display '(raise 0.1)))
 
   :when (bound-and-true-p multiple-cursors-mode))
 
