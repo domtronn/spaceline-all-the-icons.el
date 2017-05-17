@@ -998,7 +998,8 @@ available updates then restores the current buffer."
       (propertize (format-time-string "%H:%M ") 'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit) 'display '(raise 0.1))
       (propertize icon
                   'face `(:height ,(spaceline-all-the-icons--height 0.9) :family ,(all-the-icons-wicon-family) :inherit)
-                  'display '(raise 0.1)))
+                  'display '(raise 0.1))
+      (propertize " " 'display '(space . (:width 50))))
       'help-echo `(format-time-string "%H:%M")
       'mouse-face (spaceline-all-the-icons--highlight)))
   :tight t :enabled t
