@@ -450,14 +450,14 @@ doesn't inherit all properties of a face."
                         (projectile-project-name) "×")))
 
     (concat
-     (spaceline-all-the-icons--separator "|" nil " ")
+     (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator nil " ")
      (propertize project-id
                  'face `(:height ,(spaceline-all-the-icons--height height) :inherit)
                  'mouse-face (spaceline-all-the-icons--highlight)
                  'display `(raise ,raise)
                  'help-echo help-echo
                  'local-map local-map)
-     (spaceline-all-the-icons--separator "|" " " "")))
+     (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator " " "")))
   :tight t)
 
 (spaceline-define-segment all-the-icons-mode-icon
@@ -1191,7 +1191,7 @@ INFO should be an object similar to `yahoo-weather-info'."
    minor-mode-alist
    :initial-value '())
   :enabled nil
-  :separator (spaceline-all-the-icons--separator "|"))
+  :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator))
 
 ;; Paradox Segments
 (spaceline-define-segment all-the-icons-paradox-line-count

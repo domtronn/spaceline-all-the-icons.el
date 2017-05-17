@@ -93,6 +93,16 @@
   :group 'spaceline
   :group 'spaceline-all-the-icons)
 
+(defcustom spaceline-all-the-icons-primary-separator "|"
+	"Separator character used for joining primary segments together."
+	:group 'spaceline-all-the-icons
+	:type 'string)
+
+(defcustom spaceline-all-the-icons-secondary-separator "·"
+	"Separator character used for joining secondary segments together."
+	:group 'spaceline-all-the-icons
+	:type 'string)
+
 ;;; Global helper functions
 (defun spaceline-all-the-icons--height (&optional height)
   "Scale `powerline-text-scale-factor' by HEIGHT."
@@ -149,7 +159,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
        all-the-icons-narrowed
        all-the-icons-multiple-cursors)
       :face highlight-face
-      :separator (spaceline-all-the-icons--separator "|" " "))
+      :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator " "))
 
      all-the-icons-separator-left-active-3
      all-the-icons-separator-left-inactive
@@ -162,7 +172,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
          all-the-icons-flycheck-status-info) :separator " ")
        all-the-icons-package-updates)
       :face other-face
-      :separator (spaceline-all-the-icons--separator "·" " "))
+      :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-secondary-separator " "))
 
      all-the-icons-separator-left-active-4
 
@@ -185,7 +195,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
        all-the-icons-sunrise
        all-the-icons-sunset)
       :face powerline-active2
-      :separator (spaceline-all-the-icons--separator "·" " "))
+      :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-secondary-separator " "))
 
      ((all-the-icons-player-volume
        all-the-icons-player-controls
@@ -203,7 +213,8 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
 
      ((all-the-icons-battery-status
        all-the-icons-time)
-      :separator (spaceline-all-the-icons--separator "|" " ") :face default-face)))
+      :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator " ")
+      :face default-face)))
 
   (setq-default mode-line-format spaceline-all-the-icons-theme))
 
@@ -211,7 +222,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
  "all-the-icons-paradox"
  '(((all-the-icons-paradox-line-count
      all-the-icons-paradox-filter)
-    :separator (spaceline-all-the-icons--separator "|" " ")
+    :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator " ")
     :face highlight-face)
 
    all-the-icons-separator-paradox-1
