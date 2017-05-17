@@ -126,7 +126,7 @@
     (pin         (("thumb-tack" . faicon)
                   ("pin" . octicon)))))
 
-;; Window Numbering Icon
+;;; Window Numbering Icon
 (defcustom spaceline-all-the-icons-icon-set-window-numbering 'circle
   "The Icon set to use for the `all-the-icons-window-number' indicator."
   :group 'spaceline-all-the-icons-icon-set
@@ -136,7 +136,7 @@
           (const :tag "Normal String  - 1" string)
           (const :tag ,(format "Square         - %s" (all-the-icons-material "filter_1" :v-adjust 0.0)) square)))
 
-;; Git Statistics Icon
+;;; Git Statistics Icon
 (define-spaceline-all-the-icons--icon-set-getter "git-stats")
 (defcustom spaceline-all-the-icons-icon-set-git-stats 'diff-icons
   "The Icon set to use for the `all-the-icons-git-status' indicator."
@@ -156,7 +156,7 @@
              ,(propertize "🡓" 'display '(raise 0.0))
              ,(propertize "•" 'display '(raise 0.0))))))
 
-;; Flycheck Slim Icons
+;;; Flycheck Slim Icons
 (define-spaceline-all-the-icons--icon-set-getter "flycheck-slim")
 (defcustom spaceline-all-the-icons-icon-set-flycheck-slim 'solid
   "The Icon set to use for the `all-the-icons-flycheck-status' in SLIM mode."
@@ -203,7 +203,7 @@
     (arrows   ((sunrise . ,(propertize "🡑" 'display '(raise 0.1)))
                (sunset .  ,(propertize "🡓" 'display '(raise 0.1)))))))
 
-;; Git Ahead
+;;; Git Ahead Icons
 (define-spaceline-all-the-icons--icon-set-getter "git-ahead")
 (defcustom spaceline-all-the-icons-icon-set-git-ahead 'arrow
   "The Icon set to use for the `all-the-icons-git-ahead'."
@@ -217,7 +217,7 @@
     (commit ,(propertize (all-the-icons-octicon "git-commit" :v-adjust 0)
                          'face `(:family ,(all-the-icons-octicon-family) :inherit)))))
 
-;; Git Ahead
+;;; Git Status Icons
 (define-spaceline-all-the-icons--icon-set-getter "vc-icon-git")
 (defcustom spaceline-all-the-icons-icon-set-vc-icon-git 'git-logo
   "The Icon set to use for the `all-the-icons-vc-icon' when in a git repository."
@@ -238,6 +238,20 @@
     (octocat ,(all-the-icons-faicon "github-alt"))
     (gitlab ,(all-the-icons-faicon "gitlab"))))
 
+;;; Multiple Cursors Icons
+(define-spaceline-all-the-icons--icon-set-getter "mc")
+(defcustom spaceline-all-the-icons-icon-set-mc 'caret
+  "The Icon set to use for the `all-the-icons-multiple-cursors' segment."
+  :group 'spaceline-all-the-icons-icon-set
+  :type `(radio
+          (const :tag ,(format "Typing Caret  - %s" (all-the-icons-faicon "i-cursor" :v-adjust -0.2)) caret)
+          (const :tag ,(format "Mouse Pointer - %s" (all-the-icons-faicon "mouse-pointer" :v-adjust -0.2)) pointer)))
+
+(defconst spaceline-all-the-icons-icon-set--mc
+  `((caret ,(all-the-icons-faicon "i-cursor" :v-adjust 0.1))
+    (pointer ,(all-the-icons-faicon "mouse-pointer" :v-adjust 0.1))))
+
+;; Custom settings
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
   :group 'spaceline-all-the-icons
@@ -601,7 +615,7 @@ It is only enabled when you're not in a project or if the projectile segment is 
 (spaceline-define-segment all-the-icons-multiple-cursors
   "An `all-the-icons' segment to display the number of multiple cursors active."
   (concat
-   (propertize (all-the-icons-faicon "i-cursor" :v-adjust 0.1)
+   (propertize (spaceline-all-the-icons-icon-set-mc)
                'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit))
    (propertize " " 'display '(space . (:width (2))))
    (format "%d" (mc/num-cursors)))

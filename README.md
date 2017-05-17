@@ -72,7 +72,7 @@ setup/config will enable the segments.
 ```el
 (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
 (spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
-(spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream
+(spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
 (spaceline-all-the-icons--setup-paradox)         ;; Enable Paradox mode line
 (spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
 ```
@@ -139,6 +139,7 @@ These segments can have one of the following icon sets
 | `bookmark` | `bookmark`, `heart`, `star` |
 | `dedicated` | `pin`, `sticky-note` |
 | `window-numbering` | `circle`, `solid`, `string`, `square` |
+| `multiple-cursors` | `caret`, `pointer` |
 | `git-stats` | `diff-icons`, `arrows` |
 | `flycheck-slim` | `solid`, `outline`, `dots` |
 | `sun-time` | `rise/set`, `sun/moon`, `arrows` |
@@ -162,10 +163,10 @@ To debug this, try running
 
 ```el
 M-x spaceline-all-the-icons--debug-segments
-C-u M-x spaceline-all-th-icons--debug-segments
+C-u M-x spaceline-all-the-icons--debug-segments
 ```
 
-This will return a list of segments which are throwing errors and will
+This will _(should)_ return a list of segments which are throwing errors and will
 help me to debug any issues you're having!
 
 Calling it with a `C-u` prefix will _(should)_ disable the segments
