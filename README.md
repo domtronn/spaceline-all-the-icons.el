@@ -151,6 +151,11 @@ You can customize the divider separators using
 `spaceline-all-the-icons-separators-type`, the available types are:
 `'slant`, `'arrow`, `'cup`, `'wave`, `'none`
 
+You also have two types of separators between individual segments,
+these are `spaceline-all-the-icons-primary-separator` &
+`spaceline-all-the-icons-secondary-separator`. Their defualt values
+are `|` & `·` respectively.
+
 ### Debugging
 
 When a segment throws an error in Spaceline, this causes the entire
