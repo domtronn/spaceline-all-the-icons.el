@@ -829,13 +829,13 @@ When FAMILY is provided, put `:family' property into face."
 
 (defun spaceline-all-the-icons--flycheck-status ()
   "Render the mode line for Flycheck Status in a more verbose fashion."
-  (let* ((text (pcase flycheck-last-status-change
-                 (`finished    (spaceline-all-the-icons--flycheck-finished))
-                 (`running     "⟲ Running")
-                 (`no-checker  "⚠ No Checker")
-                 (`not-checked "✖ Disabled")
-                 (`errored     "⚠ Error")
-                 (`interrupted "⛔ Interrupted")))
+  (let* ((text (cl-case flycheck-last-status-change
+                 (finished    (spaceline-all-the-icons--flycheck-finished))
+                 (running     (concat (all-the-icons-faicon "refresh") " Running"))
+                 (no-checker  "⚠ No Checker")
+                 (not-checked "✖ Disabled")
+                 (errored     "⚠ Error")
+                 (interrupted "⛔ Interrupted")))
          (face (cond
                 ((string-match "✔" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(spaceline-all-the-icons--face-foreground 'success)))
                 ((string-match "⚠" text) `(:height ,(spaceline-all-the-icons--height 0.9) :foreground ,(spaceline-all-the-icons--face-foreground 'warning)))
