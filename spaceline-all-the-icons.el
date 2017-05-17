@@ -3,7 +3,7 @@
 ;; Copyright (C) 2017  Dominic Charlesworth <dgc336@gmail.com>
 
 ;; Author: Dominic Charlesworth <dgc336@gmail.com>
-;; Package-Version: 1.2.0
+;; Package-Version: 1.3.0
 ;; Package-Requires: ((emacs "24.4") (all-the-icons "2.6.0") (spaceline "2.0.0") (memoize "1.0.1"))
 ;; URL: https://github.com/domtronn/spaceline-all-the-icons.el
 ;; Keywords: convenience, lisp, tools
@@ -40,6 +40,7 @@
 ;; - `process'           The currently running process
 ;; - `position'          The Line/Column current position
 ;; - `region-info'       Count of lines and words currently in region
+;; - `narrowed'          Whether or not the current buffer is narrowed
 ;; - `fullscreen'        An indicator of whether or not window is fullscreen
 ;; - `text-scale'        The amount of global text scale
 ;; - `vc-icon'           The current Version Control Icon
@@ -145,6 +146,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
        all-the-icons-region-info
        all-the-icons-fullscreen
        all-the-icons-text-scale
+       all-the-icons-narrowed
        all-the-icons-multiple-cursors)
       :face highlight-face
       :separator (spaceline-all-the-icons--separator "|" " "))

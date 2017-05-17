@@ -622,6 +622,17 @@ It is only enabled when you're not in a project or if the projectile segment is 
 
   :when (bound-and-true-p multiple-cursors-mode))
 
+(spaceline-define-segment all-the-icons-narrowed
+  "An `all-the-icons' segment to indicate whether the current buffer is narrowed."
+  (propertize (all-the-icons-faicon "filter" :v-adjust 0.1)
+              'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)
+              'help-echo "mouse-1: Widen the current file"
+              'mouse-face (spaceline-all-the-icons--highlight)
+              'local-map (make-mode-line-mouse-map 'mouse-1 'widen))
+  
+  :tight t :enabled nil
+  :when (buffer-narrowed-p))
+
 ;;; Fourth divider segments
 (spaceline-define-segment all-the-icons-vc-icon
   "An `all-the-icons' segment to depict the current VC system with an icon"

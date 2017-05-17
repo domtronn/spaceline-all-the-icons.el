@@ -119,6 +119,7 @@ calling the following in your `:config`
 | `dedicated` | Indicates whether the current file is dedicated |
 | `fullscreen` | Indicates whether the frame is Fullscreen  |
 | `buffer-position` | Indicates the position through the buffer as a percentage  |
+| `narrowed` | Indicates whether the current buffer has been narrowed  |
 
 ### Icon Sets
 
