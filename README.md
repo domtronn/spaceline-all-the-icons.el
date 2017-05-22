@@ -1,3 +1,5 @@
+[![MELPA](https://melpa.org/packages/spaceline-all-the-icons-badge.svg)](https://melpa.org/#/spaceline-all-the-icons)
+
 <p align="center">
 <img src="logo.png" width="1200">
 </p>
