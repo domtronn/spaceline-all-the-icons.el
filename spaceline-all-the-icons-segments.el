@@ -631,7 +631,7 @@ It is only enabled when you're not in a project or if the projectile segment is 
               'help-echo "mouse-1: Widen the current file"
               'mouse-face (spaceline-all-the-icons--highlight)
               'local-map (make-mode-line-mouse-map 'mouse-1 'widen))
-  
+
   :tight t :enabled nil
   :when (buffer-narrowed-p))
 
@@ -994,15 +994,25 @@ available updates then restores the current buffer."
 (spaceline-define-segment all-the-icons-time
   "An `all-the-icons' segment to to display the time and a clock icon"
   (let* ((time (string-to-number (format-time-string "%I")))
-         (icon (all-the-icons-wicon (format "time-%s" time) :v-adjust 0.0)))
+         (time-icon (all-the-icons-wicon (format "time-%s" time) :v-adjust 0.0))
+         (date-icon (all-the-icons-octicon "calendar" :v-adjust 0.0)))
+
     (propertize
      (concat
       (propertize (format-time-string "%H:%M ") 'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit) 'display '(raise 0.1))
-      (propertize icon
+      (propertize time-icon
                   'face `(:height ,(spaceline-all-the-icons--height 0.9) :family ,(all-the-icons-wicon-family) :inherit)
                   'display '(raise 0.1))
+
+      (when (bound-and-true-p display-time-day-and-date)
+        (concat
+         (propertize (format-time-string " %a %b %d ") 'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit) 'display '(raise 0.1))
+         (propertize date-icon
+                     'face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-octicon-family) :inherit)
+                     'display '(raise 0.1))))
+
       (propertize " " 'display '(space . (:width 50))))
-      'help-echo `(format-time-string "%H:%M")
+      'help-echo (format-time-string "%c")
       'mouse-face (spaceline-all-the-icons--highlight)))
   :tight t :enabled t
   :when (or spaceline-all-the-icons-clock-always-visible
