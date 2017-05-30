@@ -514,7 +514,8 @@ doesn't inherit all properties of a face."
   (when (buffer-file-name)
     (let* ((name (spaceline-all-the-icons--memoized-file-truename (buffer-file-name)))
 
-           (project-root (when (and spaceline-all-the-icons-projectile-p
+           (project-root (when (and (not (file-remote-p (buffer-file-name)))
+                                    spaceline-all-the-icons-projectile-p
                                     (fboundp 'projectile-project-p)
                                     (projectile-project-p))
                            (spaceline-all-the-icons--memoized-file-truename
@@ -1228,7 +1229,8 @@ BODY is the form to evaluate to get the text to display."
      (let* ((text ,@body)
             (text-face `(:foreground ,(spaceline-all-the-icons--face-foreground 'font-lock-keyword-face)
                          :background ,(spaceline-all-the-icons--face-background 'powerline-active1)))
-            (icon-face `(:family ,(all-the-icons-icon-family ,icon)))
+            (icon-face `(:family ,(all-the-icons-icon-family ,icon)
+                         :background ,(spaceline-all-the-icons--face-background 'powerline-active1)))
             (num-face (cond
                        ((eq ',type 'new) 'success)
                        ((eq ',type 'upgrade) 'warning)
