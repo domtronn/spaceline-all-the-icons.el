@@ -710,10 +710,10 @@ type, (i.e. added, deleted, modified) of a diff/hunk."
        (let ((lines (1+ (- ,el-f ,sl-f)))
              (hunk ,hunk-f)
              (type ,type-f))
-         (pcase type
-           ('deleted (list added (+ removed (with-temp-buffer (insert hunk) (1- (count-lines (point-min) (point-max))))) modified))
-           ('added (list (+ added lines) removed modified))
-           ('modified (list added removed (+ modified lines))))))))
+         (cl-case type
+           (deleted (list added (+ removed (with-temp-buffer (insert hunk) (1- (count-lines (point-min) (point-max))))) modified))
+           (added (list (+ added lines) removed modified))
+           (modified (list added removed (+ modified lines))))))))
 
 (spaceline-all-the-icons--git-stats-reducer diffinfos (git-gutter-hunk-end-line it) (git-gutter-hunk-start-line it) (git-gutter-hunk-content it) (git-gutter-hunk-type it))
 (spaceline-all-the-icons--git-stats-reducer +diffinfos (plist-get it :end-line) (plist-get it :start-line) (plist-get it :content) (plist-get it :type))
