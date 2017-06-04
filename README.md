@@ -46,6 +46,11 @@ to the load path and then calling
 (use-package spaceline-all-the-icons)
 ```
 
+To enable git changes count, please enable git-gutter-mode
+```
+(global-git-gutter-mode 1)
+```
+
 *N.B.* This package is *_highly_* dependent
 on [`all-the-icons.el`](https://github.com/domtronn/all-the-icons.el), so make
 sure you have the [fonts](https://github.com/domtronn/all-the-icons.el/tree/master/fonts)
