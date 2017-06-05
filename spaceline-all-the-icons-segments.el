@@ -952,27 +952,27 @@ available updates then restores the current buffer."
 
          (icon-alist
           (cond
-           (charging? '((icon . "charging") (inherit . success) (height . 1.3) (raise . 0.0)))
-           ((> percent 95) '((icon . "full") (inherit . success)))
+           (charging? '((icon . "charging") (inherit . fancy-battery-charging) (height . 1.3) (raise . 0.0)))
+           ((> percent 95) '((icon . "full") (inherit . fancy-battery-charging)))
            ((> percent 70) '((icon . "three-quarters")))
            ((> percent 30) '((icon . "half")))
-           ((> percent 15) '((icon . "quarter") (inherit . warning)))
-           (t '((icon . "empty") (inherit . error)))))
+           ((> percent 15) '((icon . "quarter") (inherit . fancy-battery-discharging)))
+           (t '((icon . "empty") (inherit . fancy-battery-critical)))))
 
          (icon-set (if charging? 'alltheicon 'faicon))
          (icon-f   (all-the-icons--function-name icon-set))
          (family-f (all-the-icons--family-name icon-set))
 
-         (icon-face `(:height ,(spaceline-all-the-icons--height) :family ,(funcall family-f) :background ,(spaceline-all-the-icons--face-background default-face)))
+         (icon-face `(:family ,(funcall family-f) :background ,(spaceline-all-the-icons--face-background default-face)))
          (text-face `(:height ,(spaceline-all-the-icons--height 0.9) :background ,(spaceline-all-the-icons--face-background default-face))))
 
     (let-alist icon-alist
-      (when .height (setq icon-face (plist-put icon-face :height (spaceline-all-the-icons--height .height))))
+      (setq icon-face (append `(:height ,(spaceline-all-the-icons--height (when .height .height))) icon-face))
       (if (not .inherit)
           (setq icon-face (append icon-face '(:inherit))
                 text-face (append text-face '(:inherit)))
-        (setq icon-face (append `(:foreground ,(spaceline-all-the-icons--face-foreground .inherit)) icon-face)
-              text-face (append `(:foreground ,(spaceline-all-the-icons--face-foreground .inherit)) text-face)))
+        (setq icon-face (append icon-face `(:inherit ,(macroexpand .inherit)))
+              text-face (append text-face `(:inherit ,(macroexpand .inherit)))))
 
       (propertize
        (concat
