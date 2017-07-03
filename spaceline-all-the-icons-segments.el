@@ -43,6 +43,7 @@
 (declare-function winum-get-number "ext:winum.el")
 (declare-function window-numbering-get-number "ext:window-numbering.el")
 (declare-function mc/num-cursors "ext:multiple-cursors.el")
+(declare-function fancy-narrow-active-p "ext:fancy-narrow.el")
 
 (defvar flycheck-current-errors)
 (defvar flycheck-last-status-change)
@@ -632,8 +633,10 @@ It is only enabled when you're not in a project or if the projectile segment is 
               'mouse-face (spaceline-all-the-icons--highlight)
               'local-map (make-mode-line-mouse-map 'mouse-1 'widen))
 
-  :tight t :enabled nil
-  :when (buffer-narrowed-p))
+  :tight t
+  :when (or (buffer-narrowed-p)
+            (and (bound-and-true-p fancy-narrow-mode)
+                 (fancy-narrow-active-p))))
 
 ;;; Fourth divider segments
 (spaceline-define-segment all-the-icons-vc-icon
