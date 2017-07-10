@@ -95,6 +95,9 @@ separator."
 (define-spaceline-all-the-icons--separator left-active-3 "right" spaceline-highlight-face-func 'mode-line)
 (define-spaceline-all-the-icons--separator left-active-4 "right" 'mode-line 'powerline-active2)
 
+(define-spaceline-all-the-icons--separator left-extra-1 "right" 'mode-line 'powerline-active1)
+(define-spaceline-all-the-icons--separator left-extra-2 "right" 'powerline-active1 'powerline-active2)
+
 (define-spaceline-all-the-icons--separator right-active-1 "left" 'mode-line 'powerline-active2)
 (define-spaceline-all-the-icons--separator right-active-2 "left" 'powerline-active1 'mode-line)
 

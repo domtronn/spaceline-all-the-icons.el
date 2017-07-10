@@ -95,14 +95,14 @@
   :group 'spaceline-all-the-icons)
 
 (defcustom spaceline-all-the-icons-primary-separator "|"
-	"Separator character used for joining primary segments together."
-	:group 'spaceline-all-the-icons
-	:type 'string)
+  "Separator character used for joining primary segments together."
+  :group 'spaceline-all-the-icons
+  :type 'string)
 
 (defcustom spaceline-all-the-icons-secondary-separator "·"
-	"Separator character used for joining secondary segments together."
-	:group 'spaceline-all-the-icons
-	:type 'string)
+  "Separator character used for joining secondary segments together."
+  :group 'spaceline-all-the-icons
+  :type 'string)
 
 ;;; Global helper functions
 (defun spaceline-all-the-icons--height (&optional height)
@@ -175,11 +175,17 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
       :face other-face
       :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-secondary-separator " "))
 
-     all-the-icons-separator-left-active-4
+     ((all-the-icons-separator-left-active-4)
+      :when (not (or spaceline-all-the-icons-nyan-cat-p
+                     spaceline-all-the-icons-minor-modes-p)))
 
-     ((all-the-icons-nyan-cat)
-      :face 'mode-line
-      :tight t :separator "")
+     ((all-the-icons-separator-left-extra-1
+       all-the-icons-nyan-cat
+       all-the-icons-separator-left-extra-2)
+      :tight t
+      :face powerline-active1
+      :when (or spaceline-all-the-icons-nyan-cat-p
+                spaceline-all-the-icons-minor-modes-p))
      
      ((all-the-icons-separator-minor-mode-left
        all-the-icons-minor-modes

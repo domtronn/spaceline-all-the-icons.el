@@ -1209,7 +1209,7 @@ INFO should be an object similar to `yahoo-weather-info'."
 
 (spaceline-define-segment all-the-icons-nyan-cat
   "Shows the infamous nyan cat.  Requires `nyan-mode' to be enabled."
-  (powerline-raw (nyan-create) 'powerline-active2)
+  (nyan-create)
   :when (and active (bound-and-true-p nyan-mode)))
 
 ;; Paradox Segments
