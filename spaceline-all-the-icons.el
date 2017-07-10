@@ -178,9 +178,9 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
      all-the-icons-separator-left-active-4
 
      ((all-the-icons-nyan-cat)
-      :face 'mode-line
+      :face mode-line
       :tight t :separator "")
-     
+
      ((all-the-icons-separator-minor-mode-left
        all-the-icons-minor-modes
        all-the-icons-separator-minor-mode-right)
