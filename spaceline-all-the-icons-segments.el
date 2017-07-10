@@ -1207,6 +1207,11 @@ INFO should be an object similar to `yahoo-weather-info'."
   :enabled nil
   :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator))
 
+(spaceline-define-segment all-the-icons-nyan-cat
+  "Shows the infamous nyan cat.  Requires `nyan-mode' to be enabled."
+  (powerline-raw (nyan-create) 'powerline-active2)
+  :when (and active (bound-and-true-p nyan-mode)))
+
 ;; Paradox Segments
 (spaceline-define-segment all-the-icons-paradox-line-count
   "An `all-the-icons' segment to display the line number created by `paradox--update-mode-line-front-space'"

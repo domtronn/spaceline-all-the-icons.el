@@ -67,6 +67,7 @@
 ;; - `sunrise' [`yahoo-weather']                       Display an icon to show todays sunrise time
 ;; - `sunset' [`yahoo-weather']                        Display an icon to show todays sunset time
 ;; - `battery-status' [`fancy-battery']                Display a colour coded battery with time remaining
+;; - `nyan-mode' [`nyan-mode']                         Display Nyan Cat as a progress meter through the buffer
 
 ;;; Code:
 
@@ -176,6 +177,10 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
 
      all-the-icons-separator-left-active-4
 
+     ((all-the-icons-nyan-cat)
+      :face 'mode-line
+      :tight t :separator "")
+     
      ((all-the-icons-separator-minor-mode-left
        all-the-icons-minor-modes
        all-the-icons-separator-minor-mode-right)
