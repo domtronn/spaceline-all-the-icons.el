@@ -176,7 +176,9 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
       :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-secondary-separator " "))
 
      ((all-the-icons-separator-left-active-4)
-      :when (not (or spaceline-all-the-icons-nyan-cat-p
+      :tight t
+      :when (not (or (and (bound-and-true-p nyan-mode)
+                          spaceline-all-the-icons-nyan-cat-p)
                      spaceline-all-the-icons-minor-modes-p)))
 
      ((all-the-icons-separator-left-extra-1
@@ -184,7 +186,8 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
        all-the-icons-separator-left-extra-2)
       :tight t
       :face powerline-active1
-      :when (or spaceline-all-the-icons-nyan-cat-p
+      :when (or (and (bound-and-true-p nyan-mode)
+                     spaceline-all-the-icons-nyan-cat-p)
                 spaceline-all-the-icons-minor-modes-p))
      
      ((all-the-icons-separator-minor-mode-left
