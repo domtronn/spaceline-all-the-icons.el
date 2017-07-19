@@ -950,7 +950,7 @@ available updates then restores the current buffer."
 (spaceline-define-segment all-the-icons-battery-status
   "An `all-the-icons' segment to show the battery information"
   (let* ((charging?  (string= "AC" (cdr (assoc ?L fancy-battery-last-status))))
-         (percent    (string-to-int (cdr (assoc ?p fancy-battery-last-status))))
+         (percent    (string-to-number (cdr (assoc ?p fancy-battery-last-status))))
          (time       (cdr (assoc ?t fancy-battery-last-status)))
 
          (icon-alist
