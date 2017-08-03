@@ -929,7 +929,7 @@ available updates then restores the current buffer."
       (propertize (all-the-icons-faicon "check-circle" :v-adjust 0.1)
                   'face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-faicon-family) :inherit))
       " "
-      (propertize org-clock-current-task
+      (propertize (truncate-string-to-width org-clock-current-task 20 nil nil "…")
                   'face face
                   'display '(raise 0.1)))
      'help-echo "Go to task"
