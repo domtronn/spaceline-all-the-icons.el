@@ -1014,7 +1014,7 @@ available updates then restores the current buffer."
                      'face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-octicon-family) :inherit)
                      'display '(raise 0.1))))
 
-      (propertize " " 'display '(space . (:width 50))))
+      (propertize " " 'display '(space . (:width 1))))
       'help-echo (format-time-string "%c")
       'mouse-face (spaceline-all-the-icons--highlight)))
   :tight t :enabled t
