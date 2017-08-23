@@ -425,9 +425,9 @@ doesn't inherit all properties of a face."
                  (circle  (format "%c" (+ window-num 9311)))
                  (string  (progn (number-to-string window-num)))
                  (square  (progn
-                            (setq face (append `(:height ,(spaceline-all-the-icons--height 0.8)) face))
+                            (setq face (append `(:height ,(spaceline-all-the-icons--height 0.9)) face))
                             (setq face (append `(:family ,(all-the-icons-material-family)) face))
-                            (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.2))))))
+                            (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.1))))))
     (propertize icon 'face face))
 
   :when (and
@@ -1033,7 +1033,7 @@ available updates then restores the current buffer."
                      'face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-octicon-family) :inherit)
                      'display '(raise 0.1))))
 
-      (propertize " " 'display '(space . (:width 50))))
+      (propertize " " 'display '(space . (:width 1))))
       'help-echo (format-time-string "%c")
       'mouse-face (spaceline-all-the-icons--highlight)))
   :tight t :enabled t
