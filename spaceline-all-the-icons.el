@@ -225,7 +225,8 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
      all-the-icons-separator-right-active-2
      all-the-icons-separator-right-inactive
 
-     ((all-the-icons-battery-status
+     ((all-the-icons-org-clock-current-task
+       all-the-icons-battery-status
        all-the-icons-time)
       :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator " ")
       :face default-face)))

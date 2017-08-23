@@ -52,6 +52,7 @@
 (defvar neo-buffer--start-node)
 (defvar git-gutter:diffinfos)
 (defvar git-gutter+-diffinfos)
+(defvar org-clock-current-task)
 
 (defmacro define-spaceline-all-the-icons--icon-set-getter (name)
   "Macro to create a getter function for icon set NAME."
@@ -919,6 +920,24 @@ available updates then restores the current buffer."
              (> spaceline-all-the-icons--package-updates 0)))
 
 ;;; First Right divider segments
+;; Org task
+(spaceline-define-segment all-the-icons-org-clock-current-task
+  "An `all-the-icons' segment to display the current org-clock task."
+  (let ((face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)))
+    (propertize
+     (concat
+      (propertize (all-the-icons-faicon "check-circle" :v-adjust 0.1)
+                  'face `(:height ,(spaceline-all-the-icons--height 1.1) :family ,(all-the-icons-faicon-family) :inherit))
+      " "
+      (propertize (truncate-string-to-width org-clock-current-task 20 nil nil "…")
+                  'face face
+                  'display '(raise 0.1)))
+     'help-echo "Go to task"
+     'mouse-face (spaceline-all-the-icons--highlight)
+     'local-map (make-mode-line-mouse-map 'mouse-1 #'org-clock-goto)))
+  :when (and active
+             org-clock-current-task))
+
 (spaceline-define-segment all-the-icons-hud
   "An `all-the-icons' segment to show the position through buffer HUD indicator."
   (let ((color (spaceline-all-the-icons--face-foreground default-face))
