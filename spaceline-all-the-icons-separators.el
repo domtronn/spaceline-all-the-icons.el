@@ -44,6 +44,9 @@
                                (all-the-icons-alltheicon "arrow-left")
                                (all-the-icons-alltheicon "arrow-right")) arrow)))
 
+(defvar spaceline-all-the-icons-separator-scale 1.6
+  "Scaling factor to adjust the separator height.")
+
 (defcustom spaceline-all-the-icons-separators-invert-direction nil
   "Whether or not to invert the separator direction."
   :group 'spaceline-all-the-icons
@@ -84,7 +87,7 @@ separator."
        (unless (or (eq separator 'none)
                    (string= (spaceline-all-the-icons--face-background sf) (spaceline-all-the-icons--face-background ef)))
         (propertize (all-the-icons-alltheicon (format "%s-%s" separator direction) :v-adjust 0.0)
-                    'face `(:height ,(spaceline-all-the-icons--height 1.6)
+                    'face `(:height ,(spaceline-all-the-icons--height spaceline-all-the-icons-separator-scale)
                             :family ,(all-the-icons-alltheicon-family)
                             :foreground ,(spaceline-all-the-icons--face-background sf)
                             :background ,(spaceline-all-the-icons--face-background ef)))))
