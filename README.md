@@ -140,6 +140,7 @@ These segments can have one of the following icon sets
 | `bookmark` | `bookmark`, `heart`, `star` |
 | `dedicated` | `pin`, `sticky-note` |
 | `window-numbering` | `circle`, `solid`, `string`, `square` |
+| `eyebrowse-workspace` | `circle`, `solid`, `string`, `square` |
 | `multiple-cursors` | `caret`, `pointer` |
 | `git-stats` | `diff-icons`, `arrows` |
 | `flycheck-slim` | `solid`, `outline`, `dots` |
