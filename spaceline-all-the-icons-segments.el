@@ -42,6 +42,7 @@
 (declare-function paradox-list-packages "ext:paradox.el")
 (declare-function winum-get-number "ext:winum.el")
 (declare-function window-numbering-get-number "ext:window-numbering.el")
+(declare-function eyebrowse--get "ext:eyebrowse.el")
 (declare-function mc/num-cursors "ext:multiple-cursors.el")
 (declare-function fancy-narrow-active-p "ext:fancy-narrow.el")
 
@@ -131,6 +132,16 @@
 ;;; Window Numbering Icon
 (defcustom spaceline-all-the-icons-icon-set-window-numbering 'circle
   "The Icon set to use for the `all-the-icons-window-number' indicator."
+  :group 'spaceline-all-the-icons-icon-set
+  :type `(radio
+          (const :tag "Circle Outline - ①" circle)
+          (const :tag "Circle Solid   - ➊" solid)
+          (const :tag "Normal String  - 1" string)
+          (const :tag ,(format "Square         - %s" (all-the-icons-material "filter_1" :v-adjust 0.0)) square)))
+
+;;; Eyebrowse Icon
+(defcustom spaceline-all-the-icons-icon-set-eyebrowse-slot 'circle
+  "The Icon set to use for the `all-the-icons-eyebrowse-slot' indicator."
   :group 'spaceline-all-the-icons-icon-set
   :type `(radio
           (const :tag "Circle Outline - ①" circle)
@@ -256,6 +267,11 @@
 ;; Custom settings
 (defcustom spaceline-all-the-icons-window-number-always-visible nil
   "Whether or not to show the window number all the time or when there are multiple windows."
+  :group 'spaceline-all-the-icons
+  :type 'boolean)
+
+(defcustom spaceline-all-the-icons-eyebrowse-display-name t
+  "Whether or not to disable the current workspace name as part of the modeline."
   :group 'spaceline-all-the-icons
   :type 'boolean)
 
@@ -415,11 +431,13 @@ doesn't inherit all properties of a face."
            ((bound-and-true-p window-numbering-mode) (window-numbering-get-number)))))
     (when (numberp window-num) window-num)))
 
-(spaceline-define-segment all-the-icons-window-number
-  "An `all-the-icons' segment depicting the current window number"
+(defun spaceline-all-the-icons--window-number-icon (window-num &optional icon-set)
+  "Return the icon to use for WINDOW-NUM from ICON-SET.
+ICON-SET defaults to `spaceline-all-the-icons-icon-set-window-numbering'."
   (let* ((face `(:height ,(spaceline-all-the-icons--height 1.2) :inherit))
-         (window-num (spaceline-all-the-icons--window-number))
-         (icon-set (if (> window-num 9) 'string spaceline-all-the-icons-icon-set-window-numbering))
+         (icon-set (if (> window-num 9) 'string
+                     (or icon-set
+                         spaceline-all-the-icons-icon-set-window-numbering)))
          (icon (cl-case icon-set
                  (solid   (format "%c" (+ window-num 10121)))
                  (circle  (format "%c" (+ window-num 9311)))
@@ -428,11 +446,48 @@ doesn't inherit all properties of a face."
                             (setq face (append `(:height ,(spaceline-all-the-icons--height 0.9)) face))
                             (setq face (append `(:family ,(all-the-icons-material-family)) face))
                             (all-the-icons-material (format "filter_%s" window-num) :v-adjust -0.1))))))
-    (propertize icon 'face face))
+    (propertize icon 'face face)))
 
+(spaceline-define-segment all-the-icons-window-number
+  "An `all-the-icons' segment depicting the current window number"
+  (spaceline-all-the-icons--window-number-icon
+   (spaceline-all-the-icons--window-number)
+   spaceline-all-the-icons-icon-set-window-numbering)
   :when (and
          (spaceline-all-the-icons--window-number)
          (spaceline-all-the-icons--window-number-show-p)))
+
+(spaceline-define-segment all-the-icons-eyebrowse-workspace
+  "An `all-the-icons' segment to display the current eyebrowse
+  workspace. Requires `eyebrowse-mode' to be enabled."
+  (let* ((num (eyebrowse--get 'current-slot))
+         (tag (when num (caddr (assoc num (eyebrowse--get 'window-configs)))))
+
+         (eyebrowse-slot (spaceline-all-the-icons--window-number-icon
+                          num spaceline-all-the-icons-icon-set-eyebrowse-slot))
+         (eyebrowse-new
+          (propertize (all-the-icons-octicon "eye")
+                               'display '(raise 0.1)
+                               'face `( :height ,(spaceline-all-the-icons--height 1.2) :family ,(all-the-icons-octicon-family) :inherit)))
+         (eyebrowse-tag-p (and (not (string= "" tag)) spaceline-all-the-icons-eyebrowse-display-name))
+         (eyebrowse-tag
+          (when eyebrowse-tag-p
+            (concat
+             (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator nil "")
+             (propertize tag
+                         'display '(raise 0.2)
+                         'face `(:slant italic :height ,(spaceline-all-the-icons--height 0.9) :inherit))))))
+
+    (concat (propertize eyebrowse-new
+                        'mouse-face (spaceline-all-the-icons--highlight)
+                        'local-map (make-mode-line-mouse-map 'mouse-1 'eyebrowse-create-window-config)
+                        'help-echo "Create new Eyebrowse window config")
+            (spaceline-all-the-icons--separator spaceline-all-the-icons-primary-separator nil "")
+            (propertize (concat eyebrowse-slot  eyebrowse-tag)
+                        'mouse-face (spaceline-all-the-icons--highlight)
+                        'local-map (make-mode-line-mouse-map 'mouse-1 'eyebrowse-switch-to-window-config)
+                        'help-echo "Switch Eyebrowse window config")))
+  :when (bound-and-true-p eyebrowse-mode))
 
 (spaceline-define-segment all-the-icons-buffer-size
   "An `all-the-icons' segment depicting the buffer size"
