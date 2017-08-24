@@ -936,8 +936,7 @@ available updates then restores the current buffer."
      'mouse-face (spaceline-all-the-icons--highlight)
      'local-map (make-mode-line-mouse-map 'mouse-1 #'org-clock-goto)))
   :when (and active
-             (fboundp 'org-clock-current-task)
-             org-clock-current-task))
+             (bound-and-true-p org-clock-current-task)))
 
 (spaceline-define-segment all-the-icons-hud
   "An `all-the-icons' segment to show the position through buffer HUD indicator."
