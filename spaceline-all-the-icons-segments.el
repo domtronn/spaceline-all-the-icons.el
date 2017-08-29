@@ -461,7 +461,7 @@ ICON-SET defaults to `spaceline-all-the-icons-icon-set-window-numbering'."
   "An `all-the-icons' segment to display the current eyebrowse
   workspace. Requires `eyebrowse-mode' to be enabled."
   (let* ((num (eyebrowse--get 'current-slot))
-         (tag (when num (caddr (assoc num (eyebrowse--get 'window-configs)))))
+         (tag (when num (cl-caddr (assoc num (eyebrowse--get 'window-configs)))))
 
          (eyebrowse-slot (spaceline-all-the-icons--window-number-icon
                           num spaceline-all-the-icons-icon-set-eyebrowse-slot))
