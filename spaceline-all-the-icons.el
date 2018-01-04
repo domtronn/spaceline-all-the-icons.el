@@ -191,7 +191,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
       :when (or (and (bound-and-true-p nyan-mode)
                      spaceline-all-the-icons-nyan-cat-p)
                 spaceline-all-the-icons-minor-modes-p))
-     
+
      ((all-the-icons-separator-minor-mode-left
        all-the-icons-minor-modes
        all-the-icons-separator-minor-mode-right)
@@ -203,7 +203,8 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
       :face powerline-active2
       :separator ""))
 
-   `(((,@additional-segments) :when active :face powerline-active2)
+   `(all-the-icons-separator-right-active-1
+     ((,@additional-segments) :when active :face powerline-active2)
      ((,@additional-segments) :when (not active) :face powerline-inactive2)
 
      ((all-the-icons-weather
@@ -219,7 +220,6 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
        all-the-icons-player-controls-shuffle)
       :face powerline-active2)
 
-     all-the-icons-separator-right-active-1
      ((all-the-icons-hud
        all-the-icons-buffer-position)
       :separator " " :when active)
