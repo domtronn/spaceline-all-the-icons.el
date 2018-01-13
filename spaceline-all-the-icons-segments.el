@@ -1248,7 +1248,7 @@ INFO should be an object similar to `yahoo-weather-info'."
 
 (spaceline-define-segment all-the-icons-minor-modes
   "An `all-the-icons' segment to display minor modes, prefering to use the diminished values."
-  (reduce
+  (cl-reduce
    (lambda (acc minor-mode)
      (let* ((lighter  (mapconcat 'identity (split-string (format-mode-line (cadr minor-mode))) " "))
             (display? (and (not (string= "" lighter))
