@@ -439,8 +439,8 @@ ICON-SET defaults to `spaceline-all-the-icons-icon-set-window-numbering'."
                      (or icon-set
                          spaceline-all-the-icons-icon-set-window-numbering)))
          (icon (cl-case icon-set
-                 (solid   (format "%c" (+ window-num 10121)))
-                 (circle  (format "%c" (+ window-num 9311)))
+                 (solid   (format "%c" (if (= window-num 0) 127244 (+ window-num 10121))))
+                 (circle  (format "%c" (if (= window-num 0) 9450 (+ window-num 9311))))
                  (string  (progn (number-to-string window-num)))
                  (square  (progn
                             (setq face (append `(:height ,(spaceline-all-the-icons--height 0.9)) face))
