@@ -1076,7 +1076,8 @@ available updates then restores the current buffer."
 
     (propertize
      (concat
-      (propertize (format-time-string "%H:%M ") 'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit) 'display '(raise 0.1))
+      (propertize (format-time-string (or display-time-format (if display-time-24hr-format "%H:%M " "%-I:%M%p ")))
+                  'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit) 'display '(raise 0.1))
       (propertize time-icon
                   'face `(:height ,(spaceline-all-the-icons--height 0.9) :family ,(all-the-icons-wicon-family) :inherit)
                   'display '(raise 0.1))
