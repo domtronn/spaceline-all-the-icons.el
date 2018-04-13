@@ -69,6 +69,7 @@
 ;; - `sunset' [`yahoo-weather']                        Display an icon to show todays sunset time
 ;; - `battery-status' [`fancy-battery']                Display a colour coded battery with time remaining
 ;; - `nyan-mode' [`nyan-mode']                         Display Nyan Cat as a progress meter through the buffer
+;; - `mu4e-alert' [`mu4e-alert']                       Display an icon with unread mail count
 
 ;;; Code:
 
@@ -191,7 +192,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
       :when (or (and (bound-and-true-p nyan-mode)
                      spaceline-all-the-icons-nyan-cat-p)
                 spaceline-all-the-icons-minor-modes-p))
-     
+
      ((all-the-icons-separator-minor-mode-left
        all-the-icons-minor-modes
        all-the-icons-separator-minor-mode-right)
@@ -209,7 +210,8 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
      ((all-the-icons-weather
        all-the-icons-temperature
        all-the-icons-sunrise
-       all-the-icons-sunset)
+       all-the-icons-sunset
+       all-the-icons-mu4e-alert)
       :face powerline-active2
       :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-secondary-separator " "))
 
