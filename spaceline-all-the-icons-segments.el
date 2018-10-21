@@ -717,7 +717,7 @@ It is only enabled when you're not in a project or if the projectile segment is 
     (propertize
      (concat
       (propertize git-branch
-                  'face `(:family ,(all-the-icons-octicon-family) :height ,(spaceline-all-the-icons--height) :inherit)
+                  'face `(:family ,(all-the-icons-octicon-family) :height ,(spaceline-all-the-icons--height 0.9) :inherit)
                   'display '(raise 0.1))
       (propertize (format " %s" branch)
                   'face `(:height ,(spaceline-all-the-icons--height 0.9) :inherit)
@@ -755,7 +755,7 @@ When FAMILY is provided, put `:family' property into face."
      (propertize " " 'face `(:height ,(spaceline-all-the-icons--height 0.2)))
      (propertize (format "%s" text)
                  'face `(:foreground ,(spaceline-all-the-icons--face-foreground face)
-                         :height ,(spaceline-all-the-icons--height))))))
+                         :height ,(spaceline-all-the-icons--height height))))))
 
 (defmacro spaceline-all-the-icons--git-stats-reducer (name el-f sl-f hunk-f type-f)
   "Macro to define reducer to calculate Added, Deleted & Modified lines in git.
