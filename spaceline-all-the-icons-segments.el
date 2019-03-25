@@ -556,7 +556,7 @@ ICON-SET defaults to `spaceline-all-the-icons-icon-set-window-numbering'."
         (add-to-list 'file-face :inherit t)
       (setq file-face (append `(:background ,(spaceline-all-the-icons--face-background default-face)) file-face))
       (setq file-face (append `(:foreground ,(or spaceline-all-the-icons-file-name-highlight
-                                                 (spaceline-all-the-icons--face-background highlight-face))) file-face)))
+                                                 (spaceline-all-the-icons--face-foreground highlight-face))) file-face)))
 
     (propertize buffer-id
                 'face file-face
