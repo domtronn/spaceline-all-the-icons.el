@@ -134,7 +134,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
   (spaceline-compile
    "all-the-icons"
    '((all-the-icons-anzu
-      :face mode-line
+      :face 'mode-line
       :skip-alternate t)
 
      ((all-the-icons-modified
@@ -187,7 +187,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
        all-the-icons-nyan-cat
        all-the-icons-separator-left-extra-2)
       :tight t
-      :face powerline-active1
+      :face 'powerline-active1
       :when (or (and (bound-and-true-p nyan-mode)
                      spaceline-all-the-icons-nyan-cat-p)
                 spaceline-all-the-icons-minor-modes-p))
@@ -200,24 +200,23 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
       :when spaceline-all-the-icons-minor-modes-p)
 
      ((all-the-icons-which-function)
-      :face powerline-active2
+      :face 'powerline-active2
       :separator ""))
 
-   `(((,@additional-segments) :when active :face powerline-active2)
-     ((,@additional-segments) :when (not active) :face powerline-inactive2)
-
+   `(((,@additional-segments) :when active :face 'powerline-active2)
+     ((,@additional-segments) :when (not active) :face 'powerline-inactive2)
      ((all-the-icons-weather
        all-the-icons-temperature
        all-the-icons-sunrise
        all-the-icons-sunset)
-      :face powerline-active2
+      :face 'powerline-active2
       :separator (spaceline-all-the-icons--separator spaceline-all-the-icons-secondary-separator " "))
 
      ((all-the-icons-player-volume
        all-the-icons-player-controls
        all-the-icons-track
        all-the-icons-player-controls-shuffle)
-      :face powerline-active2)
+      :face 'powerline-active2)
 
      all-the-icons-separator-right-active-1
      ((all-the-icons-hud
@@ -247,10 +246,9 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
      all-the-icons-paradox-status-upgrade
      all-the-icons-paradox-status-installed)
     :separator "  "
-    :face powerline-active1)
-
+    :face 'powerline-active1)
    all-the-icons-separator-paradox-2
-   ((all-the-icons-paradox-total) :face powerline-active2)
+   ((all-the-icons-paradox-total) :face 'powerline-active2)
 
    all-the-icons-separator-paradox-3
    ((all-the-icons-process :tight t))
@@ -265,7 +263,7 @@ Add ADDITIONAL-SEGMENTS to the end of the theme."
      all-the-icons-neotree-dirs
      all-the-icons-neotree-files
      all-the-icons-neotree-close-bracket)
-    :face line-face)) '())
+    :face 'line-face)) '())
 
 ;; Interactive & Setup Functions
 (defconst spaceline-all-the-icons-paradox-theme '("%e" (:eval (spaceline-ml-all-the-icons-paradox)))
