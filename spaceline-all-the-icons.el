@@ -105,11 +105,16 @@
   :group 'spaceline-all-the-icons
   :type 'string)
 
+(defcustom spaceline-scale-factor nil
+ "Scale of mode-line font height."
+ :group 'spaceline-all-the-icons
+ :type '(choice float integer (const nil)))
+
 ;;; Global helper functions
 (defun spaceline-all-the-icons--height (&optional height)
-  "Scale `powerline-text-scale-factor' by HEIGHT."
-  (if (bound-and-true-p powerline-text-scale-factor)
-      (* (or height 1) (or powerline-text-scale-factor 1))
+  "Scale `spaceline-scale-factor' by HEIGHT."
+  (if (bound-and-true-p spaceline-scale-factor)
+      (* (or height 1) (or spaceline-scale-factor 1))
       (or height 1)))
 
 (defun spaceline-all-the-icons--face-background (face)
