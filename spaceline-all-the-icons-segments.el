@@ -777,7 +777,7 @@ type, (i.e. added, deleted, modified) of a diff/hunk."
 
 (spaceline-all-the-icons--git-stats-reducer diffinfos (git-gutter-hunk-end-line it) (git-gutter-hunk-start-line it) (git-gutter-hunk-content it) (git-gutter-hunk-type it))
 (spaceline-all-the-icons--git-stats-reducer +diffinfos (plist-get it :end-line) (plist-get it :start-line) (plist-get it :content) (plist-get it :type))
-(spaceline-all-the-icons--git-stats-reducer diffhl (cadr it) 1 (make-string (1+ (cadr it)) 10) (cl-case (cl-caddr it) (insert 'added) (change 'modified) ('delete 'deleted)))
+(spaceline-all-the-icons--git-stats-reducer diffhl (cadr it) 1 (make-string (1+ (cadr it)) 10) (cl-case (cl-caddr it) (insert 'added) (change 'modified) (delete 'deleted)))
 
 (defun spaceline-all-the-icons--git-statistics ()
   "Function to return a list of added, removed and modified lines in current file."
